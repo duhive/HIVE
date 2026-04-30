@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-hive-green: #004D40;
+  --color-hive-light-green: #00695C;
+  --color-accent: #004D40;
+  --color-navy-900: #1A1A1A;
+  --color-ivory: #FFFFFF;
+  --color-silver: #757575;
+  
+  --font-serif: "Inter", sans-serif;
+  --font-sans: "Inter", sans-serif;
+  --font-display: "Inter", sans-serif;
+}
+
+body {
+  @apply bg-white text-navy-900 font-sans antialiased;
+}
+
+.text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-hive-green to-hive-light-green;
+}
+
+h1, h2, h3, h4 {
+  @apply font-bold tracking-tight;
+}
+
+.nav-link {
+  @apply relative py-2 text-[13px] font-bold tracking-[0.15em] uppercase transition-colors hover:text-hive-green text-navy-900/60;
+}
+
+.nav-link.active {
+  @apply text-hive-green;
+}
+
+.nav-link.active::after {
+  content: '';
+  @apply absolute bottom-0 left-0 w-full h-0.5 bg-hive-green;
+}
