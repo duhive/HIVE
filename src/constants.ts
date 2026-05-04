@@ -3,7 +3,7 @@ import { Member, CurriculumItem, FAQ } from './types';
 export const REGULAR_CURRICULUM: CurriculumItem[] = [
   {
     id: 1,
-    title: "자율 주제 연구",
+    title: "자유주제연구",
     period: "Weekly",
     description: "학회원들이 직접 선정한 관광 및 호스피탈리티 관련 주제를 심도 있게 탐구하고 분석합니다.",
     kpi: "주간 연구 리포트 발행 및 피드백",
@@ -11,19 +11,19 @@ export const REGULAR_CURRICULUM: CurriculumItem[] = [
   },
   {
     id: 2,
-    title: "관광 이슈 분석",
+    title: "글로벌 관광 이슈분석",
     period: "Bi-weekly",
     description: "국내외 관광 산업의 최신 이슈와 트렌드를 다각도로 분석하고 시사점을 도출합니다.",
-    kpi: "이슈 분석 리포트 발표 5회",
+    kpi: "이슈 분석 리포트 발표 4회",
     outcomes: ["Issue Analysis Report", "Trend Briefing"]
   },
   {
     id: 3,
-    title: "비즈니스 모델 개발",
+    title: "Reading & Idea Development",
     period: "Monthly",
-    description: "기술, 문화, 예술 등 타 산업과 결합된 혁신적인 비즈니스 모델을 연구하고 기획합니다.",
-    kpi: "비즈니스 모델 제안서 완성",
-    outcomes: ["Business Model Canvas", "Pitch Deck"]
+    description: "호스피탈리티와 인문학적 텍스트를 통해 새로운 관점을 도출하고 창의적인 아이디어를 개발합니다.",
+    kpi: "독서 토론 및 아이디어 제안서",
+    outcomes: ["Book Review Report", "Idea Deck"]
   }
 ];
 
@@ -72,8 +72,8 @@ export const MEMBERS: Member[] = [
     image: "https://i.ibb.co/ymb9d6wb/4.png",
     bio: "외부 파트너십을 강화하고 HIVE의 네트워크를 확장합니다.",
     education: "호텔외식관광학과",
-    skills: ["Strategic Partnership", "Networking"],
-    contact: "TBD"
+    skills: ["MICE Management", "Hotel Management"],
+    contact: "smko0619@naver.com"
   },
   {
     id: 3,
@@ -132,8 +132,8 @@ export const MEMBERS: Member[] = [
     image: "https://i.ibb.co/TGvX4D7/28.png",
     bio: "현장 중심의 대외 활동으로 실무적 시너지를 창출합니다.",
     education: "호텔외식관광학과",
-    skills: ["Field Research", "Collaboration"],
-    contact: "TBD"
+    skills: ["Aviation Service", "Hotel Management"],
+    contact: "seokgi205@gmail.com"
   },
   {
     id: 11,
@@ -196,7 +196,7 @@ export const PARTNER_MEMBERS: Member[] = [
     image: "https://i.ibb.co/FLWQ3Y8Z/me.png",
     bio: "사용자 경험 중심의 서비스 디자인을 연구합니다.",
     education: "일반대학원 관광경영학과",
-    skills: ["Regional Tourism Development", "Service Experience Design"],
+    skills: ["Regional Tourism Development", "Foodservice Management"],
     contact: "yujinpark0311@naver.com"
   },
   {

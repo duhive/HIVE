@@ -6,7 +6,7 @@ import { Target, Users, TrendingUp, ShieldCheck } from 'lucide-react';
 const About = () => {
   const features = [
     { icon: <span className="text-3xl font-display font-bold text-accent">H</span>, title: "Hospitality", desc: "호스피탈리티 산업의 본질을 탐구하고 전문성을 구축합니다." },
-    { icon: <span className="text-3xl font-display font-bold text-accent">I</span>, title: "Innovation", desc: "디지털 기술과 데이터를 활용한 비즈니스 혁신을 추구합니다." },
+    { icon: <span className="text-3xl font-display font-bold text-accent">I</span>, title: "Innovation", desc: "디지털 기술뿐만 아니라 관광호스피탈리티 산업의 전방위적인 혁신을 추구합니다." },
     { icon: <span className="text-3xl font-display font-bold text-accent">V</span>, title: "Value", desc: "이종 산업 간의 융합을 통해 차별화된 비즈니스 가치를 창출합니다." },
     { icon: <span className="text-3xl font-display font-bold text-accent">E</span>, title: "Experience", desc: "고객의 여정과 감동을 설계하는 차별화된 경험 비즈니스를 지향합니다." },
   ];

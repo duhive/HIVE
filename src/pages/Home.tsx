@@ -10,39 +10,35 @@ const Home = () => {
   return (
     <div className="pt-20">
       {/* Hero Section */}
-      <section className="relative h-[90vh] flex items-center overflow-hidden bg-white">
-        <div className="absolute inset-0 opacity-10">
+      <section className="relative h-[90vh] flex items-center justify-center overflow-hidden bg-gray-900">
+        <div className="absolute inset-0">
           <img 
-            src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=2070" 
-            alt="Hospitality" 
-            className="w-full h-full object-cover grayscale"
+            src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&q=80&w=2070" 
+            alt="Luxury Hospitality Background" 
+            className="w-full h-full object-cover opacity-70"
             referrerPolicy="no-referrer"
           />
+          <div className="absolute inset-0 bg-black/20" />
         </div>
         
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="max-w-3xl"
           >
-            <span className="inline-block px-4 py-1 bg-hive-green/10 text-hive-green text-[10px] font-bold uppercase tracking-[0.4em] mb-6 border border-hive-green/20">
-              Daegu University
-            </span>
-            <h1 className="text-5xl md:text-7xl font-bold text-gray-900 mb-6 leading-tight">
-              Redefining Hospitality through <span className="text-hive-green">Strategic Innovation</span>
+            <h1 className="text-4xl md:text-7xl font-bold text-white mb-8 leading-tight tracking-tight">
+              Hospitality, Innovation, Value, Experience
             </h1>
-            <p className="text-xl text-gray-500 mb-10 font-light leading-relaxed">
-              전략적 혁신을 통한 호스피탈리티의 재정의. <br/>
-              HIVE는 단순한 학회를 넘어, 산업의 문제를 진단하고 해결하는 전략 컨설팅 네트워크입니다.
+            <p className="text-xl md:text-2xl text-white/90 mb-12 font-medium">
+              대구대학교 호스피탈리티 경영학회 HIVE입니다.
             </p>
-            <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6">
-              <Link to="/join" className="px-8 py-4 bg-hive-green text-white font-bold uppercase tracking-widest hover:bg-hive-light-green transition-all flex items-center justify-center">
-                Join HIVE 2026 <Zap size={18} className="ml-2" />
-              </Link>
-              <Link to="/about" className="px-8 py-4 border border-gray-200 text-gray-900 font-bold uppercase tracking-widest hover:bg-gray-50 transition-all flex items-center justify-center">
-                Our Story <ArrowRight size={18} className="ml-2" />
+            <div className="flex justify-center">
+              <Link 
+                to="/about" 
+                className="px-10 py-4 border border-white text-white font-bold uppercase tracking-[0.3em] hover:bg-white hover:text-black transition-all duration-300"
+              >
+                About US
               </Link>
             </div>
           </motion.div>
@@ -101,7 +97,7 @@ const Home = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
               { char: 'H', title: 'Hospitality', desc: '산업의 본질을 꿰뚫는 서비스 마인드셋', icon: <Globe size={24}/> },
-              { char: 'I', title: 'Innovation', desc: '기존의 틀을 깨는 창의적 솔루션 제안', icon: <Zap size={24}/> },
+              { char: 'I', title: 'Innovation', desc: '디지털 기술을 넘어 관광호스피탈리티 혁신 추구', icon: <Zap size={24}/> },
               { char: 'V', title: 'Value', desc: '비즈니스와 사회를 잇는 실질적 가치 창출', icon: <Target size={24}/> },
               { char: 'E', title: 'Experience', desc: '사용자 중심의 총체적 경험 디자인', icon: <Users size={24}/> },
             ].map((item, idx) => (
@@ -119,6 +115,34 @@ const Home = () => {
                 <p className="text-sm text-gray-500 leading-relaxed">{item.desc}</p>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Strategies Section */}
+      <section className="py-24 bg-white border-y border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Core Strategies</h2>
+            <p className="text-hive-green font-bold tracking-[0.2em] uppercase text-sm">How we work</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-0">
+            <div className="p-10 border-b md:border-b-0 md:border-r border-gray-100 hover:bg-gray-50/50 transition-colors">
+              <span className="text-6xl font-light text-gray-100 mb-8 block font-display">01</span>
+              <h3 className="text-xl font-bold mb-4 text-gray-900 tracking-tight">Academic Research</h3>
+              <p className="text-gray-500 text-sm leading-relaxed italic">"글로벌 호스피탈리티 산업의 트렌드를 분석하고 학문적 인사이트를 도출합니다."</p>
+            </div>
+            <div className="p-10 border-b md:border-b-0 md:border-r border-gray-100 hover:bg-gray-50/50 transition-colors">
+              <span className="text-6xl font-light text-gray-100 mb-8 block font-display">02</span>
+              <h3 className="text-xl font-bold mb-4 text-gray-900 tracking-tight">Global Networking</h3>
+              <p className="text-gray-500 text-sm leading-relaxed italic">"산업 실무자들과의 네트워크를 구축하여 실질적인 비즈니스 경험을 공유합니다."</p>
+            </div>
+            <div className="p-10 hover:bg-gray-50/50 transition-colors">
+              <span className="text-6xl font-light text-gray-100 mb-8 block font-display">03</span>
+              <h3 className="text-xl font-bold mb-4 text-gray-900 tracking-tight">Idea Development</h3>
+              <p className="text-gray-500 text-sm leading-relaxed italic">"텍스트 기반의 깊은 고찰을 통해 창의적이고 실무적인 아이디어를 기획합니다."</p>
+            </div>
           </div>
         </div>
       </section>

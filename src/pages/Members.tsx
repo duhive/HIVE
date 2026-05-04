@@ -148,16 +148,16 @@ const Members = () => {
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-4xl max-h-[75vh] bg-white rounded-3xl overflow-hidden shadow-2xl border border-gray-200 flex flex-col md:flex-row"
+              className="relative w-full max-w-3xl max-h-[90vh] bg-white rounded-3xl overflow-hidden shadow-2xl border border-gray-200 flex flex-col md:flex-row h-auto"
             >
               <button
                 onClick={() => setSelectedMember(null)}
-                className="absolute top-6 right-6 z-10 p-2 bg-gray-100 rounded-full text-gray-600 hover:bg-accent hover:text-white transition-colors"
+                className="absolute top-4 right-4 z-10 p-2 bg-white/80 backdrop-blur-md rounded-full text-gray-400 hover:bg-red-50 hover:text-red-500 transition-colors shadow-sm"
               >
-                <X size={24} />
+                <X size={18} />
               </button>
 
-              <div className="w-full md:w-2/5 h-64 md:h-auto relative">
+              <div className="w-full md:w-2/5 h-72 md:h-auto relative bg-gray-50">
                 <img
                   src={selectedMember.image}
                   alt={selectedMember.name}
@@ -166,25 +166,24 @@ const Members = () => {
                 />
               </div>
 
-              <div className="w-full md:w-3/5 p-6 md:p-10 overflow-y-auto">
-                <div className="mb-6">
-                  <span className="text-accent font-bold uppercase tracking-[0.2em] text-xs">{selectedMember.role}</span>
-                  <h2 className="text-4xl font-display font-bold mt-2 text-gray-900">{selectedMember.name}</h2>
-                  <p className="text-gray-600 mt-4 text-lg italic whitespace-pre-line">"{selectedMember.bio}"</p>
+              <div className="w-full md:w-3/5 p-6 md:p-10 flex flex-col justify-center">
+                <div className="mb-5">
+                  <span className="text-hive-green font-bold uppercase tracking-[0.2em] text-xs">{selectedMember.role}</span>
+                  <h2 className="text-4xl font-display font-bold mt-0.5 text-gray-900">{selectedMember.name}</h2>
                 </div>
 
-                <div className="grid gap-6">
+                <div className="space-y-6">
                   <section>
-                    <div className="flex items-center space-x-2 text-accent mb-3">
+                    <div className="flex items-center space-x-2 text-hive-green mb-3">
                       <GraduationCap size={18} />
                       <h4 className="font-bold uppercase tracking-widest text-xs text-gray-400">Education</h4>
                     </div>
-                    <p className="text-gray-700">{selectedMember.education}</p>
+                    <p className="text-gray-700 leading-relaxed">{selectedMember.education}</p>
                   </section>
 
-                  <div className="grid grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 gap-6">
                     <section>
-                      <div className="flex items-center space-x-2 text-accent mb-3">
+                      <div className="flex items-center space-x-2 text-hive-green mb-3">
                         <Award size={18} />
                         <h4 className="font-bold uppercase tracking-widest text-xs text-gray-400">INTERESTS</h4>
                       </div>
@@ -198,11 +197,11 @@ const Members = () => {
                     </section>
 
                     <section>
-                      <div className="flex items-center space-x-2 text-accent mb-3">
+                      <div className="flex items-center space-x-2 text-hive-green mb-3">
                         <Mail size={18} />
                         <h4 className="font-bold uppercase tracking-widest text-xs text-gray-400">Contact</h4>
                       </div>
-                      <p className="text-gray-600 text-sm break-all">{selectedMember.contact}</p>
+                      <p className="text-gray-600 text-sm break-all font-mono">{selectedMember.contact}</p>
                     </section>
                   </div>
                 </div>

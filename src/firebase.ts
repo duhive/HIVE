@@ -1,7 +1,10 @@
-// Firebase dummy configuration to prevent build errors
-export const db = null as any;
-export const auth = null as any;
-export const storage = null as any;
-export const analytics = null as any;
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
+import firebaseConfig from '../firebase-applet-config.json';
 
-export default { db, auth, storage, analytics };
+const app = initializeApp(firebaseConfig);
+export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
+export const auth = getAuth();
+
+export default { db, auth };

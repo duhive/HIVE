@@ -41,7 +41,7 @@ const Join = () => {
               <h4 className="text-[10px] uppercase tracking-[0.3em] text-navy-900/40 font-bold mb-4">Recruitment Process</h4>
               {[
                 { step: "01", title: "Application Submission", desc: "서류 전형 (온라인 지원서)" },
-                { step: "02", title: "Strategic Interview", desc: "심층 면접 (역량 및 가치관 확인)" },
+                { step: "02", title: "Strategic Interview", desc: "면접 (역량 및 가치관 확인)" },
                 { step: "03", title: "Final Selection", desc: "최종 합격자 발표 및 오리엔테이션" }
               ].map((item, idx) => (
                 <div key={idx} className="flex items-center p-4 bg-navy-900/5 border-l-2 border-navy-900">

@@ -53,10 +53,6 @@ const MemberModal: React.FC<MemberModalProps> = ({ member, onClose }) => {
               <h2 className="text-4xl font-bold text-gray-900 mb-6 tracking-tight">
                 {member.name}
               </h2>
-              <p className="text-gray-500 italic leading-relaxed text-sm">
-                "Hospitality 산업의 디지털 전환과 전략적 혁신을 주도하는 리더입니다. <br/>
-                끊임없는 도전으로 새로운 가치를 창출합니다."
-              </p>
             </div>
 
             <div className="space-y-8">
