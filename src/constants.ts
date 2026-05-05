@@ -62,7 +62,7 @@ export const MEMBERS: Member[] = [
     image: "https://i.ibb.co/v6z0pWtm/image.jpg",
     bio: "HIVE의 비전을 설계하고 학회의 성장을 주도합니다.",
     education: "호텔외식관광학과",
-    skills: ["관광 교육", "호텔 경영"],
+    skills: ["관광교육", "호텔경영"],
     contact: "rang4f58@naver.com"
   },
   {
@@ -72,7 +72,7 @@ export const MEMBERS: Member[] = [
     image: "https://i.ibb.co/ymb9d6wb/4.png",
     bio: "외부 파트너십을 강화하고 HIVE의 네트워크를 확장합니다.",
     education: "호텔외식관광학과",
-    skills: ["MICE 경영", "호텔 경영"],
+    skills: ["MICE경영", "호텔경영"],
     contact: "smko0619@naver.com"
   },
   {
@@ -82,7 +82,7 @@ export const MEMBERS: Member[] = [
     image: "https://i.ibb.co/TGvX4D7/28.png",
     bio: "HIVE의 브랜드 가치를 전달하고 소통의 창구를 만듭니다.",
     education: "호텔외식관광학과",
-    skills: ["MICE 경영", "호텔 경영"],
+    skills: ["MICE경영", "호텔경영"],
     contact: "min_0817@naver.com"
   },
   {
@@ -92,7 +92,7 @@ export const MEMBERS: Member[] = [
     image: "https://i.ibb.co/TGvX4D7/28.png",
     bio: "투명한 예산 관리로 학회의 안정적인 운영을 지원합니다.",
     education: "호텔외식관광학과",
-    skills: ["MICE 경영", "항공 서비스"],
+    skills: ["MICE경영", "항공서비스"],
     contact: "ksh0020203@naver.com"
   },
   {
@@ -102,7 +102,7 @@ export const MEMBERS: Member[] = [
     image: "https://i.ibb.co/v6rTnkYv/Kakao-Talk-20260322-200810881.jpg",
     bio: "글로벌 시장으로의 도약을 위한 대외 협력을 담당합니다.",
     education: "호텔관광경영학부",
-    skills: ["글로벌 전략", "파트너십"],
+    skills: ["글로벌전략", "파트너십"],
     contact: "TBD"
   },
   {
@@ -112,7 +112,7 @@ export const MEMBERS: Member[] = [
     image: "https://i.ibb.co/mC5PxwhH/image.png",
     bio: "지역 관광 활성화를 위한 전략적 제휴를 추진합니다.",
     education: "관광항공경영학과",
-    skills: ["지역 관광 개발", "항공 서비스"],
+    skills: ["지역관광개발", "항공서비스"],
     contact: "khkzz0802@naver.com"
   },
   {
@@ -122,7 +122,7 @@ export const MEMBERS: Member[] = [
     image: "https://i.ibb.co/9mTfw9zq/image.jpg",
     bio: "창의적인 콘텐츠로 HIVE의 연구 성과를 시각화합니다.",
     education: "호텔외식관광학과",
-    skills: ["국제 관광", "지역 관광 개발"],
+    skills: ["국제관광", "지역관광개발"],
     contact: "yeeun8556@naver.com"
   },
   {
@@ -132,7 +132,7 @@ export const MEMBERS: Member[] = [
     image: "https://i.ibb.co/TGvX4D7/28.png",
     bio: "현장 중심의 대외 활동으로 실무적 시너지를 창출합니다.",
     education: "호텔외식관광학과",
-    skills: ["항공 서비스", "호텔 경영"],
+    skills: ["항공서비스", "호텔경영"],
     contact: "seokgi205@gmail.com"
   },
   {
@@ -142,7 +142,7 @@ export const MEMBERS: Member[] = [
     image: "https://i.ibb.co/TGvX4D7/28.png",
     bio: "글로벌 호스피탈리티 트렌드를 분석하고 공유합니다.",
     education: "호텔외식관광학과",
-    skills: ["호텔 경영", "관광 서비스"],
+    skills: ["호텔경영", "관광서비스"],
     contact: "TBD"
   }
 ];
@@ -158,56 +158,56 @@ export const PARTNER_MEMBERS: Member[] = [
   {
     id: 102,
     name: "이정현",
-    role: "파트너",
-    category: "동문 파트너",
+    role: "Partner",
+    category: "Alumni Partners",
     image: "https://i.ibb.co/TGvX4D7/28.png",
     bio: "HIVE의 성장을 함께 응원하는 졸업생 파트너입니다.",
     education: "부산세연고등학교",
-    skills: ["호스피탈리티", "네트워킹"],
+    skills: ["Hospitality", "Networking"],
     contact: "TBD"
   },
   {
     id: 103,
     name: "박지호",
-    role: "파트너",
-    category: "융합 파트너",
+    role: "Partner",
+    category: "Convergence Partners",
     image: "https://i.ibb.co/93V2Mn1T/image.jpg",
-    bio: "영어교육과 심리학의 융합을 통해 항공 산업의 미래를 탐구합니다.",
+    bio: "Exploring the future of aviation through the fusion of English Education and Psychology.",
     education: "영어교육과 & 심리학과",
-    skills: ["항공 서비스", "항공 경영"],
+    skills: ["Aviation Service", "Aviation Management"],
     contact: "jiho5690@naver.com"
   },
   {
     id: 104,
     name: "김보민",
-    role: "파트너",
-    category: "동문 파트너",
+    role: "Partner",
+    category: "Alumni Partners",
     image: "https://i.ibb.co/TGvX4D7/28.png",
     bio: "데이터 기반의 관광 연구를 통해 학문적 깊이를 더합니다.",
     education: "일반대학원 관광경영학과",
-    skills: ["인공지능", "스마트 관광"],
+    skills: ["AI", "Smart Tourism"],
     contact: "kbm010525@naver.com"
   },
   {
     id: 105,
     name: "박유진",
-    role: "파트너",
-    category: "동문 파트너",
+    role: "Partner",
+    category: "Alumni Partners",
     image: "https://i.ibb.co/4gYQMtwb/2026-05-05-160901.png",
     bio: "사용자 경험 중심의 서비스 디자인을 연구합니다.",
     education: "일반대학원 관광경영학과",
-    skills: ["지역 관광 개발", "외식 경영"],
+    skills: ["Regional Tourism Development", "Foodservice Management"],
     contact: "yujinpark0311@naver.com"
   },
   {
     id: 106,
     name: "전나영",
-    role: "파트너",
-    category: "융합 파트너",
+    role: "Partner",
+    category: "Convergence Partners",
     image: "https://i.ibb.co/KxdRcy4B/image.jpg",
-    bio: "지리교육과 항공 서비스의 융합을 통한 새로운 가치를 창출합니다.",
+    bio: "Creating new value through the fusion of Geography Education and Aviation Service.",
     education: "지리교육과",
-    skills: ["항공 서비스", "지리 교육"],
+    skills: ["Aviation Service", "Geography Education"],
     contact: "pss76@naver.com"
   }
 ];
