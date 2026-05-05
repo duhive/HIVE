@@ -62,7 +62,7 @@ export const MEMBERS: Member[] = [
     image: "https://i.ibb.co/v6z0pWtm/image.jpg",
     bio: "HIVE의 비전을 설계하고 학회의 성장을 주도합니다.",
     education: "호텔외식관광학과",
-    skills: ["관광교육", "호텔경영"],
+    skills: ["Tourism Education", "Hotel Management"],
     contact: "rang4f58@naver.com"
   },
   {
@@ -72,7 +72,7 @@ export const MEMBERS: Member[] = [
     image: "https://i.ibb.co/ymb9d6wb/4.png",
     bio: "외부 파트너십을 강화하고 HIVE의 네트워크를 확장합니다.",
     education: "호텔외식관광학과",
-    skills: ["MICE경영", "호텔경영"],
+    skills: ["MICE Management", "Hotel Management"],
     contact: "smko0619@naver.com"
   },
   {
@@ -82,7 +82,7 @@ export const MEMBERS: Member[] = [
     image: "https://i.ibb.co/TGvX4D7/28.png",
     bio: "HIVE의 브랜드 가치를 전달하고 소통의 창구를 만듭니다.",
     education: "호텔외식관광학과",
-    skills: ["MICE경영", "호텔경영"],
+    skills: ["MICE Management", "Hotel Management"],
     contact: "min_0817@naver.com"
   },
   {
@@ -92,7 +92,7 @@ export const MEMBERS: Member[] = [
     image: "https://i.ibb.co/TGvX4D7/28.png",
     bio: "투명한 예산 관리로 학회의 안정적인 운영을 지원합니다.",
     education: "호텔외식관광학과",
-    skills: ["MICE경영", "항공서비스"],
+    skills: ["MICE Management", "Aviation Service"],
     contact: "ksh0020203@naver.com"
   },
   {
@@ -102,7 +102,7 @@ export const MEMBERS: Member[] = [
     image: "https://i.ibb.co/v6rTnkYv/Kakao-Talk-20260322-200810881.jpg",
     bio: "글로벌 시장으로의 도약을 위한 대외 협력을 담당합니다.",
     education: "호텔관광경영학부",
-    skills: ["글로벌전략", "파트너십"],
+    skills: ["Global Strategy", "Partnership"],
     contact: "TBD"
   },
   {
@@ -112,7 +112,7 @@ export const MEMBERS: Member[] = [
     image: "https://i.ibb.co/mC5PxwhH/image.png",
     bio: "지역 관광 활성화를 위한 전략적 제휴를 추진합니다.",
     education: "관광항공경영학과",
-    skills: ["지역관광개발", "항공서비스"],
+    skills: ["Regional Tourism Development", "Aviation Service"],
     contact: "khkzz0802@naver.com"
   },
   {
@@ -122,7 +122,7 @@ export const MEMBERS: Member[] = [
     image: "https://i.ibb.co/9mTfw9zq/image.jpg",
     bio: "창의적인 콘텐츠로 HIVE의 연구 성과를 시각화합니다.",
     education: "호텔외식관광학과",
-    skills: ["국제관광", "지역관광개발"],
+    skills: ["International Tourism", "Regional Tourism Development"],
     contact: "yeeun8556@naver.com"
   },
   {
@@ -132,7 +132,7 @@ export const MEMBERS: Member[] = [
     image: "https://i.ibb.co/TGvX4D7/28.png",
     bio: "현장 중심의 대외 활동으로 실무적 시너지를 창출합니다.",
     education: "호텔외식관광학과",
-    skills: ["항공서비스", "호텔경영"],
+    skills: ["Aviation Service", "Hotel Management"],
     contact: "seokgi205@gmail.com"
   },
   {
@@ -142,7 +142,7 @@ export const MEMBERS: Member[] = [
     image: "https://i.ibb.co/TGvX4D7/28.png",
     bio: "글로벌 호스피탈리티 트렌드를 분석하고 공유합니다.",
     education: "호텔외식관광학과",
-    skills: ["호텔경영", "관광서비스"],
+    skills: ["Hotel Management", "Tourism Service"],
     contact: "TBD"
   }
 ];
