@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { ArrowRight, Globe, Users, Target, Zap } from 'lucide-react';
-import SectionHeader from '../components/SectionHeader';
 import Contact from '../components/Contact';
 import { BRAND_STORY } from '../constants';
 
@@ -58,10 +57,10 @@ const Home = () => {
               <h4 className="text-hive-green font-bold tracking-widest text-xs uppercase mb-4">About HIVE</h4>
               <h2 className="text-4xl font-bold text-gray-900 mb-8 leading-tight">
                 호스피탈리티의 본질에<br/>
-                <span className="text-hive-green serif">혁신을 더하다</span>
+                <span className="text-hive-green font-serif">혁신을 더하다</span>
               </h2>
               <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-                {BRAND_STORY.origin}
+                HIVE는 대구대학교를 대표하는 학업적 호스피탈리티 경영학회입니다. 환대의 본질에 새로운 경험을 더하여, 차세대 호스피탈리티 리더를 양성합니다.
               </p>
               <Link to="/about" className="inline-flex items-center text-hive-green font-bold uppercase tracking-widest text-sm hover:translate-x-2 transition-transform">
                 Learn More <ArrowRight size={18} className="ml-2" />
@@ -119,6 +118,7 @@ const Home = () => {
         </div>
       </section>
 
+
       {/* Strategies Section */}
       <section className="py-24 bg-white border-y border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -131,17 +131,17 @@ const Home = () => {
             <div className="p-10 border-b md:border-b-0 md:border-r border-gray-100 hover:bg-gray-50/50 transition-colors">
               <span className="text-6xl font-light text-gray-100 mb-8 block font-display">01</span>
               <h3 className="text-xl font-bold mb-4 text-gray-900 tracking-tight">Academic Research</h3>
-              <p className="text-gray-500 text-sm leading-relaxed italic">"글로벌 호스피탈리티 산업의 트렌드를 분석하고 학문적 인사이트를 도출합니다."</p>
+              <p className="text-gray-500 text-sm leading-relaxed italic">"산업 트렌드를 분석하고 학술적 인사이트를 도출합니다."</p>
             </div>
             <div className="p-10 border-b md:border-b-0 md:border-r border-gray-100 hover:bg-gray-50/50 transition-colors">
               <span className="text-6xl font-light text-gray-100 mb-8 block font-display">02</span>
-              <h3 className="text-xl font-bold mb-4 text-gray-900 tracking-tight">Global Networking</h3>
-              <p className="text-gray-500 text-sm leading-relaxed italic">"산업 실무자들과의 네트워크를 구축하여 실질적인 비즈니스 경험을 공유합니다."</p>
+              <h3 className="text-xl font-bold mb-4 text-gray-900 tracking-tight">Networking</h3>
+              <p className="text-gray-500 text-sm leading-relaxed italic">"다양한 실무 및 선배들과의 네트워크를 통해 지혜를 공유합니다."</p>
             </div>
             <div className="p-10 hover:bg-gray-50/50 transition-colors">
               <span className="text-6xl font-light text-gray-100 mb-8 block font-display">03</span>
-              <h3 className="text-xl font-bold mb-4 text-gray-900 tracking-tight">Idea Development</h3>
-              <p className="text-gray-500 text-sm leading-relaxed italic">"텍스트 기반의 깊은 고찰을 통해 창의적이고 실무적인 아이디어를 기획합니다."</p>
+              <h3 className="text-xl font-bold mb-4 text-gray-900 tracking-tight">Service Design</h3>
+              <p className="text-gray-500 text-sm leading-relaxed italic">"사람 중심의 따뜻하고 혁신적인 서비스를 기획합니다."</p>
             </div>
           </div>
         </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mail, MapPin, Phone, Instagram, Globe, MessageSquare } from 'lucide-react';
+import { Mail, MapPin, MessageSquare, Instagram, Globe } from 'lucide-react';
 import { motion } from 'motion/react';
 
 const Contact = () => {
@@ -10,17 +10,17 @@ const Contact = () => {
           
           {/* Contact Information */}
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
+            initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
             <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-gray-900 mb-8">
-              Get in <span className="text-hive-green italic serif">Touch</span>
+              Get in <span className="text-hive-green italic font-serif">Touch</span>
             </h2>
             <p className="text-lg text-gray-500 mb-12 max-w-md leading-relaxed">
-              HIVE와 함께 호스피탈리티의 미래를 설계하고 싶으신가요? 
-              궁금한 점이나 협업 제안이 있다면 언제든 연락주세요.
+              HIVE와 함께 호스피탈리티의 가치를 나누고 싶으신가요? <br/>
+              궁금한 점이나 협력 제안이 있다면 언제든 편하게 연락주세요.
             </p>
 
             <div className="space-y-8">
@@ -30,13 +30,13 @@ const Contact = () => {
                 </div>
                 <div>
                   <h4 className="text-xs uppercase tracking-widest font-bold text-gray-400 mb-1">Email</h4>
-                  <p className="text-gray-900 font-medium">duhospitality@naver.com</p>
+                  <p className="text-gray-900 font-medium italic">duhospitality@naver.com</p>
                 </div>
               </div>
 
               <div className="flex items-start space-x-4">
                 <div className="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center text-hive-green flex-shrink-0">
-                  <MapPin size={20} />
+                   <MapPin size={20} />
                 </div>
                 <div>
                   <h4 className="text-xs uppercase tracking-widest font-bold text-gray-400 mb-1">Location</h4>
@@ -49,7 +49,7 @@ const Contact = () => {
 
               <div className="flex items-start space-x-4">
                 <div className="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center text-hive-green flex-shrink-0">
-                  <MessageSquare size={20} />
+                   <MessageSquare size={20} />
                 </div>
                 <div>
                   <h4 className="text-xs uppercase tracking-widest font-bold text-gray-400 mb-1">Social</h4>
@@ -73,7 +73,7 @@ const Contact = () => {
 
           {/* Contact Form */}
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
+            initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
@@ -110,7 +110,7 @@ const Contact = () => {
                 <label className="block text-[10px] uppercase tracking-widest font-bold text-gray-400 mb-2">Message</label>
                 <textarea 
                   rows={4}
-                  className="w-full bg-white border border-gray-100 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-hive-green/20 focus:border-hive-green transition-all resize-none"
+                  className="w-full bg-white border border-gray-100 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-hive-green/20 focus:border-hive-green transition-all resize-none font-sans"
                   placeholder="Tell us more about your inquiry..."
                 />
               </div>

@@ -14,7 +14,7 @@ const Footer = () => {
             </Link>
             <p className="text-gray-400 max-w-sm text-sm leading-relaxed mb-8">
               Daegu University Hospitality Management Society. <br/>
-              전략적 혁신을 통한 호스피탈리티의 재정의. 우리는 산업의 미래 리더를 양성합니다.
+              환대의 본질을 연구하고 가치 있는 경험을 제안합니다. 당신의 가능성을 함께 만들어가는 학업적 공동체입니다.
             </p>
             <div className="flex space-x-6 items-center">
               <a 
@@ -59,7 +59,7 @@ const Footer = () => {
         
         <div className="mt-16 pt-8 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center text-[10px] uppercase tracking-widest text-gray-300 font-bold">
           <p>© 2026 HIVE. All Rights Reserved.</p>
-          <p className="mt-4 md:mt-0">Designed for Strategic Excellence</p>
+          <p className="mt-4 md:mt-0">Hospitality Management Society</p>
         </div>
       </div>
     </footer>

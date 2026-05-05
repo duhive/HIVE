@@ -43,20 +43,19 @@ const Navbar = () => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-20">
+        <div className="flex justify-between h-20 items-center">
           <div className="flex items-center">
             <Link to="/" className="flex items-center">
               <span className="text-3xl font-black tracking-tighter text-hive-green">HIVE</span>
             </Link>
           </div>
 
-          {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
               <div 
                 key={item.name} 
-                className="relative group"
-                onMouseEnter={() => item.subItems && setActiveDropdown(item.name)}
+                className="relative h-full flex items-center"
+                onMouseEnter={() => setActiveDropdown(item.name)}
                 onMouseLeave={() => setActiveDropdown(null)}
               >
                 <Link
@@ -68,25 +67,23 @@ const Navbar = () => {
                   }`}
                 >
                   <span>{item.name}</span>
-                  {item.subItems && <ChevronDown size={14} className={`transition-transform duration-200 ${activeDropdown === item.name ? 'rotate-180' : ''}`} />}
+                  {item.subItems && <ChevronDown size={12} className={`transition-transform duration-200 ${activeDropdown === item.name ? 'rotate-180' : ''}`} />}
                 </Link>
 
-                {/* Dropdown Menu */}
                 <AnimatePresence>
                   {item.subItems && activeDropdown === item.name && (
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 10 }}
-                      transition={{ duration: 0.2 }}
-                      className="absolute top-full left-0 w-48 bg-white border border-gray-100 shadow-xl rounded-lg py-2 z-50"
+                      className="absolute top-full left-0 w-48 bg-white border border-gray-100 shadow-xl rounded-lg py-3 z-50"
                     >
                       {item.subItems.map((subItem) => (
                         <Link
                           key={subItem.name}
                           to={subItem.path}
-                          className={`block px-4 py-2 text-base text-gray-600 hover:bg-gray-50 hover:text-hive-green transition-colors ${
-                            location.pathname === subItem.path ? 'text-hive-green font-bold bg-gray-50' : ''
+                          className={`block px-5 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-hive-green transition-colors ${
+                            location.pathname === subItem.path ? 'text-hive-green font-bold' : ''
                           }`}
                         >
                           {subItem.name}
@@ -102,7 +99,6 @@ const Navbar = () => {
             </div>
           </div>
 
-          {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center space-x-4">
             <UserMenu />
             <button
@@ -114,6 +110,7 @@ const Navbar = () => {
           </div>
         </div>
       </div>
+
 
       {/* Mobile Menu */}
       <AnimatePresence>

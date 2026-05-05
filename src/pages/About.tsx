@@ -1,7 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { BRAND_STORY } from '../constants';
-import { Target, Users, TrendingUp, ShieldCheck } from 'lucide-react';
 
 const About = () => {
   const features = [
@@ -43,15 +42,6 @@ const About = () => {
           </motion.div>
 
           <div className="relative">
-            {/* Watermark Image for HIVE meanings */}
-            <div className="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none z-0">
-              <img 
-                src="https://i.ibb.co/3y9k8mbW/3.png" 
-                alt="HIVE Watermark" 
-                className="w-full h-auto max-w-md object-contain"
-                referrerPolicy="no-referrer"
-              />
-            </div>
             <div className="grid grid-cols-2 gap-6 relative z-10">
               {features.map((f, i) => (
                 <motion.div
@@ -60,7 +50,7 @@ const About = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
-                  className="p-8 glass-card rounded-2xl hover:border-accent/40 transition-all duration-300 group shadow-sm hover:shadow-md"
+                  className="p-8 bg-white border border-gray-100 rounded-2xl hover:border-accent/40 transition-all duration-300 group shadow-sm hover:shadow-md"
                 >
                   <div className="mb-4 transform group-hover:scale-110 transition-transform duration-300">
                     {f.icon}
@@ -73,7 +63,7 @@ const About = () => {
           </div>
         </div>
 
-        {/* Scope of Activities Section */}
+
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -122,7 +112,7 @@ const About = () => {
               </div>
               <div className="grid grid-cols-2 gap-4 mt-6">
                 {[
-                  { name: "START UP", color: "bg-hive-green/5 text-hive-green" },
+                  { name: "Education", color: "bg-hive-green/5 text-hive-green" },
                   { name: "Fintech", color: "bg-hive-green/5 text-hive-green" },
                   { name: "IT · AI", color: "bg-hive-green/5 text-hive-green" },
                   { name: "Service Design", color: "bg-hive-green/5 text-hive-green" }
