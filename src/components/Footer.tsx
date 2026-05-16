@@ -10,7 +10,9 @@ const Footer = () => {
           <div className="col-span-1 md:col-span-2">
             <Link to="/" className="flex items-center space-x-3 mb-6">
               <div className="w-8 h-8 bg-hive-green flex items-center justify-center text-white font-bold rounded-sm">H</div>
-              <span className="text-xl font-bold tracking-tight text-hive-green">HIVE</span>
+              <span className="text-xl font-bold tracking-tight text-hive-green">
+                HI<span className="inline-block scale-x-[0.8] origin-center -mx-[0.02em]">V</span>E
+              </span>
             </Link>
             <p className="text-gray-400 max-w-sm text-sm leading-relaxed mb-8">
               Daegu University Hospitality Management Society. <br/>

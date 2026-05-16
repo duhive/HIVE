@@ -46,7 +46,9 @@ const Navbar = () => {
         <div className="flex justify-between h-20 items-center">
           <div className="flex items-center">
             <Link to="/" className="flex items-center">
-              <span className="text-3xl font-black tracking-tighter text-hive-green">HIVE</span>
+              <span className="text-3xl font-black tracking-tighter text-hive-green">
+                HI<span className="inline-block scale-x-[0.8] origin-center -mx-[0.02em]">V</span>E
+              </span>
             </Link>
           </div>
 
