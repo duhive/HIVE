@@ -196,7 +196,7 @@ export const PARTNER_MEMBERS: Member[] = [
     image: "https://i.ibb.co/Z1Tk4T4L/2026-05-05-160901.png",
     bio: "사용자 경험 중심의 서비스 디자인을 연구합니다.",
     education: "일반대학원 관광경영학과",
-    skills: ["Regional Tourism Development", "Global Trade Service", "Aviation Management"],
+    skills: ["Regional Tourism Development", "Service Experience Design"],
     contact: "yujinpark0311@naver.com"
   },
   {

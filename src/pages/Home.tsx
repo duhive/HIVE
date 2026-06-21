@@ -1,46 +1,194 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'motion/react';
-import { ArrowRight, Globe, Users, Target, Zap } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
+import { ArrowRight, Globe, Users, Target, Zap, ChevronLeft, ChevronRight, Play, Pause } from 'lucide-react';
 import Contact from '../components/Contact';
 import { BRAND_STORY } from '../constants';
 
+const slides = [
+  {
+    image: "/src/assets/images/aviation_service_hero_1782037825374.jpg",
+    uniDept: "DAEGU UNIVERSITY HOSPITALITY MANAGEMENT SOCIETY",
+    slogan: "환대와 혁신으로 더 넓은 세상의 가치를 연결하는",
+    title: "호스피탈리티",
+    subtitle: "DIVISION OF HOSPITALITY",
+    linkPath: "/about",
+    linkText: "LEARN MORE"
+  },
+  {
+    image: "https://images.unsplash.com/photo-1540962351504-03099e0a754b?auto=format&fit=crop&q=80&w=2000",
+    uniDept: "DAEGU UNIVERSITY HOSPITALITY MANAGEMENT SOCIETY",
+    slogan: "지성적 탐구와 혁신으로 차세대 호스피탈리티의 가치를 세우다",
+    title: "글로벌 호스피탈리티 리더십",
+    subtitle: "ACADEMIC INNOVATION & GLOBAL LEADERSHIP",
+    linkPath: "/activities",
+    linkText: "VIEW ACTIVITIES"
+  },
+  {
+    image: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&q=80&w=2000",
+    uniDept: "DAEGU UNIVERSITY HOSPITALITY MANAGEMENT SOCIETY",
+    slogan: "새로운 도약과 연구를 향해 높은 가치를 창출하는",
+    title: "차세대 글로벌 호스피탈리티 네트워크",
+    subtitle: "NEXT GENERATION HOSPITALITY NETWORK",
+    linkPath: "/join",
+    linkText: "JOIN US NOW"
+  },
+  {
+    image: "https://images.unsplash.com/photo-1517479149777-5f3b1511d5ad?auto=format&fit=crop&q=80&w=2000",
+    uniDept: "DAEGU UNIVERSITY HOSPITALITY MANAGEMENT SOCIETY",
+    slogan: "품격 높은 감동과 학술적 전문성을 설계하는 커뮤니티",
+    title: "최적의 서비스 경험 디자인",
+    subtitle: "EXPERIENCE DESIGN & SERVICE STRATEGY",
+    linkPath: "/projects",
+    linkText: "OUR PROJECTS"
+  }
+];
+
 const Home = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(true);
+
+  useEffect(() => {
+    if (!isPlaying) return;
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [isPlaying]);
+
+  const handlePrev = () => {
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  };
+
+  const handleNext = () => {
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
+  };
+
+  const togglePlay = () => {
+    setIsPlaying(!isPlaying);
+  };
+
   return (
-    <div className="pt-20">
+    <div className="pt-20 bg-white">
       {/* Hero Section */}
-      <section className="relative h-[90vh] flex items-center justify-center overflow-hidden bg-gray-900">
-        <div className="absolute inset-0">
-          <img 
-            src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&q=80&w=2070" 
-            alt="Luxury Hospitality Background" 
-            className="w-full h-full object-cover opacity-70"
-            referrerPolicy="no-referrer"
-          />
-          <div className="absolute inset-0 bg-black/20" />
+      <section className="relative h-[85vh] min-h-[500px] flex items-center overflow-hidden bg-slate-950">
+        {/* Animated Slide Background */}
+        <div className="absolute inset-0 z-0">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentSlide}
+              className="absolute inset-0 w-full h-full"
+              initial={{ opacity: 0, scale: 1.05 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1.2, ease: "easeOut" }}
+            >
+              <img 
+                src={slides[currentSlide].image} 
+                alt={slides[currentSlide].title} 
+                className="w-full h-full object-cover object-center opacity-45 select-none"
+                referrerPolicy="no-referrer"
+              />
+            </motion.div>
+          </AnimatePresence>
+          {/* Elite Navy / Slate Overlay mimicking the university portal */}
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-900/65 to-slate-950/90 mix-blend-multiply" />
+          <div className="absolute inset-0 bg-radial-at-c from-transparent via-slate-950/40 to-slate-950" />
         </div>
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <h1 className="text-4xl md:text-7xl font-bold text-white mb-8 leading-tight tracking-tight">
-              Hospitality, Innovation, Value, Experience
+
+        {/* Technical/Cyber Circle Coordinate Overlay inspired by reference screenshot */}
+        <div className="absolute left-4 md:left-24 top-1/2 -translate-y-1/2 w-[300px] md:w-[550px] h-[300px] md:h-[550px] pointer-events-none opacity-30 z-10">
+          <svg viewBox="0 0 100 100" fill="none" className="w-full h-full text-blue-400/30 animate-[spin_100s_linear_infinite]">
+            <circle cx="50" cy="50" r="45" stroke="currentColor" strokeWidth="0.15" strokeDasharray="1 3" />
+            <circle cx="50" cy="50" r="38" stroke="currentColor" strokeWidth="0.25" />
+            <circle cx="50" cy="50" r="30" stroke="currentColor" strokeWidth="0.1" strokeDasharray="3 1" />
+            <circle cx="50" cy="50" r="22" stroke="currentColor" strokeWidth="0.3" />
+            <line x1="5" y1="50" x2="95" y2="50" stroke="currentColor" strokeWidth="0.1" />
+            <line x1="50" y1="5" x2="50" y2="95" stroke="currentColor" strokeWidth="0.1" />
+            <path d="M 20 50 A 30 30 0 0 1 80 50" stroke="currentColor" strokeWidth="0.4" strokeDasharray="1 2" />
+          </svg>
+          <div className="absolute inset-0 flex items-center justify-center animate-[pulse_4s_ease-in-out_infinite]">
+            <div className="w-48 h-48 rounded-full border border-teal-500/10 blur-[1px]"></div>
+          </div>
+        </div>
+
+        {/* Hero Content */}
+        <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 relative z-20">
+          <div className="max-w-4xl text-left font-sans">
+            {/* Slogan */}
+            <motion.p
+              key={`slogan-${currentSlide}`}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.1 }}
+              className="text-base md:text-xl text-blue-200/90 font-medium mb-4 tracking-wide leading-relaxed"
+            >
+              {slides[currentSlide].slogan}
+            </motion.p>
+            
+            {/* Title - Fixed to 호스피탈리티 경영학회 as requested */}
+            <h1 className="text-3xl sm:text-5xl md:text-6xl font-black text-white mb-4 leading-tight tracking-tight select-none">
+              호스피탈리티 경영학회
             </h1>
-            <p className="text-xl md:text-2xl text-white/90 mb-12 font-medium">
-              대구대학교 호스피탈리티 경영학회 HIVE입니다.
+
+            {/* Subtitle - Fixed to Hospitality Management Society as requested */}
+            <p className="text-xs sm:text-sm md:text-base font-bold text-gray-400 tracking-[0.4em] mb-10 select-none uppercase font-mono">
+              Hospitality Management Society
             </p>
-            <div className="flex justify-center">
+
+            {/* Action Link button */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+            >
               <Link 
-                to="/about" 
-                className="px-10 py-4 border border-white text-white font-bold uppercase tracking-[0.3em] hover:bg-white hover:text-black transition-all duration-300"
+                to={slides[currentSlide].linkPath} 
+                className="inline-flex items-center gap-3 px-8 py-3.5 border border-white/20 hover:border-white text-white/95 hover:text-white font-mono text-sm tracking-[0.2em] rounded-sm bg-white/5 backdrop-blur-sm hover:bg-white hover:text-slate-950 transition-all duration-300 shadow-lg"
               >
-                About US
+                {slides[currentSlide].linkText}
+                <ArrowRight size={14} />
               </Link>
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
+        </div>
+
+        {/* Minimalist Slide Navigation & Status Panel matching exact layout (< 1 / 4 > ||) */}
+        <div className="absolute bottom-8 right-4 sm:right-12 lg:right-24 z-30 flex items-center bg-slate-950/85 md:bg-slate-900/60 backdrop-blur-md px-6 py-3.5 rounded-full border border-white/10 text-white shadow-xl">
+          {/* Previous Button */}
+          <button 
+            onClick={handlePrev}
+            className="p-1 hover:text-blue-400 active:scale-95 transition-all mr-3"
+            aria-label="Previous Slide"
+          >
+            <ChevronLeft size={18} />
+          </button>
+
+          {/* Pagination Counter: current / total */}
+          <span className="font-mono text-xs tracking-wider select-none font-bold mr-4">
+            {String(currentSlide + 1).padStart(2, '0')} <span className="text-gray-500 mx-1">/</span> {String(slides.length).padStart(2, '0')}
+          </span>
+
+          {/* Next Button */}
+          <button 
+            onClick={handleNext}
+            className="p-1 hover:text-blue-400 active:scale-95 transition-all mr-5"
+            aria-label="Next Slide"
+          >
+            <ChevronRight size={18} />
+          </button>
+
+          {/* Divider line */}
+          <span className="h-4 w-[1px] bg-white/15 dark:bg-white/15 mr-4" />
+
+          {/* Autoplay Play/Pause */}
+          <button 
+            onClick={togglePlay}
+            className="p-1 hover:text-blue-400 active:scale-95 transition-all"
+            aria-label={isPlaying ? "Pause autocomplete" : "Play autocomplete"}
+          >
+            {isPlaying ? <Pause size={14} fill="currentColor" /> : <Play size={14} fill="currentColor" />}
+          </button>
         </div>
       </section>
 
