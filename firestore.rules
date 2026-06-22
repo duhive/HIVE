@@ -1,9 +1,38 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Default deny
+    // Global default-deny safety net
     match /{document=**} {
       allow read, write: if false;
+    }
+
+    // Helper functions
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function isValidApplication(data) {
+      return data.keys().hasAll(['name', 'email', 'phone', 'department', 'studentId', 'motivation', 'strengths', 'interestTrack', 'photo', 'submittedAt'])
+        && data.keys().size() == 10
+        && data.name is string && data.name.size() >= 2 && data.name.size() <= 100
+        && data.email is string && data.email.size() >= 5 && data.email.size() <= 150
+        && data.phone is string && data.phone.size() >= 8 && data.phone.size() <= 30
+        && data.department is string && data.department.size() >= 2 && data.department.size() <= 100
+        && data.studentId is string && data.studentId.size() >= 4 && data.studentId.size() <= 30
+        && data.motivation is string && data.motivation.size() >= 10 && data.motivation.size() <= 3000
+        && data.strengths is string && data.strengths.size() >= 10 && data.strengths.size() <= 3000
+        && data.interestTrack is string && data.interestTrack.size() >= 2 && data.interestTrack.size() <= 100
+        && data.photo is string && data.photo.size() <= 800000
+        && data.submittedAt == request.time;
+    }
+
+    match /applications/{applicationId} {
+      allow create: if isValidId(applicationId) && isValidApplication(incoming());
+      allow read, update, delete: if false;
     }
   }
 }

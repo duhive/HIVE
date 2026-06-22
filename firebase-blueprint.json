@@ -1,0 +1,59 @@
+{
+  "entities": {
+    "application": {
+      "title": "Application",
+      "description": "An application submitted by a prospective candidate to join HIVE",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Full name of the applicant"
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address of the applicant"
+        },
+        "phone": {
+          "type": "string",
+          "description": "Phone number of the applicant"
+        },
+        "department": {
+          "type": "string",
+          "description": "Department/Major of the applicant"
+        },
+        "studentId": {
+          "type": "string",
+          "description": "Student ID of the applicant"
+        },
+        "motivation": {
+          "type": "string",
+          "description": "Motivation to join the society"
+        },
+        "strengths": {
+          "type": "string",
+          "description": "Personal strengths and relevant experiences"
+        },
+        "interestTrack": {
+          "type": "string",
+          "description": "Preferred area of interest"
+        },
+        "photo": {
+          "type": "string",
+          "description": "Base64-encoded profile or introduction image"
+        },
+        "submittedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp of submission"
+        }
+      },
+      "required": ["name", "email", "phone", "department", "studentId", "motivation", "strengths", "interestTrack", "photo", "submittedAt"]
+    }
+  },
+  "firestore": {
+    "/applications/{applicationId}": {
+      "schema": "application",
+      "description": "Collection of submitted applications"
+    }
+  }
+}

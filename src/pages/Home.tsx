@@ -108,7 +108,7 @@ const Home = () => {
             <path d="M 20 50 A 30 30 0 0 1 80 50" stroke="currentColor" strokeWidth="0.4" strokeDasharray="1 2" />
           </svg>
           <div className="absolute inset-0 flex items-center justify-center animate-[pulse_4s_ease-in-out_infinite]">
-            <div className="w-48 h-48 rounded-full border border-teal-500/10 blur-[1px]"></div>
+            <div className="w-48 h-48 rounded-full border border-blue-500/10 blur-[1px]"></div>
           </div>
         </div>
 
@@ -132,7 +132,7 @@ const Home = () => {
             </h1>
 
             {/* Subtitle - Fixed to Hospitality Management Society as requested */}
-            <p className="text-xs sm:text-sm md:text-base font-bold text-gray-400 tracking-[0.4em] mb-10 select-none uppercase font-mono">
+            <p className="text-xs sm:text-sm md:text-base font-bold text-blue-200/50 tracking-[0.4em] mb-10 select-none uppercase font-mono">
               Hospitality Management Society
             </p>
 
@@ -158,7 +158,7 @@ const Home = () => {
           {/* Previous Button */}
           <button 
             onClick={handlePrev}
-            className="p-1 hover:text-blue-400 active:scale-95 transition-all mr-3"
+            className="p-1 hover:text-blue-400 active:scale-95 transition-all mr-3 cursor-pointer"
             aria-label="Previous Slide"
           >
             <ChevronLeft size={18} />
@@ -166,13 +166,13 @@ const Home = () => {
 
           {/* Pagination Counter: current / total */}
           <span className="font-mono text-xs tracking-wider select-none font-bold mr-4">
-            {String(currentSlide + 1).padStart(2, '0')} <span className="text-gray-500 mx-1">/</span> {String(slides.length).padStart(2, '0')}
+            {String(currentSlide + 1).padStart(2, '0')} <span className="text-white/40 mx-1">/</span> {String(slides.length).padStart(2, '0')}
           </span>
 
           {/* Next Button */}
           <button 
             onClick={handleNext}
-            className="p-1 hover:text-blue-400 active:scale-95 transition-all mr-5"
+            className="p-1 hover:text-blue-400 active:scale-95 transition-all mr-5 cursor-pointer"
             aria-label="Next Slide"
           >
             <ChevronRight size={18} />
@@ -184,7 +184,7 @@ const Home = () => {
           {/* Autoplay Play/Pause */}
           <button 
             onClick={togglePlay}
-            className="p-1 hover:text-blue-400 active:scale-95 transition-all"
+            className="p-1 hover:text-blue-400 active:scale-95 transition-all cursor-pointer"
             aria-label={isPlaying ? "Pause autocomplete" : "Play autocomplete"}
           >
             {isPlaying ? <Pause size={14} fill="currentColor" /> : <Play size={14} fill="currentColor" />}
@@ -203,11 +203,11 @@ const Home = () => {
               transition={{ duration: 0.8 }}
             >
               <h4 className="text-hive-green font-bold tracking-widest text-xs uppercase mb-4">About HIVE</h4>
-              <h2 className="text-4xl font-bold text-gray-900 mb-8 leading-tight">
+              <h2 className="text-4xl font-bold text-navy-900 mb-8 leading-tight">
                 호스피탈리티의 본질에<br/>
                 <span className="text-hive-green font-serif">혁신을 더하다</span>
               </h2>
-              <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+              <p className="text-lg text-navy-900/70 mb-8 leading-relaxed">
                 HIVE는 대구대학교를 대표하는 학업적 호스피탈리티 경영학회입니다. 환대의 본질에 새로운 경험을 더하여, 차세대 호스피탈리티 리더를 양성합니다.
               </p>
               <Link to="/about" className="inline-flex items-center text-hive-green font-bold uppercase tracking-widest text-sm hover:translate-x-2 transition-transform">
@@ -234,16 +234,16 @@ const Home = () => {
       </section>
 
       {/* Core Values / H.I.V.E */}
-      <section className="py-24 bg-gray-50">
+      <section className="py-24 bg-ivory">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">The HIVE Concept</h2>
+            <h2 className="text-4xl font-bold text-navy-900 mb-4">The HIVE Concept</h2>
             <p className="text-hive-green font-bold tracking-[0.2em] uppercase text-sm">Our Identity</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
-              { char: 'H', title: 'Hospitality', desc: '산업의 본질을 꿰뚫는 서비스 마인드셋', icon: <Globe size={24}/> },
+              { char: 'H', title: 'Hospitality', desc: '산업의 본질을 꿰뚫는 service 마인드셋', icon: <Globe size={24}/> },
               { char: 'I', title: 'Innovation', desc: '디지털 기술을 넘어 관광호스피탈리티 혁신 추구', icon: <Zap size={24}/> },
               { char: 'V', title: 'Value', desc: '비즈니스와 사회를 잇는 실질적 가치 창출', icon: <Target size={24}/> },
               { char: 'E', title: 'Experience', desc: '사용자 중심의 총체적 경험 디자인', icon: <Users size={24}/> },
@@ -254,12 +254,12 @@ const Home = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1 }}
-                className="p-8 bg-white border border-gray-100 shadow-sm hover:shadow-md transition-all rounded-xl"
+                className="p-8 bg-white border border-navy-900/10 shadow-sm hover:shadow-md transition-all rounded-xl"
               >
                 <div className="text-4xl font-bold text-hive-green/10 mb-4">{item.char}</div>
                 <div className="text-hive-green mb-4">{item.icon}</div>
-                <h3 className="text-xl font-bold mb-2 text-gray-900">{item.title}</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">{item.desc}</p>
+                <h3 className="text-xl font-bold mb-2 text-navy-900">{item.title}</h3>
+                <p className="text-sm text-navy-900/60 leading-relaxed">{item.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -268,28 +268,28 @@ const Home = () => {
 
 
       {/* Strategies Section */}
-      <section className="py-24 bg-white border-y border-gray-100">
+      <section className="py-24 bg-white border-y border-navy-900/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Core Strategies</h2>
+            <h2 className="text-4xl font-bold text-navy-900 mb-4">Core Strategies</h2>
             <p className="text-hive-green font-bold tracking-[0.2em] uppercase text-sm">How we work</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-0">
-            <div className="p-10 border-b md:border-b-0 md:border-r border-gray-100 hover:bg-gray-50/50 transition-colors">
-              <span className="text-6xl font-light text-gray-100 mb-8 block font-display">01</span>
-              <h3 className="text-xl font-bold mb-4 text-gray-900 tracking-tight">Academic Research</h3>
-              <p className="text-gray-500 text-sm leading-relaxed italic">"산업 트렌드를 분석하고 학술적 인사이트를 도출합니다."</p>
+            <div className="p-10 border-b md:border-b-0 md:border-r border-navy-900/10 hover:bg-navy-900/[0.02] transition-colors">
+              <span className="text-6xl font-light text-navy-900/10 mb-8 block font-display">01</span>
+              <h3 className="text-xl font-bold mb-4 text-navy-900 tracking-tight">Service Issue Seminar</h3>
+              <p className="text-navy-900/60 text-sm leading-relaxed italic">"최신 서비스 산업 트렌드와 호스피탈리티 이슈 분석 세미나를 진행합니다."</p>
             </div>
-            <div className="p-10 border-b md:border-b-0 md:border-r border-gray-100 hover:bg-gray-50/50 transition-colors">
-              <span className="text-6xl font-light text-gray-100 mb-8 block font-display">02</span>
-              <h3 className="text-xl font-bold mb-4 text-gray-900 tracking-tight">Networking</h3>
-              <p className="text-gray-500 text-sm leading-relaxed italic">"다양한 실무 및 선배들과의 네트워크를 통해 지혜를 공유합니다."</p>
+            <div className="p-10 border-b md:border-b-0 md:border-r border-navy-900/10 hover:bg-navy-900/[0.02] transition-colors">
+              <span className="text-6xl font-light text-navy-900/10 mb-8 block font-display">02</span>
+              <h3 className="text-xl font-bold mb-4 text-navy-900 tracking-tight">Networking</h3>
+              <p className="text-navy-900/60 text-sm leading-relaxed italic">"다양한 실무 및 선배들과의 네트워크를 통해 지혜를 공유합니다."</p>
             </div>
-            <div className="p-10 hover:bg-gray-50/50 transition-colors">
-              <span className="text-6xl font-light text-gray-100 mb-8 block font-display">03</span>
-              <h3 className="text-xl font-bold mb-4 text-gray-900 tracking-tight">Service Design</h3>
-              <p className="text-gray-500 text-sm leading-relaxed italic">"사람 중심의 따뜻하고 혁신적인 서비스를 기획합니다."</p>
+            <div className="p-10 hover:bg-navy-900/[0.02] transition-colors">
+              <span className="text-6xl font-light text-navy-900/10 mb-8 block font-display">03</span>
+              <h3 className="text-xl font-bold mb-4 text-navy-900 tracking-tight">Academic Column</h3>
+              <p className="text-navy-900/60 text-sm leading-relaxed italic">"다양한 주제의 학회원 칼럼을 통해 트렌드와 통찰을 공유합니다."</p>
             </div>
           </div>
         </div>

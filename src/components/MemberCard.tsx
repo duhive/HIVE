@@ -12,11 +12,11 @@ const MemberCard: React.FC<MemberCardProps> = ({ member, onClick }) => {
   return (
     <motion.div
       whileHover={{ scale: 1.02 }}
-      className="group relative aspect-[3/4] rounded-2xl overflow-hidden cursor-pointer shadow-lg bg-gray-200"
+      className="group relative aspect-[3/4] rounded-2xl overflow-hidden cursor-pointer shadow-lg bg-navy-900/10"
       onClick={onClick}
     >
       {/* Placeholder Background Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-300 to-gray-400"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-navy-900/20 to-navy-900/30"></div>
       
       {/* Bottom Gradient Overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90"></div>

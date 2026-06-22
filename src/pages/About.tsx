@@ -30,10 +30,10 @@ const About = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl md:text-5xl font-display font-bold mb-8 text-gradient">
+            <h2 className="text-4xl md:text-5xl font-display font-bold mb-8 text-hive-green">
               About Us
             </h2>
-            <div className="space-y-6 text-gray-600 leading-relaxed text-lg">
+            <div className="space-y-6 text-navy-900/70 leading-relaxed text-lg">
               <p>{BRAND_STORY.origin}</p>
               <p>{BRAND_STORY.problem}</p>
               <p>{BRAND_STORY.difference}</p>
@@ -42,6 +42,16 @@ const About = () => {
           </motion.div>
 
           <div className="relative">
+            {/* Single Large Watermark Behind the entire grid */}
+            <div className="absolute inset-0 flex items-center justify-center opacity-[0.25] pointer-events-none select-none z-0">
+              <img 
+                src="https://i.ibb.co/Rpk7MTKP/3.png" 
+                alt="Large HIVE Watermark" 
+                className="w-80 h-80 md:w-[480px] md:h-[480px] object-contain"
+                referrerPolicy="no-referrer"
+              />
+            </div>
+
             <div className="grid grid-cols-2 gap-6 relative z-10">
               {features.map((f, i) => (
                 <motion.div
@@ -50,13 +60,15 @@ const About = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
-                  className="p-8 bg-white border border-gray-100 rounded-2xl hover:border-accent/40 transition-all duration-300 group shadow-sm hover:shadow-md"
+                  className="p-8 bg-white/40 border border-navy-900/10 rounded-2xl hover:border-accent/40 transition-all duration-300 group shadow-sm hover:shadow-md relative overflow-hidden"
                 >
-                  <div className="mb-4 transform group-hover:scale-110 transition-transform duration-300">
-                    {f.icon}
+                  <div className="relative z-10">
+                    <div className="mb-4 transform group-hover:scale-110 transition-transform duration-300">
+                      {f.icon}
+                    </div>
+                    <h3 className="text-xl font-bold mb-2 text-navy-900">{f.title}</h3>
+                    <p className="text-sm text-navy-900/40">{f.desc}</p>
                   </div>
-                  <h3 className="text-xl font-bold mb-2 text-gray-900">{f.title}</h3>
-                  <p className="text-sm text-gray-400">{f.desc}</p>
                 </motion.div>
               ))}
             </div>
@@ -73,14 +85,14 @@ const About = () => {
         >
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-5xl font-display font-bold mb-6 text-hive-green">Scope of Activities</h2>
-            <p className="text-gray-500 max-w-2xl mx-auto text-lg">
+            <p className="text-navy-900/60 max-w-2xl mx-auto text-lg">
               HIVE는 전통적인 호스피탈리티 전문성과 현대적인 융복합 분야를 결합하여 산업의 경계를 확장합니다.
             </p>
           </div>
 
           <div className="flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-16">
             {/* Traditional Block */}
-            <div className="relative p-10 border border-gray-200 rounded-[2.5rem] w-full max-w-sm bg-white shadow-sm">
+            <div className="relative p-10 border border-navy-900/10 rounded-[2.5rem] w-full max-w-sm bg-white shadow-sm">
               <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-hive-green text-white px-6 py-2 font-bold text-[10px] uppercase tracking-[0.2em] rounded-full shadow-lg whitespace-nowrap">
                 Traditional Hospitality
               </div>
@@ -106,13 +118,13 @@ const About = () => {
             </div>
 
             {/* Convergence Block */}
-            <div className="relative p-10 border border-gray-200 rounded-[2.5rem] w-full max-w-sm bg-white shadow-sm">
+            <div className="relative p-10 border border-navy-900/10 rounded-[2.5rem] w-full max-w-sm bg-white shadow-sm">
               <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-hive-green text-white px-6 py-2 font-bold text-[10px] uppercase tracking-[0.2em] rounded-full shadow-lg whitespace-nowrap">
                 Convergence Fields
               </div>
               <div className="grid grid-cols-2 gap-4 mt-6">
                 {[
-                  { name: "Education", color: "bg-hive-green/5 text-hive-green" },
+                  { name: "Entertainment", color: "bg-hive-green/5 text-hive-green" },
                   { name: "Fintech", color: "bg-hive-green/5 text-hive-green" },
                   { name: "IT · AI", color: "bg-hive-green/5 text-hive-green" },
                   { name: "Service Design", color: "bg-hive-green/5 text-hive-green" }

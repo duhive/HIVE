@@ -2,12 +2,12 @@
 @import "tailwindcss";
 
 @theme {
-  --color-hive-green: #004D40;
-  --color-hive-light-green: #00695C;
-  --color-accent: #004D40;
-  --color-navy-900: #1A1A1A;
+  --color-hive-green: #002D56;
+  --color-hive-light-green: #C5A16F;
+  --color-accent: #002D56;
+  --color-navy-900: #051429;
   --color-ivory: #FFFFFF;
-  --color-silver: #757575;
+  --color-silver: #64748B;
   
   --font-serif: "Inter", sans-serif;
   --font-sans: "Inter", sans-serif;

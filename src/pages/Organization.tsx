@@ -51,7 +51,7 @@ const Organization = () => {
   ];
 
   return (
-    <div className="pt-20 min-h-screen bg-gray-50">
+    <div className="pt-20 min-h-screen bg-ivory">
       <section className="py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
@@ -66,7 +66,7 @@ const Organization = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="text-4xl md:text-5xl font-bold tracking-tight text-gray-900 mb-6"
+              className="text-4xl md:text-5xl font-bold tracking-tight text-navy-900 mb-6"
             >
               Organization
             </motion.h2>
@@ -74,7 +74,7 @@ const Organization = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="text-lg text-gray-600 max-w-2xl mx-auto"
+              className="text-lg text-navy-900/70 max-w-2xl mx-auto"
             >
               HIVE는 체계적인 조직 구성을 통해 각 분야의 전문성을 극대화하고,<br/>
               학회원들이 실무적인 역량을 쌓을 수 있는 환경을 제공합니다.
@@ -89,22 +89,22 @@ const Organization = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300"
+                className="bg-white p-8 rounded-3xl shadow-sm border border-navy-900/10 hover:shadow-xl transition-all duration-300"
               >
                 <div className="flex items-center space-x-4 mb-6">
                   <div className="p-3 bg-hive-green/10 rounded-2xl">
                     {dept.icon}
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900">{dept.title}</h3>
+                  <h3 className="text-2xl font-bold text-navy-900">{dept.title}</h3>
                 </div>
-                <p className="text-gray-600 mb-8 leading-relaxed">
+                <p className="text-navy-900/70 mb-8 leading-relaxed">
                   {dept.description}
                 </p>
                 <div className="space-y-3">
-                  <h4 className="text-sm font-bold text-gray-400 uppercase tracking-widest">Key Responsibilities</h4>
+                  <h4 className="text-sm font-bold text-navy-900/40 uppercase tracking-widest">Key Responsibilities</h4>
                   <ul className="space-y-2">
                     {dept.tasks.map((task, i) => (
-                      <li key={i} className="flex items-start space-x-3 text-gray-700">
+                      <li key={i} className="flex items-start space-x-3 text-navy-900/80">
                         <span className="mt-1.5 w-1.5 h-1.5 bg-hive-green rounded-full flex-shrink-0" />
                         <span>{task}</span>
                       </li>

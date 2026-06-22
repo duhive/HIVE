@@ -19,7 +19,7 @@ const Greetings = () => {
                 className="lg:col-span-4"
               >
                 <div className="max-w-[280px] mx-auto lg:mx-0">
-                  <div className="aspect-[3/4] rounded-2xl overflow-hidden bg-gray-100 shadow-xl border border-gray-100">
+                  <div className="aspect-[3/4] rounded-2xl overflow-hidden bg-navy-900/5 shadow-xl border border-navy-900/10">
                     <img 
                       src="https://i.ibb.co/v6z0pWtm/image.jpg" 
                       alt="President" 
@@ -28,8 +28,8 @@ const Greetings = () => {
                     />
                   </div>
                   <div className="mt-4 text-center lg:text-left">
-                    <p className="text-gray-900 font-bold text-lg">1기 학회장 강경임</p>
-                    <p className="text-gray-500 text-sm">대구대학교 호텔외식관광학과</p>
+                    <p className="text-navy-900 font-bold text-lg">1기 학회장 강경임</p>
+                    <p className="text-navy-900/60 text-sm">대구대학교 호텔외식관광학과</p>
                   </div>
                 </div>
               </motion.div>
@@ -43,12 +43,12 @@ const Greetings = () => {
                 className="lg:col-span-8"
               >
                 <h4 className="text-hive-green font-bold tracking-widest text-xs uppercase mb-4">President's Message</h4>
-                <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-gray-900 mb-8 leading-tight">
+                <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-navy-900 mb-8 leading-tight">
                   호스피탈리티의 본질에<br/>
-                  <span className="text-hive-green serif">혁신을 더하다</span>
+                  <span className="text-hive-green font-serif">혁신을 더하다</span>
                 </h2>
                 
-                <div className="space-y-6 text-base md:text-lg text-gray-600 leading-relaxed">
+                <div className="space-y-6 text-base md:text-lg text-navy-900/70 leading-relaxed">
                   <p>
                     안녕하십니까, Hospitality 경영학회 HIVE의 1기 학회장 강경임입니다.
                   </p>
