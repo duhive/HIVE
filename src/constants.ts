@@ -164,6 +164,16 @@ export const MEMBERS: Member[] = [
     education: "지리교육과",
     skills: ["항공서비스", "지리교육"],
     contact: "pss76@naver.com"
+  },
+  {
+    id: 14,
+    name: "송수민",
+    role: "Convergence Partner",
+    image: "https://i.ibb.co/TGvX4D7/28.png",
+    bio: "Creating synergistic value through various interdisciplinary approaches in Hospitality.",
+    education: "경영학과",
+    skills: ["항공서비스", "항공경영"],
+    contact: "TBD"
   }
 ];
 
