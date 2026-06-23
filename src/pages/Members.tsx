@@ -2,16 +2,14 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { MEMBERS, PARTNER_MEMBERS } from '../constants';
 import { Member } from '../types';
-import { X, Mail, GraduationCap, Briefcase, Award, Users, ChevronDown, ChevronUp } from 'lucide-react';
+import { X, Mail, GraduationCap, Briefcase, Award, Users } from 'lucide-react';
 
 const Members = () => {
   const [selectedMember, setSelectedMember] = useState<Member | null>(null);
-  const [showExperience, setShowExperience] = useState<boolean>(false);
   const [selectedCategory, setSelectedCategory] = useState<string>('GENERATIONS');
 
   const handleSelectMember = (member: Member) => {
     setSelectedMember(member);
-    setShowExperience(false);
   };
   const [selectedFilter, setSelectedFilter] = useState<string>('전체');
 
@@ -306,44 +304,6 @@ const Members = () => {
                       </div>
                       <p className="text-navy-900/70 text-sm break-all font-mono">{selectedMember.contact}</p>
                     </section>
-
-                    {selectedMember.experience && selectedMember.experience.length > 0 && (
-                      <section className="border-t border-navy-900/10 pt-5">
-                        <button
-                          onClick={() => setShowExperience(!showExperience)}
-                          className="flex items-center justify-between w-full text-left py-2 text-navy-900 hover:text-hive-green transition-colors font-bold text-sm tracking-wide focus:outline-none cursor-pointer group"
-                        >
-                          <div className="flex items-center space-x-2 text-hive-green">
-                            <Briefcase size={18} />
-                            <h4 className="font-bold uppercase tracking-widest text-xs text-navy-900/40">상세 경력 및 활동 사항</h4>
-                          </div>
-                          {showExperience ? (
-                            <ChevronUp size={16} className="text-navy-900/40 group-hover:text-hive-green transition-colors" />
-                          ) : (
-                            <ChevronDown size={16} className="text-navy-900/40 group-hover:text-hive-green transition-colors" />
-                          )}
-                        </button>
-                        
-                        <motion.div
-                          initial={false}
-                          animate={{ 
-                            height: showExperience ? "auto" : 0,
-                            opacity: showExperience ? 1 : 0
-                          }}
-                          transition={{ duration: 0.3, ease: "easeInOut" }}
-                          className="overflow-hidden"
-                        >
-                          <ul className="mt-4 space-y-2.5 pl-1">
-                            {selectedMember.experience.map((exp, idx) => (
-                              <li key={idx} className="flex items-start space-x-2.5 text-navy-900/70 text-sm leading-relaxed">
-                                <span className="mt-2 w-1.5 h-1.5 bg-hive-green rounded-full flex-shrink-0" />
-                                <span>{exp}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </motion.div>
-                      </section>
-                    )}
 
                   </div>
                 </div>
