@@ -195,7 +195,10 @@ export const PARTNER_MEMBERS: Member[] = [
     bio: "데이터 기반의 관광 연구를 통해 학문적 깊이를 더합니다.",
     education: "대구대학교 호텔관광연구실",
     skills: ["인공지능", "스마트관광"],
-    contact: "kbm010525@naver.com"
+    contact: "kbm010525@naver.com",
+    experience: [
+      "2024. 08 경상남도 산청군 관광개발 예비사업 연구개발과제 인턴"
+    ]
   },
   {
     id: 105,
