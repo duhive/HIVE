@@ -149,7 +149,7 @@ export const MEMBERS: Member[] = [
     id: 12,
     name: "박지호",
     role: "Convergence Partner",
-    image: "https://i.ibb.co/93V2Mn1T/image.jpg",
+    image: "https://i.ibb.co/TGvX4D7/28.png",
     bio: "Exploring the future of aviation through the fusion of English Education and Psychology.",
     education: "영어교육과 / 심리학과",
     skills: ["항공서비스", "항공경영"],
@@ -173,7 +173,7 @@ export const MEMBERS: Member[] = [
     bio: "Creating synergistic value through various interdisciplinary approaches in Hospitality.",
     education: "경영학과",
     skills: ["항공서비스", "항공경영"],
-    contact: "TBD"
+    contact: "yry8282@naver.com"
   }
 ];
 

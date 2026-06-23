@@ -90,19 +90,20 @@ const Home = () => {
               <img 
                 src={slides[currentSlide].image} 
                 alt={slides[currentSlide].title} 
-                className="w-full h-full object-cover object-center opacity-45 select-none"
+                className="w-full h-full object-cover object-center opacity-65 select-none"
                 referrerPolicy="no-referrer"
               />
             </motion.div>
           </AnimatePresence>
-          {/* Elite Navy / Slate Overlay mimicking the university portal */}
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-900/65 to-slate-950/90 mix-blend-multiply" />
-          <div className="absolute inset-0 bg-radial-at-c from-transparent via-slate-950/40 to-slate-950" />
+          {/* Green / Slate Overlay matching the green brand theme */}
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/70 via-hive-green/20 to-slate-950/70 mix-blend-multiply" />
+          <div className="absolute inset-0 bg-radial-at-c from-transparent via-slate-950/25 to-slate-950/80" />
+          <div className="absolute inset-0 bg-hive-green/10 mix-blend-color pointer-events-none" />
         </div>
 
         {/* Technical/Cyber Circle Coordinate Overlay inspired by reference screenshot */}
         <div className="absolute left-4 md:left-24 top-1/2 -translate-y-1/2 w-[300px] md:w-[550px] h-[300px] md:h-[550px] pointer-events-none opacity-30 z-10">
-          <svg viewBox="0 0 100 100" fill="none" className="w-full h-full text-blue-400/30 animate-[spin_100s_linear_infinite]">
+          <svg viewBox="0 0 100 100" fill="none" className="w-full h-full text-hive-light-green/30 animate-[spin_100s_linear_infinite]">
             <circle cx="50" cy="50" r="45" stroke="currentColor" strokeWidth="0.15" strokeDasharray="1 3" />
             <circle cx="50" cy="50" r="38" stroke="currentColor" strokeWidth="0.25" />
             <circle cx="50" cy="50" r="30" stroke="currentColor" strokeWidth="0.1" strokeDasharray="3 1" />
@@ -112,7 +113,7 @@ const Home = () => {
             <path d="M 20 50 A 30 30 0 0 1 80 50" stroke="currentColor" strokeWidth="0.4" strokeDasharray="1 2" />
           </svg>
           <div className="absolute inset-0 flex items-center justify-center animate-[pulse_4s_ease-in-out_infinite]">
-            <div className="w-48 h-48 rounded-full border border-blue-500/10 blur-[1px]"></div>
+            <div className="w-48 h-48 rounded-full border border-hive-green/20 blur-[1px]"></div>
           </div>
         </div>
 
@@ -125,7 +126,7 @@ const Home = () => {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.1 }}
-              className="text-base md:text-xl text-blue-200/90 font-medium mb-4 tracking-wide leading-relaxed"
+              className="text-base md:text-xl text-emerald-100/95 font-medium mb-4 tracking-wide leading-relaxed"
             >
               {slides[currentSlide].slogan}
             </motion.p>
@@ -136,7 +137,7 @@ const Home = () => {
             </h1>
 
             {/* Subtitle - Fixed to Hospitality Management Society as requested */}
-            <p className="text-xs sm:text-sm md:text-base font-bold text-blue-200/50 tracking-[0.4em] mb-10 select-none uppercase font-mono">
+            <p className="text-xs sm:text-sm md:text-base font-bold text-emerald-200/50 tracking-[0.4em] mb-10 select-none uppercase font-mono">
               Hospitality Management Society
             </p>
 
@@ -162,7 +163,7 @@ const Home = () => {
           {/* Previous Button */}
           <button 
             onClick={handlePrev}
-            className="p-1 hover:text-blue-400 active:scale-95 transition-all mr-3 cursor-pointer"
+            className="p-1 hover:text-hive-light-green active:scale-95 transition-all mr-3 cursor-pointer"
             aria-label="Previous Slide"
           >
             <ChevronLeft size={18} />
@@ -176,7 +177,7 @@ const Home = () => {
           {/* Next Button */}
           <button 
             onClick={handleNext}
-            className="p-1 hover:text-blue-400 active:scale-95 transition-all mr-5 cursor-pointer"
+            className="p-1 hover:text-hive-light-green active:scale-95 transition-all mr-5 cursor-pointer"
             aria-label="Next Slide"
           >
             <ChevronRight size={18} />
@@ -188,7 +189,7 @@ const Home = () => {
           {/* Autoplay Play/Pause */}
           <button 
             onClick={togglePlay}
-            className="p-1 hover:text-blue-400 active:scale-95 transition-all cursor-pointer"
+            className="p-1 hover:text-hive-light-green active:scale-95 transition-all cursor-pointer"
             aria-label={isPlaying ? "Pause autocomplete" : "Play autocomplete"}
           >
             {isPlaying ? <Pause size={14} fill="currentColor" /> : <Play size={14} fill="currentColor" />}

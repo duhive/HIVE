@@ -2,9 +2,9 @@
 @import "tailwindcss";
 
 @theme {
-  --color-hive-green: #002D56;
-  --color-hive-light-green: #C5A16F;
-  --color-accent: #002D56;
+  --color-hive-green: #0B5A42;
+  --color-hive-light-green: #10B981;
+  --color-accent: #0B5A42;
   --color-navy-900: #051429;
   --color-ivory: #FFFFFF;
   --color-silver: #64748B;
