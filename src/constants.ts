@@ -3,7 +3,7 @@ import { Member, CurriculumItem, FAQ } from './types';
 export const REGULAR_CURRICULUM: CurriculumItem[] = [
   {
     id: 1,
-    title: "Hospitality 세미나",
+    title: "호스피탈리티 세미나",
     period: "격주",
     description: "국내외 관광 산업의 최신 이슈와 트렌드를 다각도로 분석하고 시사점을 도출합니다.",
     kpi: "이슈 분석 리포트 발표 2회",
@@ -11,7 +11,7 @@ export const REGULAR_CURRICULUM: CurriculumItem[] = [
   },
   {
     id: 2,
-    title: "Hospitality Case Study",
+    title: "호스피탈리티 사례연구",
     period: "주간",
     description: "국내외 주요 호텔, 항공사, 플랫폼 및 혁신적인 관광 기업들의 실제 비즈니스 모델과 전략적 사례를 다각도로 분석하여 당면 과제에 대한 최적의 해결 방안을 도출합니다.",
     kpi: "글로벌 기업 비즈니스 혁신 사례 분석 및 연구 발표 2회",
@@ -19,7 +19,7 @@ export const REGULAR_CURRICULUM: CurriculumItem[] = [
   },
   {
     id: 3,
-    title: "Academic Column & Magazine",
+    title: "관광 칼럼 / 매거진",
     period: "월간",
     description: "관광·호스피탈리티 산업 트렌드와 학회원들의 독창적인 통찰이 담긴 칼럼 및 학회 매거진을 기획하고 정기적으로 발행합니다.",
     kpi: "에세이 리서치 및 학회 매거진 기획안 구성",

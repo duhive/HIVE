@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Calendar, MapPin, Users, Award, ChevronLeft, ChevronRight } from 'lucide-react';
+import { X, Calendar, MapPin, ChevronLeft, ChevronRight } from 'lucide-react';
 import SectionHeader from '../components/SectionHeader';
 
 interface GalleryImage {
@@ -12,14 +12,12 @@ interface GalleryImage {
   url: string;
   urls?: string[];
   location: string;
-  participants: string;
-  takeaway: string;
 }
 
 const GALLERY_IMAGES: GalleryImage[] = [
   {
     id: 4,
-    title: "Hospitality 세미나(2)",
+    title: "호스피탈리티 세미나(2)",
     category: "Regular Curriculums",
     date: "2026.03.14",
     description: `관광 및 호스피탈리티 산업의 다각화된 국외 이슈와 최신 전략적 흐름을 분석하고 연구 발표를 진행했습니다.
@@ -38,23 +36,23 @@ const GALLERY_IMAGES: GalleryImage[] = [
       "https://i.ibb.co/HDJWNNXB/image4.png",
       "https://i.ibb.co/zVCVtKLS/image3.png"
     ],
-    location: "대구대학교 사회과학관 공동 연구 센터",
-    participants: "HIVE 1기 구성원 및 신규 연구진",
-    takeaway: "경쟁력 지표 분석 중심의 글로벌 관광 비즈니스 혁신 사례 리서치 완료"
+    location: "경영 1관 1318c"
   },
   {
     id: 5,
-    title: "Hospitality 세미나(1)",
+    title: "호스피탈리티 세미나(1)",
     category: "Idea Ideation",
-    date: "2026.04.10",
-    description: "인문학적 통찰과 환대 서비스 설계의 기본 정신을 정립하기 위해 문화적 가치 서적들을 논평하고 교의적인 고객 분석 프레임워크를 심층 복합 기안한 스터디입니다. 이론적 기반에 그치지 않고, 고객 심리를 아우르는 서비스 블루프린트 프로토타이핑을 구현하였습니다.",
+    date: "2026.04.06",
+    description: `지난 4월 6일(월) 16:30, '관심 있는 관광 분야 조사 및 발표'를 주제로 세미나가 진행되었습니다.
+
+각 학회원이 지속 가능한 관광, AI·스마트 관광, 지역 관광, 축제 및 이벤트 관광, 관광 상품 및 서비스 경험 등 다양한 주제에 대해 2~3분간 자유로운 발표를 펼치고, 가벼운 대화와 질의응답을 통해 폭넓은 시각과 인사이트를 나누었습니다.
+
+앞으로도 활발한 상호 지식 공유와 학습을 통해 구성원 모두가 주도적으로 성장할 수 있는 풍성한 세미나를 이어가겠습니다.`,
     url: "https://i.ibb.co/tpGm5dsZ/Kakao-Talk-20260407-184041137-05.jpg",
     urls: [
       "https://i.ibb.co/tpGm5dsZ/Kakao-Talk-20260407-184041137-05.jpg"
     ],
-    location: "교내 창의 아이디어 도서 협업 라운지",
-    participants: "HIVE 독서 토론 및 브랜딩 소모임",
-    takeaway: "가치 중심 공간 기획서 도출 및 융합 실무 프로토타입 디자인 완성"
+    location: "경영 1관 1318c"
   },
   {
     id: 6,
@@ -73,9 +71,7 @@ const GALLERY_IMAGES: GalleryImage[] = [
       "https://i.ibb.co/Mx4Yw4nk/image.png",
       "https://i.ibb.co/8LxTxT0F/image1.png"
     ],
-    location: "대구대학교 사회과학관 비즈니스 네트워킹룸",
-    participants: "HIVE 1기 전체 학회원 및 임원진",
-    takeaway: "학회 공동체 비전 정렬 및 네트워킹 아이스브레이킹 완료"
+    location: "경영 1관 1318c"
   }
 ];
 
@@ -262,26 +258,6 @@ const Photo = () => {
                       <div>
                         <h4 className="text-[10px] font-bold uppercase tracking-widest text-navy-900/40 mb-0.5">진행 장소</h4>
                         <p className="text-xs font-medium text-navy-900/80">{selectedImage.location}</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start space-x-3">
-                      <div className="p-1 rounded-md bg-navy-900/5 text-hive-green flex-shrink-0">
-                        <Users size={15} />
-                      </div>
-                      <div>
-                        <h4 className="text-[10px] font-bold uppercase tracking-widest text-navy-900/40 mb-0.5">참가 학회원</h4>
-                        <p className="text-xs font-medium text-navy-900/80">{selectedImage.participants}</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start space-x-3">
-                      <div className="p-1 rounded-md bg-navy-900/5 text-hive-green flex-shrink-0">
-                        <Award size={15} />
-                      </div>
-                      <div>
-                        <h4 className="text-[10px] font-bold uppercase tracking-widest text-navy-900/40 mb-0.5">핵심 성과 (Core Takeaway)</h4>
-                        <p className="text-xs font-medium text-hive-green">{selectedImage.takeaway}</p>
                       </div>
                     </div>
                   </div>
