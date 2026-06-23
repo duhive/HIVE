@@ -3,19 +3,19 @@ import { Member, CurriculumItem, FAQ } from './types';
 export const REGULAR_CURRICULUM: CurriculumItem[] = [
   {
     id: 1,
-    title: "자유주제연구",
-    period: "주간",
-    description: "학회원들이 직접 선정한 관광 및 호스피탈리티 관련 주제를 심도 있게 탐구하고 분석합니다.",
-    kpi: "주간 연구 리포트 발행 및 피드백",
-    outcomes: ["연구 논문", "인사이트 덱"]
-  },
-  {
-    id: 2,
     title: "Hospitality 세미나",
     period: "격주",
     description: "국내외 관광 산업의 최신 이슈와 트렌드를 다각도로 분석하고 시사점을 도출합니다.",
-    kpi: "이슈 분석 리포트 발표 4회",
+    kpi: "이슈 분석 리포트 발표 2회",
     outcomes: ["이슈 분석 보고서", "트렌드 브리핑"]
+  },
+  {
+    id: 2,
+    title: "Hospitality Case Study",
+    period: "주간",
+    description: "국내외 주요 호텔, 항공사, 플랫폼 및 혁신적인 관광 기업들의 실제 비즈니스 모델과 전략적 사례를 다각도로 분석하여 당면 과제에 대한 최적의 해결 방안을 도출합니다.",
+    kpi: "글로벌 기업 비즈니스 혁신 사례 분석 및 연구 발표 2회",
+    outcomes: ["사례 분석 리포트", "비즈니스 전략 제안서"]
   },
   {
     id: 3,
@@ -204,9 +204,14 @@ export const PARTNER_MEMBERS: Member[] = [
     category: "Alumni Partners",
     image: "https://i.ibb.co/Z1Tk4T4L/2026-05-05-160901.png",
     bio: "사용자 경험 중심의 서비스 디자인을 연구합니다.",
-    education: "대구대학교 호텔관광연구실 / 대구관광고등학교 시간강사",
+    education: "대구대학교 호텔관광연구실",
     skills: ["지역관광개발", "서비스 경험 디자인"],
-    contact: "yujinpark0311@naver.com"
+    contact: "yujinpark0311@naver.com",
+    experience: [
+      "2023. 08 한국관광공사 주관, 국제이벤트 지원사업 전문가 평가단",
+      "2024. 08 경상남도 산청군 관광개발 예비사업 연구개발과제 인턴",
+      "2026. 04 ~ : 대구관광고등학교 시간강사(관광문화와자원, 웨딩)"
+    ]
   }
 ];
 

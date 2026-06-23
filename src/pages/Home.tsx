@@ -5,9 +5,13 @@ import { ArrowRight, Globe, Users, Target, Zap, ChevronLeft, ChevronRight, Play,
 import Contact from '../components/Contact';
 import { BRAND_STORY } from '../constants';
 
+import aviationHero from '../assets/images/aviation_service_hero_1782037825374.jpg';
+import metaverseHero from '../assets/images/metaverse_hotel_hero_1782191831140.jpg';
+import cabinServiceAbout from '../assets/images/cabin_service_about_1782193310292.jpg';
+
 const slides = [
   {
-    image: "/src/assets/images/aviation_service_hero_1782037825374.jpg",
+    image: aviationHero,
     uniDept: "DAEGU UNIVERSITY HOSPITALITY MANAGEMENT SOCIETY",
     slogan: "환대와 혁신으로 더 넓은 세상의 가치를 연결하는",
     title: "호스피탈리티",
@@ -128,7 +132,7 @@ const Home = () => {
             
             {/* Title - Fixed to 호스피탈리티 경영학회 as requested */}
             <h1 className="text-3xl sm:text-5xl md:text-6xl font-black text-white mb-4 leading-tight tracking-tight select-none">
-              호스피탈리티 경영학회
+              <span className="tracking-[0.08em] mr-2">호스피탈리티</span> 경영학회
             </h1>
 
             {/* Subtitle - Fixed to Hospitality Management Society as requested */}
@@ -222,8 +226,8 @@ const Home = () => {
               className="relative aspect-square rounded-3xl overflow-hidden shadow-2xl"
             >
               <img 
-                src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80" 
-                alt="HIVE Team Collaboration"
+                src={cabinServiceAbout} 
+                alt="HIVE Premium Cabin Service"
                 className="w-full h-full object-cover"
                 referrerPolicy="no-referrer"
               />
@@ -295,8 +299,8 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Contact Section */}
-      <Contact />
+
+      {/* Contact Section removed as requested */}
     </div>
   );
 };

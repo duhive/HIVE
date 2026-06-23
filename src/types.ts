@@ -17,6 +17,7 @@ export interface Member {
   education: string;
   skills: string[];
   contact: string;
+  experience?: string[];
 }
 
 export interface FAQ {

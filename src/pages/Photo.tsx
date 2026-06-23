@@ -19,10 +19,19 @@ interface GalleryImage {
 const GALLERY_IMAGES: GalleryImage[] = [
   {
     id: 4,
-    title: "Hospitality 세미나",
+    title: "Hospitality 세미나(2)",
     category: "Regular Curriculums",
     date: "2026.03.14",
-    description: "지능화되어가는 현대 관광 산업의 흐름을 분석하고 스마트 투어리즘 및 디지털 미디어 서비스 사례를 발굴하는 정기 연구회입니다. 핵심 트렌드 브리핑 리포트를 매주 제작 및 토의하고 데이터와 기술이 결합한 새로운 경험 영역에 관한 인사이트를 교환합니다.",
+    description: `관광 및 호스피탈리티 산업의 다각화된 국외 이슈와 최신 전략적 흐름을 분석하고 연구 발표를 진행했습니다.
+
+주요 연구 분석 주제:
+• 자본의 역외 수출 현상과 상생 전략
+• 문화유산 자원과 관광수요의 활성화 상관관계
+• 일본 '스마도리(スマドリ)' 문화 확산에 따른 주류 시장 분석
+• 서비스 직군의 노동 환경이 직무만족과 이직의도에 미치는 영향
+• 유가 등 대외 요인 조성이 국제 관광 경제에 주는 피드백
+
+폭넓은 토의를 거치며 글로벌 비즈니스 인사이트를 단단히 다지는 지식 교류의 장을 마련했습니다.`,
     url: "https://i.ibb.co/4nfnKKkj/Kakao-Talk-20260507-182539464-08.jpg",
     urls: [
       "https://i.ibb.co/4nfnKKkj/Kakao-Talk-20260507-182539464-08.jpg",
@@ -39,11 +48,9 @@ const GALLERY_IMAGES: GalleryImage[] = [
     category: "Idea Ideation",
     date: "2026.04.10",
     description: "인문학적 통찰과 환대 서비스 설계의 기본 정신을 정립하기 위해 문화적 가치 서적들을 논평하고 교의적인 고객 분석 프레임워크를 심층 복합 기안한 스터디입니다. 이론적 기반에 그치지 않고, 고객 심리를 아우르는 서비스 블루프린트 프로토타이핑을 구현하였습니다.",
-    url: "https://images.unsplash.com/photo-1531535934202-f022eeee25c2?auto=format&fit=crop&q=80&w=1200",
+    url: "https://i.ibb.co/tpGm5dsZ/Kakao-Talk-20260407-184041137-05.jpg",
     urls: [
-      "https://images.unsplash.com/photo-1531535934202-f022eeee25c2?auto=format&fit=crop&q=80&w=1200",
-      "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=1200",
-      "https://images.unsplash.com/photo-1552581230-c01bc03a4495?auto=format&fit=crop&q=80&w=1200"
+      "https://i.ibb.co/tpGm5dsZ/Kakao-Talk-20260407-184041137-05.jpg"
     ],
     location: "교내 창의 아이디어 도서 협업 라운지",
     participants: "HIVE 독서 토론 및 브랜딩 소모임",
@@ -55,11 +62,10 @@ const GALLERY_IMAGES: GalleryImage[] = [
     category: "Human Network",
     date: "2026.03.02",
     description: "학회 활동의 공식적인 시작을 알리는 HIVE 호스피탈리티 경영학회 오리엔테이션입니다. 학업적 비전과 향후 1년간 진행될 정기 커리큘럼 계획을 공유하고, 창의적인 아이스 브레이킹 및 팀 빌딩 게임을 통해 서로의 관심사를 나누며 학회원 간의 끈끈한 네트워크를 다지는 뜻깊은 시간이었습니다.",
-    url: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1200",
+    url: "https://i.ibb.co/Mx4Yw4nk/image.png",
     urls: [
-      "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1200",
-      "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&q=80&w=1200",
-      "https://images.unsplash.com/photo-1511556532299-8f662fc26c06?auto=format&fit=crop&q=80&w=1200"
+      "https://i.ibb.co/Mx4Yw4nk/image.png",
+      "https://i.ibb.co/8LxTxT0F/image1.png"
     ],
     location: "대구대학교 사회과학관 비즈니스 네트워킹룸",
     participants: "HIVE 1기 전체 학회원 및 임원진",
@@ -117,9 +123,6 @@ const Photo = () => {
                 
                 {/* Content Overlay */}
                 <div className="absolute bottom-0 left-0 right-0 p-6 flex flex-col justify-end text-white">
-                  <span className="mb-2 inline-block text-[10px] font-bold uppercase tracking-[0.2em] text-hive-green">
-                    {image.category}
-                  </span>
                   <h3 className="text-lg font-bold leading-tight line-clamp-1 mb-1 transition-colors duration-300 group-hover:text-hive-green">
                     {image.title}
                   </h3>
@@ -202,10 +205,6 @@ const Photo = () => {
                   </div>
                 )}
 
-                {/* Corner Category overlay on Image */}
-                <span className="absolute top-6 left-6 px-4 py-1.5 bg-hive-green text-white text-[10px] font-bold uppercase tracking-[0.2em] rounded-full shadow-lg">
-                  {selectedImage.category}
-                </span>
               </div>
 
               {/* Information View Section (Right Side) */}

@@ -60,7 +60,7 @@ const About = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
-                  className="p-8 bg-white/40 border border-navy-900/10 rounded-2xl hover:border-accent/40 transition-all duration-300 group shadow-sm hover:shadow-md relative overflow-hidden"
+                  className="p-8 bg-white/40 border border-navy-900/5 rounded-2xl hover:border-accent/40 transition-all duration-300 group shadow-sm hover:shadow-md relative overflow-hidden"
                 >
                   <div className="relative z-10">
                     <div className="mb-4 transform group-hover:scale-110 transition-transform duration-300">

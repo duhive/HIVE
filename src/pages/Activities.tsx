@@ -11,7 +11,7 @@ const Activities = () => {
           {/* Regular Curriculum Section */}
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-display font-bold mb-4 text-hive-green">Regular Curriculum</h2>
-            <h3 className="text-xl md:text-2xl font-display font-semibold text-accent mb-4 tracking-widest uppercase">정기 커리큘럼</h3>
+            <h3 className="text-xl md:text-2xl font-display font-semibold text-accent mb-4 tracking-widest uppercase">정기 활동</h3>
             <p className="text-navy-900/60 max-w-2xl mx-auto">HIVE의 전문성을 쌓아가는 정기적인 연구 및 분석 과정입니다.</p>
           </div>
 
