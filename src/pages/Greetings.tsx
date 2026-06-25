@@ -44,8 +44,8 @@ const Greetings = () => {
               >
                 <h4 className="text-hive-green font-bold tracking-widest text-xs uppercase mb-4">President's Message</h4>
                 <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-navy-900 mb-8 leading-tight">
-                  호스피탈리티의 본질에<br/>
-                  <span className="text-hive-green font-serif">혁신을 더하다</span>
+                  따뜻한 환대에<br/>
+                  <span className="text-hive-green font-serif">새로운 즐거움을 더하다</span>
                 </h2>
                 
                 <div className="space-y-6 text-base md:text-lg text-navy-900/70 leading-relaxed">

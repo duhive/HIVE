@@ -14,7 +14,7 @@ const Members = () => {
   const [selectedFilter, setSelectedFilter] = useState<string>('전체');
 
   const generations = ['전체', '0-1기', '2기'];
-  const partnerFilters = ['Alumni Partners'];
+  const partnerFilters = ['Alumni Partners', 'Convergence Partners'];
 
   const filteredMembers = (selectedCategory === 'GENERATIONS'
     ? (selectedFilter === '전체' ? MEMBERS : selectedFilter === '0-1기' ? MEMBERS : [])
@@ -206,7 +206,9 @@ const Members = () => {
                       
                       <div className="absolute bottom-0 left-0 p-6 w-full transform translate-y-2 group-hover:translate-y-0 transition-transform">
                         <h3 className="text-xl font-bold text-white">{member.name}</h3>
-                        <p className="text-white/80 text-[10px] font-medium uppercase tracking-widest mt-1">{member.role}</p>
+                        <p className="text-white/80 text-[10px] font-medium uppercase tracking-widest mt-1">
+                          {member.category === 'Convergence Partners' ? member.education : member.role}
+                        </p>
                         <div className="h-0.5 w-0 group-hover:w-full bg-white/60 transition-all duration-300 mt-2" />
                       </div>
                     </motion.div>
@@ -255,7 +257,7 @@ const Members = () => {
               <div className="w-full md:w-3/5 p-6 md:p-10 flex flex-col justify-start md:max-h-[90vh] md:overflow-y-auto">
                 <div className="mb-5">
                   <h2 className="text-4xl font-display font-bold text-navy-900">{selectedMember.name}</h2>
-                  {selectedMember.category === 'Alumni Partners' && (
+                  {selectedMember.category && (
                     <span className="text-hive-green font-bold uppercase tracking-[0.2em] text-xs mt-1 block">
                       {selectedMember.role}
                     </span>
@@ -265,7 +267,7 @@ const Members = () => {
                 <div className="space-y-6">
                   <section>
                     <div className="flex items-center space-x-2 text-hive-green mb-3">
-                      {selectedMember.category === 'Alumni Partners' ? (
+                      {selectedMember.category ? (
                         <>
                           <GraduationCap size={18} />
                           <h4 className="font-bold uppercase tracking-widest text-xs text-navy-900/40">Education</h4>
@@ -278,7 +280,7 @@ const Members = () => {
                       )}
                     </div>
                     <p className="text-navy-900/80 leading-relaxed font-normal">
-                      {selectedMember.category === 'Alumni Partners' ? selectedMember.education : selectedMember.role}
+                      {selectedMember.category ? selectedMember.education : selectedMember.role}
                     </p>
                   </section>
 

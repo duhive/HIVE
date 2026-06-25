@@ -11,7 +11,7 @@ export const REGULAR_CURRICULUM: CurriculumItem[] = [
   },
   {
     id: 2,
-    title: "퍼스널 경험 브랜딩",
+    title: "퍼스널 브랜딩",
     period: "격주",
     description: "학회 활동과 개인의 다채로운 경험 속에서 핵심 역량을 발견하고 포트폴리오를 설계하여, 나만의 고유한 퍼스널 브랜드 가치를 정교하게 고도화하고 표현하는 프로세스를 학습합니다.",
     kpi: "퍼스널 브랜드 에센스 정의 및 디지털 포트폴리오 구축",
@@ -144,36 +144,6 @@ export const MEMBERS: Member[] = [
     education: "호텔외식관광학과",
     skills: ["호텔경영", "관광서비스"],
     contact: "TBD"
-  },
-  {
-    id: 12,
-    name: "박지호",
-    role: "Convergence Partner",
-    image: "https://i.ibb.co/TGvX4D7/28.png",
-    bio: "Exploring the future of aviation through the fusion of English Education and Psychology.",
-    education: "영어교육과 / 심리학과",
-    skills: ["항공서비스", "항공경영"],
-    contact: "jiho5690@naver.com"
-  },
-  {
-    id: 13,
-    name: "전나영",
-    role: "Convergence Partner",
-    image: "https://i.ibb.co/KxdRcy4B/image.jpg",
-    bio: "Creating new value through the fusion of Geography Education and Aviation Service.",
-    education: "지리교육과",
-    skills: ["항공서비스", "지리교육"],
-    contact: "pss76@naver.com"
-  },
-  {
-    id: 14,
-    name: "송수민",
-    role: "Convergence Partner",
-    image: "https://i.ibb.co/TGvX4D7/28.png",
-    bio: "Creating synergistic value through various interdisciplinary approaches in Hospitality.",
-    education: "경영학과",
-    skills: ["항공서비스", "항공경영"],
-    contact: "yry8282@naver.com"
   }
 ];
 
@@ -185,6 +155,50 @@ export const BRAND_STORY = {
 };
 
 export const PARTNER_MEMBERS: Member[] = [
+  {
+    id: 12,
+    name: "박지호",
+    role: "Convergence Partner",
+    category: "Convergence Partners",
+    image: "https://i.ibb.co/TGvX4D7/28.png",
+    bio: "Exploring the future of aviation through the fusion of English Education and Psychology.",
+    education: "영어교육과 / 심리학과",
+    skills: ["항공서비스", "항공경영"],
+    contact: "jiho5690@naver.com"
+  },
+  {
+    id: 13,
+    name: "전나영",
+    role: "Convergence Partner",
+    category: "Convergence Partners",
+    image: "https://i.ibb.co/KxdRcy4B/image.jpg",
+    bio: "Creating new value through the fusion of Geography Education and Aviation Service.",
+    education: "지리교육과",
+    skills: ["항공서비스", "지리교육"],
+    contact: "pss76@naver.com"
+  },
+  {
+    id: 14,
+    name: "송수민",
+    role: "Convergence Partner",
+    category: "Convergence Partners",
+    image: "https://i.ibb.co/TGvX4D7/28.png",
+    bio: "Creating synergistic value through various interdisciplinary approaches in Hospitality.",
+    education: "경영학과",
+    skills: ["항공서비스", "항공경영"],
+    contact: "yry8282@naver.com"
+  },
+  {
+    id: 15,
+    name: "이시현",
+    role: "Convergence Partner",
+    category: "Convergence Partners",
+    image: "https://i.ibb.co/TGvX4D7/28.png",
+    bio: "Exploring healthcare synergy and wellness tourism through the fusion of Nursing and Hospitality.",
+    education: "간호학과",
+    skills: ["항공서비스", "항공안전"],
+    contact: "TBD"
+  },
   {
     id: 102,
     name: "이정현",

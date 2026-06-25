@@ -209,11 +209,11 @@ const Home = () => {
             >
               <h4 className="text-hive-green font-bold tracking-widest text-xs uppercase mb-4">About HIVE</h4>
               <h2 className="text-4xl font-bold text-navy-900 mb-8 leading-tight">
-                호스피탈리티의 본질에<br/>
-                <span className="text-hive-green font-serif">혁신을 더하다</span>
+                따뜻한 환대에<br/>
+                <span className="text-hive-green font-serif">새로운 즐거움을 더하다</span>
               </h2>
               <p className="text-lg text-navy-900/70 mb-8 leading-relaxed">
-                HIVE는 대구대학교를 대표하는 학업적 호스피탈리티 경영학회입니다. 환대의 본질에 새로운 경험을 더하여, 차세대 호스피탈리티 리더를 양성합니다.
+                HIVE는 대구대학교를 대표하는 호스피탈리티 경영학회입니다. 환대의 따뜻한 마음에 새로운 배움과 즐거움을 더해, 일상을 더욱 특별하게 디자인합니다.
               </p>
               <Link to="/about" className="inline-flex items-center text-hive-green font-bold uppercase tracking-widest text-sm hover:translate-x-2 transition-transform">
                 Learn More <ArrowRight size={18} className="ml-2" />
