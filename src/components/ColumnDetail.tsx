@@ -72,15 +72,9 @@ export default function ColumnDetail({
           <span className="font-mono">{column.readTime || '5 MIN READ'}</span>
         </div>
 
-        <h1 className="text-2xl md:text-3xl font-extrabold text-slate-950 tracking-tight leading-snug mb-3">
+        <h1 className="text-2xl md:text-3xl font-extrabold text-slate-950 tracking-tight leading-snug mb-6">
           {column.title}
         </h1>
-        
-        {column.subtitle && (
-          <p className="text-base text-gray-500 font-medium leading-relaxed mb-6">
-            {column.subtitle}
-          </p>
-        )}
 
         {/* Author Card right below the title */}
         <div className="border border-gray-100 rounded-2xl p-4 bg-white shadow-xs flex items-center gap-4 mb-8">
@@ -106,18 +100,6 @@ export default function ColumnDetail({
           </div>
         </div>
       </div>
-
-      {/* Big Cover Image */}
-      {column.coverImage && (
-        <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden mb-8 bg-gray-50 shadow-xs border border-gray-100">
-          <img
-            src={column.coverImage}
-            alt={column.title}
-            referrerPolicy="no-referrer"
-            className="w-full h-full object-cover"
-          />
-        </div>
-      )}
 
       {/* Executive Summary Box */}
       {column.excerpt && (

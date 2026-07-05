@@ -34,6 +34,7 @@ import { Column } from '../types';
 import ColumnCard from '../components/ColumnCard';
 import ColumnDetail from '../components/ColumnDetail';
 import ColumnForm, { CATEGORY_PRESETS } from '../components/ColumnForm';
+import cabinServiceAbout from '../assets/images/cabin_service_about_1782193310292.jpg';
 
 // Strict Firestore Error types as mandated by the Firebase Integration skill
 enum OperationType {
@@ -108,7 +109,7 @@ const PRE_SEEDED_COLUMNS = [
     readTime: '6 min read',
     likes: 42,
     tags: ['LocalTourism', 'ServiceDesign', 'LocalCreator', 'SmartHospitality'],
-    coverImage: 'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?w=800',
+    coverImage: cabinServiceAbout,
     author: {
       name: '박유진',
       role: 'Partner',

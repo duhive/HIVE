@@ -300,7 +300,6 @@ const Home = () => {
         </div>
       </section>
 
-
       {/* Contact Section removed as requested */}
     </div>
   );

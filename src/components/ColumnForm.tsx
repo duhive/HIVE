@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { X, Save, Image as ImageIcon, User, AlertCircle, HelpCircle, Link as LinkIcon } from 'lucide-react';
+import { X, Save, User, AlertCircle, HelpCircle, Link as LinkIcon } from 'lucide-react';
 import { Column } from '../types';
 import { MEMBERS, PARTNER_MEMBERS } from '../constants';
 
@@ -279,17 +279,7 @@ export default function ColumnForm({
               />
             </div>
 
-            <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1.5">소제목 (부제, 300자 이하) *</label>
-              <input
-                type="text"
-                required
-                placeholder="제목을 부연 설명하는 핵심 부제목을 작성해 주세요"
-                value={subtitle}
-                onChange={(e) => setSubtitle(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
-              />
-            </div>
+
 
             <div>
               <label className="block text-xs font-bold text-gray-700 mb-1.5">요약문 / 핵심 초록 (2자 이상 1000자 이하) *</label>
@@ -304,61 +294,11 @@ export default function ColumnForm({
             </div>
           </div>
 
-          {/* Section 2: Cover Image selection */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-between border-b border-gray-50 pb-1.5">
-              <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider flex items-center gap-2">
-                <ImageIcon className="w-4 h-4 text-gray-500" />
-                <span>2. 커버 이미지 프리셋</span>
-              </h3>
-            </div>
-
-            {/* Selected image preview */}
-            <div className="flex items-center gap-4">
-              <div className="w-24 aspect-[16/10] bg-gray-100 rounded-lg overflow-hidden shrink-0 border border-gray-200">
-                <img
-                  src={coverImage || COVER_PRESETS[0].url}
-                  alt="Preview"
-                  referrerPolicy="no-referrer"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="flex-grow">
-                <input
-                  type="url"
-                  placeholder="커버 이미지 URL을 입력하시거나 하단 프리셋을 선택하세요"
-                  value={coverImage}
-                  onChange={(e) => setCoverImage(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
-                />
-              </div>
-            </div>
-
-            {/* Cover Presets Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
-              {COVER_PRESETS.map((preset, idx) => (
-                <button
-                  type="button"
-                  key={idx}
-                  onClick={() => setCoverImage(preset.url)}
-                  className={`relative p-0.5 rounded-lg border-2 overflow-hidden transition-all duration-200 ${
-                    coverImage === preset.url ? 'border-emerald-500 shadow-xs' : 'border-transparent opacity-80 hover:opacity-100'
-                  }`}
-                >
-                  <img src={preset.url} alt={preset.name} className="w-full h-10 object-cover rounded-md" referrerPolicy="no-referrer" />
-                  <div className="absolute inset-0 bg-black/35 flex items-center justify-center">
-                    <span className="text-[9px] text-white font-bold">{preset.name}</span>
-                  </div>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Section 3: Author details */}
+          {/* Section 2: Author details */}
           <div className="space-y-4">
             <h3 className="text-sm font-bold text-gray-900 border-b border-gray-50 pb-1.5 uppercase tracking-wider flex items-center gap-2">
               <User className="w-4 h-4 text-gray-500" />
-              <span>3. 기고가 정보</span>
+              <span>2. 기고가 정보</span>
             </h3>
 
             {/* NEW Dropdown to link member profile */}

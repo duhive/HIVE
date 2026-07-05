@@ -29,6 +29,17 @@ export interface FAQ {
   answer: string;
 }
 
+export interface WeeklySession {
+  id?: string;
+  week: number;
+  track: string;
+  title: string;
+  description: string;
+  deliverable: string;
+  semester: string;
+  createdAt?: any;
+}
+
 export interface Column {
   id: string;
   title: string;
@@ -49,4 +60,5 @@ export interface Column {
   coverImage: string;
   createdAt?: any;
 }
+
 

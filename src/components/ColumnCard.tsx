@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Heart, Bookmark, Edit2, Trash2, BookOpen } from 'lucide-react';
+import { Heart, Bookmark, Edit2, Trash2, BookOpen, Calendar } from 'lucide-react';
 import { Column } from '../types';
 import { getAuthorDisplayGroup } from '../constants';
 
@@ -27,9 +27,6 @@ export default function ColumnCard({
 }: ColumnCardProps) {
   const formattedDate = column.date || '2026.07.01';
 
-  // Soft fallback for cover images
-  const coverUrl = column.coverImage || 'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?w=800';
-
   return (
     <motion.div
       id={`column-card-${column.id}`}
@@ -40,42 +37,34 @@ export default function ColumnCard({
       whileHover={{ y: -4 }}
       transition={{ duration: 0.3 }}
       onClick={onClick}
-      className="group bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col h-full cursor-pointer"
+      className="group bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-xs hover:shadow-md transition-all duration-300 flex flex-col h-full cursor-pointer p-6"
     >
-      {/* Cover Image Container */}
-      <div className="relative aspect-[16/10] w-full overflow-hidden bg-gray-50">
-        <img
-          src={coverUrl}
-          alt={column.title}
-          referrerPolicy="no-referrer"
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
-          loading="lazy"
-        />
-        {/* Category Badge */}
-        <div className="absolute top-4 left-4 z-10">
-          <span className="px-3 py-1 text-xs font-semibold text-white bg-slate-900/80 backdrop-blur-xs rounded-full tracking-wide">
-            {column.category}
-          </span>
-        </div>
-
-        {/* Read Time Overlay */}
-        <div className="absolute bottom-3 right-3 z-10 bg-black/65 backdrop-blur-xs px-2 py-1 rounded text-[10px] font-medium text-white flex items-center gap-1">
-          <BookOpen className="w-3 h-3" />
-          <span>{column.readTime || '5 min read'}</span>
-        </div>
-      </div>
-
       {/* Card Body */}
-      <div className="p-5 flex-grow flex flex-col justify-between">
+      <div className="flex-grow flex flex-col justify-between">
         <div>
-          {/* Title & Subtitle */}
-          <h3 className="text-lg font-bold text-gray-950 line-clamp-2 tracking-tight mb-2 group-hover:text-emerald-600 transition-colors duration-200">
+          {/* Metadata Row */}
+          <div className="flex items-center justify-between gap-2 mb-4 flex-wrap">
+            <span className="px-2.5 py-0.5 text-[10px] font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-md tracking-wider">
+              {column.category}
+            </span>
+            <div className="flex items-center gap-3 text-[10px] text-gray-400 font-bold uppercase tracking-wider">
+              <span className="flex items-center gap-1">
+                <BookOpen className="w-3 h-3" />
+                <span>{column.readTime || '5 min read'}</span>
+              </span>
+              <span>•</span>
+              <span className="flex items-center gap-1">
+                <Calendar className="w-3 h-3" />
+                <span>{formattedDate}</span>
+              </span>
+            </div>
+          </div>
+
+          {/* Title */}
+          <h3 className="text-base md:text-lg font-bold text-gray-950 line-clamp-2 tracking-tight mb-2.5 group-hover:text-emerald-600 transition-colors duration-200">
             {column.title}
           </h3>
-          <p className="text-sm font-medium text-gray-500 line-clamp-1 mb-3">
-            {column.subtitle}
-          </p>
-          <p className="text-xs text-gray-400 line-clamp-3 leading-relaxed mb-4">
+          <p className="text-xs text-gray-500 line-clamp-3 leading-relaxed mb-6 font-medium">
             {column.excerpt}
           </p>
         </div>
@@ -100,7 +89,6 @@ export default function ColumnCard({
                 {column.author?.role || '연구원'} • {column.author?.affiliation || 'HIVE'}
               </p>
             </div>
-            <span className="text-[10px] text-gray-400 shrink-0 font-medium">{formattedDate}</span>
           </div>
 
           {/* Buttons Row */}

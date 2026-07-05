@@ -113,6 +113,43 @@
         }
       },
       "required": ["title", "subtitle", "excerpt", "content", "category", "author", "date", "readTime", "likes", "tags", "coverImage", "createdAt"]
+    },
+    "weeklySession": {
+      "title": "Weekly Session",
+      "description": "A weekly session in the academic curriculum roadmap",
+      "type": "object",
+      "properties": {
+        "week": {
+          "type": "number",
+          "description": "Week number"
+        },
+        "track": {
+          "type": "string",
+          "description": "The educational track or category"
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of the session"
+        },
+        "description": {
+          "type": "string",
+          "description": "Short description of the session activity"
+        },
+        "deliverable": {
+          "type": "string",
+          "description": "The expected outcome/deliverable"
+        },
+        "semester": {
+          "type": "string",
+          "description": "Semester, e.g. 1학기 or 2학기"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation timestamp"
+        }
+      },
+      "required": ["week", "track", "title", "description", "deliverable", "semester", "createdAt"]
     }
   },
   "firestore": {
@@ -123,6 +160,10 @@
     "/columns/{columnId}": {
       "schema": "column",
       "description": "Collection of academic columns"
+    },
+    "/weeklySessions/{sessionId}": {
+      "schema": "weeklySession",
+      "description": "Collection of weekly academic sessions"
     }
   }
 }

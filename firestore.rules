@@ -57,6 +57,30 @@ service cloud.firestore {
         && data.createdAt is timestamp;
     }
 
+    function isValidWeeklySession(data) {
+      return data.keys().hasAll(['week', 'track', 'title', 'description', 'deliverable', 'semester', 'createdAt'])
+        && data.keys().size() == 7
+        && data.week is number
+        && data.track is string && data.track.size() <= 100
+        && data.title is string && data.title.size() >= 2 && data.title.size() <= 200
+        && data.description is string && data.description.size() <= 2000
+        && data.deliverable is string && data.deliverable.size() <= 500
+        && data.semester is string && data.semester.size() <= 20
+        && data.createdAt is timestamp;
+    }
+
+    function isValidCommunityPost(data) {
+      return data.keys().hasAll(['title', 'content', 'category', 'author', 'likes', 'views', 'comments', 'createdAt'])
+        && data.title is string && data.title.size() >= 2 && data.title.size() <= 200
+        && data.content is string && data.content.size() <= 50000
+        && data.category is string && data.category.size() <= 100
+        && data.author is string && data.author.size() <= 100
+        && data.likes is number
+        && data.views is number
+        && data.comments is list
+        && data.createdAt is timestamp;
+    }
+
     match /applications/{applicationId} {
       allow create: if isValidId(applicationId) && isValidApplication(incoming());
       allow read, update, delete: if false;
@@ -66,6 +90,20 @@ service cloud.firestore {
       allow read: if true;
       allow create: if isValidId(columnId) && isValidColumn(incoming()) && incoming().createdAt == request.time;
       allow update: if isValidId(columnId) && isValidColumn(incoming()) && incoming().createdAt == existing().createdAt;
+      allow delete: if true;
+    }
+
+    match /weeklySessions/{sessionId} {
+      allow read: if true;
+      allow create: if isValidId(sessionId) && isValidWeeklySession(incoming()) && incoming().createdAt == request.time;
+      allow update: if isValidId(sessionId) && isValidWeeklySession(incoming()) && incoming().createdAt == existing().createdAt;
+      allow delete: if true;
+    }
+
+    match /communityPosts/{postId} {
+      allow read: if true;
+      allow create: if isValidId(postId) && isValidCommunityPost(incoming()) && incoming().createdAt == request.time;
+      allow update: if isValidId(postId) && isValidCommunityPost(incoming()) && incoming().createdAt == existing().createdAt;
       allow delete: if true;
     }
   }

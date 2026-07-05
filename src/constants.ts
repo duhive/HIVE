@@ -238,7 +238,6 @@ export const PARTNER_MEMBERS: Member[] = [
     education: "대구대학교 호텔관광연구실",
     skills: ["인공지능", "스마트관광"],
     contact: "kbm010525@naver.com",
-    isAlumni: true,
     experience: [
       "2024. 08 경상남도 산청군 관광개발 예비사업 연구개발과제 인턴"
     ]
