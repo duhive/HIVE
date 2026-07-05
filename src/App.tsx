@@ -7,6 +7,7 @@ import About from './pages/About';
 import Greetings from './pages/Greetings';
 import Network from './pages/Network';
 import Activities from './pages/Activities';
+import Columns from './pages/Columns';
 import Projects from './pages/Projects';
 import Photo from './pages/Photo';
 import Organization from './pages/Organization';
@@ -39,6 +40,7 @@ export default function App() {
                 <Route path="/greetings" element={<Greetings />} />
                 <Route path="/network" element={<Network />} />
                 <Route path="/activities" element={<Activities />} />
+                <Route path="/columns" element={<Columns />} />
                 <Route path="/projects" element={<Projects />} />
                 <Route path="/photo" element={<Photo />} />
                 <Route path="/members" element={<Members />} />

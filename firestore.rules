@@ -15,6 +15,10 @@ service cloud.firestore {
       return request.resource.data;
     }
 
+    function existing() {
+      return resource.data;
+    }
+
     function isValidApplication(data) {
       return data.keys().hasAll(['name', 'email', 'phone', 'department', 'studentId', 'motivation', 'strengths', 'interestTrack', 'photo', 'submittedAt'])
         && data.keys().size() == 10
@@ -30,9 +34,39 @@ service cloud.firestore {
         && data.submittedAt == request.time;
     }
 
+    function isValidColumn(data) {
+      return data.keys().hasAll(['title', 'subtitle', 'excerpt', 'content', 'category', 'author', 'date', 'readTime', 'likes', 'tags', 'coverImage', 'createdAt'])
+        && data.keys().size() == 12
+        && data.title is string && data.title.size() >= 2 && data.title.size() <= 200
+        && data.subtitle is string && data.subtitle.size() <= 300
+        && data.excerpt is string && data.excerpt.size() >= 2 && data.excerpt.size() <= 1000
+        && data.content is string && data.content.size() <= 50000
+        && data.category is string && data.category.size() <= 100
+        && data.date is string && data.date.size() <= 30
+        && data.readTime is string && data.readTime.size() <= 30
+        && data.likes is number
+        && data.tags is list
+        && data.coverImage is string && data.coverImage.size() <= 1000
+        && data.author is map
+        && data.author.keys().hasAll(['name', 'role', 'affiliation', 'image'])
+        && data.author.keys().size() == 4
+        && data.author.name is string && data.author.name.size() <= 100
+        && data.author.role is string && data.author.role.size() <= 100
+        && data.author.affiliation is string && data.author.affiliation.size() <= 200
+        && data.author.image is string && data.author.image.size() <= 1000
+        && data.createdAt is timestamp;
+    }
+
     match /applications/{applicationId} {
       allow create: if isValidId(applicationId) && isValidApplication(incoming());
       allow read, update, delete: if false;
+    }
+
+    match /columns/{columnId} {
+      allow read: if true;
+      allow create: if isValidId(columnId) && isValidColumn(incoming()) && incoming().createdAt == request.time;
+      allow update: if isValidId(columnId) && isValidColumn(incoming()) && incoming().createdAt == existing().createdAt;
+      allow delete: if true;
     }
   }
 }

@@ -14,15 +14,12 @@ const Members = () => {
   const [selectedFilter, setSelectedFilter] = useState<string>('전체');
 
   const generations = ['전체', '0-1기', '2기'];
-  const partnerFilters = ['Alumni Partners', 'Convergence Partners'];
+  const partnerFilters = ['GST 연구회'];
 
   const filteredMembers = (selectedCategory === 'GENERATIONS'
     ? (selectedFilter === '전체' ? MEMBERS : selectedFilter === '0-1기' ? MEMBERS : [])
     : PARTNER_MEMBERS.filter(m => m.category === selectedFilter)
   ).slice().sort((a, b) => a.name.localeCompare(b.name, 'ko'));
-
-  const standardMembers = filteredMembers.filter(m => m.role !== 'Convergence Partner');
-  const convergencePartners = filteredMembers.filter(m => m.role === 'Convergence Partner');
 
   const isComingSoon = (selectedCategory === 'GENERATIONS' && selectedFilter === '2기') || 
                      (selectedCategory === 'PARTNERS' && filteredMembers.length === 0);
@@ -111,14 +108,14 @@ const Members = () => {
               selectedCategory === 'GENERATIONS' ? (
                 <div className="space-y-16">
                   {/* General Members */}
-                  {standardMembers.length > 0 && (
+                  {filteredMembers.length > 0 && (
                     <div>
                       <h4 className="text-lg font-bold text-navy-900 mb-6 flex items-center gap-2 font-display">
                         <span className="w-1.5 h-6 bg-hive-green rounded-full block"></span>
                         HIVE 학회원
                       </h4>
                       <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
-                        {standardMembers.map((member, i) => (
+                        {filteredMembers.map((member, i) => (
                           <motion.div
                             key={member.id}
                             initial={{ opacity: 0, scale: 0.9 }}
@@ -137,44 +134,14 @@ const Members = () => {
                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
                             
                             <div className="absolute bottom-0 left-0 p-6 w-full transform translate-y-2 group-hover:translate-y-0 transition-transform">
-                              <h3 className="text-xl font-bold text-white">{member.name}</h3>
-                              <p className="text-white/80 text-[10px] font-medium uppercase tracking-widest mt-1">{member.education}</p>
-                              <div className="h-0.5 w-0 group-hover:w-full bg-white/60 transition-all duration-300 mt-2" />
-                            </div>
-                          </motion.div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Convergence Partners */}
-                  {convergencePartners.length > 0 && (
-                    <div>
-                      <h4 className="text-lg font-bold text-navy-900 mb-6 flex items-center gap-2 font-display">
-                        <span className="w-1.5 h-6 bg-hive-green rounded-full block"></span>
-                        콘텐츠 융합 파트너 (Convergence Partners)
-                      </h4>
-                      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
-                        {convergencePartners.map((member, i) => (
-                          <motion.div
-                            key={member.id}
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: i * 0.05 }}
-                            onClick={() => handleSelectMember(member)}
-                            className="cursor-pointer group relative aspect-[4/5] overflow-hidden rounded-2xl bg-navy-900/5 hover:shadow-lg transition-all duration-300"
-                          >
-                            <img
-                              src={member.image}
-                              alt={member.name}
-                              className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110"
-                              referrerPolicy="no-referrer"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
-                            
-                            <div className="absolute bottom-0 left-0 p-6 w-full transform translate-y-2 group-hover:translate-y-0 transition-transform">
-                              <h3 className="text-xl font-bold text-white">{member.name}</h3>
+                              <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                                <span>{member.name}</span>
+                                {member.isAlumni && (
+                                  <span className="text-[9px] text-white bg-hive-green px-1.5 py-0.5 rounded font-bold uppercase tracking-wider select-none leading-none">
+                                    Alumni
+                                  </span>
+                                )}
+                              </h3>
                               <p className="text-white/80 text-[10px] font-medium uppercase tracking-widest mt-1">{member.education}</p>
                               <div className="h-0.5 w-0 group-hover:w-full bg-white/60 transition-all duration-300 mt-2" />
                             </div>
@@ -205,9 +172,16 @@ const Members = () => {
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
                       
                       <div className="absolute bottom-0 left-0 p-6 w-full transform translate-y-2 group-hover:translate-y-0 transition-transform">
-                        <h3 className="text-xl font-bold text-white">{member.name}</h3>
+                        <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                          <span>{member.name}</span>
+                          {member.isAlumni && (
+                            <span className="text-[9px] text-white bg-hive-green px-1.5 py-0.5 rounded font-bold uppercase tracking-wider select-none leading-none">
+                              Alumni
+                            </span>
+                          )}
+                        </h3>
                         <p className="text-white/80 text-[10px] font-medium uppercase tracking-widest mt-1">
-                          {member.category === 'Convergence Partners' ? member.education : member.role}
+                          {member.education || member.role}
                         </p>
                         <div className="h-0.5 w-0 group-hover:w-full bg-white/60 transition-all duration-300 mt-2" />
                       </div>
@@ -256,7 +230,14 @@ const Members = () => {
 
               <div className="w-full md:w-3/5 p-6 md:p-10 flex flex-col justify-start md:max-h-[90vh] md:overflow-y-auto">
                 <div className="mb-5">
-                  <h2 className="text-4xl font-display font-bold text-navy-900">{selectedMember.name}</h2>
+                  <div className="flex items-center gap-3">
+                    <h2 className="text-4xl font-display font-bold text-navy-900">{selectedMember.name}</h2>
+                    {selectedMember.isAlumni && (
+                      <span className="text-[10px] text-white bg-hive-green px-2 py-0.5 rounded font-bold uppercase tracking-wider select-none">
+                        Alumni
+                      </span>
+                    )}
+                  </div>
                   {selectedMember.category && (
                     <span className="text-hive-green font-bold uppercase tracking-[0.2em] text-xs mt-1 block">
                       {selectedMember.role}
@@ -279,9 +260,14 @@ const Members = () => {
                         </>
                       )}
                     </div>
-                    <p className="text-navy-900/80 leading-relaxed font-normal">
-                      {selectedMember.category ? selectedMember.education : selectedMember.role}
-                    </p>
+                    <div className="text-navy-900/80 leading-relaxed font-normal flex flex-wrap items-center gap-2">
+                      <span>{selectedMember.category ? selectedMember.education : selectedMember.role}</span>
+                      {!selectedMember.category && (
+                        <span className="text-xs text-navy-900/50 bg-navy-900/5 border border-navy-900/10 px-2 py-0.5 rounded font-medium">
+                          {selectedMember.education}
+                        </span>
+                      )}
+                    </div>
                   </section>
 
                   <div className="grid grid-cols-1 gap-6">

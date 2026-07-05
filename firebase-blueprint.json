@@ -48,12 +48,81 @@
         }
       },
       "required": ["name", "email", "phone", "department", "studentId", "motivation", "strengths", "interestTrack", "photo", "submittedAt"]
+    },
+    "column": {
+      "title": "Column",
+      "description": "An academic column submitted to H&T Column",
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Title of the column"
+        },
+        "subtitle": {
+          "type": "string",
+          "description": "Subtitle of the column"
+        },
+        "excerpt": {
+          "type": "string",
+          "description": "Excerpt or short summary of the column"
+        },
+        "content": {
+          "type": "string",
+          "description": "Full markdown content of the column"
+        },
+        "category": {
+          "type": "string",
+          "description": "Category of the column"
+        },
+        "author": {
+          "type": "object",
+          "description": "Author details of the column",
+          "properties": {
+            "name": { "type": "string" },
+            "role": { "type": "string" },
+            "affiliation": { "type": "string" },
+            "image": { "type": "string" }
+          },
+          "required": ["name", "role", "affiliation", "image"]
+        },
+        "date": {
+          "type": "string",
+          "description": "Formatted date of the column"
+        },
+        "readTime": {
+          "type": "string",
+          "description": "Calculated reading time of the column"
+        },
+        "likes": {
+          "type": "number",
+          "description": "Number of likes the column received"
+        },
+        "tags": {
+          "type": "array",
+          "description": "List of tags associated with the column",
+          "items": { "type": "string" }
+        },
+        "coverImage": {
+          "type": "string",
+          "description": "Cover image URL of the column"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation timestamp"
+        }
+      },
+      "required": ["title", "subtitle", "excerpt", "content", "category", "author", "date", "readTime", "likes", "tags", "coverImage", "createdAt"]
     }
   },
   "firestore": {
     "/applications/{applicationId}": {
       "schema": "application",
       "description": "Collection of submitted applications"
+    },
+    "/columns/{columnId}": {
+      "schema": "column",
+      "description": "Collection of academic columns"
     }
   }
 }

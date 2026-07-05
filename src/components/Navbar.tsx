@@ -24,6 +24,7 @@ const Navbar = () => {
       path: '/activities',
       subItems: [
         { name: 'Curriculum', path: '/activities' },
+        { name: 'H&T Column', path: '/columns' },
         { name: 'Projects', path: '/projects' },
         { name: 'Photo', path: '/photo' },
       ]

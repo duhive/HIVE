@@ -15,12 +15,38 @@ export interface Member {
   image: string;
   bio: string;
   education: string;
+  department?: string;
   skills: string[];
+  expertise?: string[];
   contact: string;
+  email?: string;
   experience?: string[];
+  isAlumni?: boolean;
 }
 
 export interface FAQ {
   question: string;
   answer: string;
 }
+
+export interface Column {
+  id: string;
+  title: string;
+  subtitle: string;
+  excerpt: string;
+  content: string;
+  category: string;
+  author: {
+    name: string;
+    role: string;
+    affiliation: string;
+    image: string;
+  };
+  date: string;
+  readTime: string;
+  likes: number;
+  tags: string[];
+  coverImage: string;
+  createdAt?: any;
+}
+

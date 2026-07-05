@@ -94,7 +94,6 @@ const Photo = () => {
           <SectionHeader 
             title="Photo Gallery"
             subtitle="포토 갤러리"
-            description="HIVE의 다양한 활동과 프로젝트의 순간들을 기록합니다. 인상 깊은 결과와 성장의 궤적을 만나보세요."
           />
 
           <div id="gallery-grid" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
