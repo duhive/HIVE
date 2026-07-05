@@ -14,11 +14,11 @@ const Members = () => {
   const [selectedFilter, setSelectedFilter] = useState<string>('전체');
 
   const generations = ['전체', '0-1기', '2기'];
-  const partnerFilters = ['전체', '글로벌서비스연구회', '투어리즘 & AI 연구회'];
+  const partnerFilters = ['글로벌서비스연구회', '투어리즘 & AI 연구회'];
 
   const filteredMembers = (selectedCategory === 'GENERATIONS'
     ? (selectedFilter === '전체' ? MEMBERS : selectedFilter === '0-1기' ? MEMBERS : [])
-    : (selectedFilter === '전체' ? PARTNER_MEMBERS : PARTNER_MEMBERS.filter(m => m.category === selectedFilter))
+    : PARTNER_MEMBERS.filter(m => m.category === selectedFilter)
   ).slice().sort((a, b) => a.name.localeCompare(b.name, 'ko'));
 
   const isComingSoon = (selectedCategory === 'GENERATIONS' && selectedFilter === '2기') || 
