@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { Heart, Bookmark, Edit2, Trash2, BookOpen } from 'lucide-react';
 import { Column } from '../types';
+import { getAuthorDisplayGroup } from '../constants';
 
 interface ColumnCardProps {
   column: Column;
@@ -89,11 +90,15 @@ export default function ColumnCard({
               className="w-9 h-9 rounded-full object-cover ring-2 ring-gray-100"
             />
             <div className="min-w-0 flex-grow">
-              <div className="flex items-baseline gap-1">
+              <div className="flex items-center gap-1.5 flex-wrap">
                 <span className="text-xs font-bold text-gray-800 truncate">{column.author?.name}</span>
-                <span className="text-[10px] text-gray-400 truncate">{column.author?.role}</span>
+                <span className="px-1.5 py-0.5 text-[8px] font-extrabold bg-slate-100 text-slate-700 rounded-md truncate max-w-[120px]" title={getAuthorDisplayGroup(column.author?.name)}>
+                  {getAuthorDisplayGroup(column.author?.name)}
+                </span>
               </div>
-              <p className="text-[10px] text-gray-400 truncate">{column.author?.affiliation || 'HIVE Research'}</p>
+              <p className="text-[10px] text-gray-400 truncate">
+                {column.author?.role || '연구원'} • {column.author?.affiliation || 'HIVE'}
+              </p>
             </div>
             <span className="text-[10px] text-gray-400 shrink-0 font-medium">{formattedDate}</span>
           </div>

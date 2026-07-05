@@ -72,6 +72,51 @@ function handleFirestoreError(error: unknown, operationType: OperationType, path
 // 2 Beautiful default academic articles to seed if database is empty
 const PRE_SEEDED_COLUMNS = [
   {
+    id: 'col-default-park-yujin-local',
+    title: '지역 고유의 매력을 살린 로컬 관광 콘텐츠 설계와 스마트 환대 가치',
+    subtitle: '산청군 관광개발 사례를 중심으로 한 디지털 트랜스포메이션과 감성 경험 디자인',
+    excerpt: '대구대학교 호텔관광연구실 소속 파트너 박유진이 제안하는 지역 밀착형 로컬 경험 설계 전략. 지자체 연계 연구과제와 교육 실무 경력을 바탕으로 한 지속 가능한 서비스 모델을 논합니다.',
+    content: `### 서론: 로컬과 기술의 만남
+
+현대 관광 산업에서 가장 주목받는 흐름은 '로컬라이제이션(Localization)'과 '디지털 전환(DX)'의 융합입니다. 단순히 멋진 숙소를 짓고 마케팅을 펼치는 것을 넘어, 그 지역만이 가진 역사, 문화, 미식 요소를 현대적인 서비스 디자인 관점에서 재해석하고 스마트 테크놀로지를 결합하여 정교하게 전달해야 합니다.
+
+본 칼럼에서는 경상남도 산청군 등 지자체 관광개발 프로젝트 실무 인턴 경험과 호텔관광연구실의 연구 성과를 바탕으로, 로컬 관광 활성화를 위한 서비스 디자인 가치 모델을 제안합니다.
+
+---
+
+### 1. 로컬 브랜드 자산의 발굴과 스토리텔링
+
+성공적인 로컬 관광 설계의 첫 단추는 지역 고유의 자산(Asset)을 정교하게 분석하는 것입니다.
+- **고유성(Authenticity) 정의:** 인위적인 관광지가 아닌 지역 밀착형 콘텐츠(예: 산청의 약초, 한방 생태 자원 등)의 본질적 가치를 규명합니다.
+- **스토리텔링 디자인:** 단순 관람을 넘어 방문객이 주인공이 되어 감각적으로 체험할 수 있는 고객 여정(Customer Journey) 시나리오를 구성합니다.
+
+---
+
+### 2. 스마트 테크놀로지를 활용한 고객 접점 고도화
+
+첨단 기술은 로컬의 따뜻한 환대 가치를 더 편리하고 완벽하게 만들어주는 '지탱점'이 되어야 합니다.
+- **비대면 지역 안내 허브:** 지자체 공공 데이터와 AI 안내 가이드를 결합한 개인 맞춤형 명소 추천 솔루션.
+- **스마트 경험 피드백:** 데이터 시각화를 통해 여행객들이 선호하는 경로와 만족도를 수집, 지속 가능한 콘텐츠 고도화에 기여합니다.
+
+---
+
+### 결론: 지역과 학문, 그리고 청년 리더의 연대
+
+결국 지속 가능한 로컬 관광 디자인은 현장 실무와 학술적 데이터의 긴밀한 연대를 통해 완성됩니다. 대구대학교 호텔관광연구실 및 HIVE 학술 포럼은 앞으로도 글로벌 서비스 연구 역량을 바탕으로, 따뜻한 마음과 차가운 지성을 결합한 선도적 호스피탈리티 솔루션을 제시해 나갈 것입니다.`,
+    category: '1차수',
+    date: '2026.07.03',
+    readTime: '6 min read',
+    likes: 42,
+    tags: ['LocalTourism', 'ServiceDesign', 'LocalCreator', 'SmartHospitality'],
+    coverImage: 'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?w=800',
+    author: {
+      name: '박유진',
+      role: 'Partner',
+      affiliation: '대구대학교 호텔관광연구실',
+      image: 'https://i.ibb.co/Z1Tk4T4L/2026-05-05-160901.png'
+    }
+  },
+  {
     id: 'col-default-ai-coexist',
     title: '호스피탈리티 산업에서의 인공지능(AI)과 인간 서비스의 공존',
     subtitle: '기계적 효율성과 인간의 감성적 가치가 만드는 하이브리드 서비스 패러다임',
@@ -101,7 +146,7 @@ const PRE_SEEDED_COLUMNS = [
 결국 지속 가능한 미래의 서비스 패러다임은 인공지능과 인간이 각자의 영역에서 시너지를 극대화하는 **'하이브리드 서비스 모델(Hybrid Service Model)'**에 달려 있습니다. 단순 반복 작업과 정교한 데이터 처리는 AI에게 전담시키고, 인간 호텔리어는 고객과의 깊은 감정적 교감과 맞춤형 프리미엄 서비스에 집중하도록 돕는 것입니다.
 
 이것이 바로 HIVE 연구회가 지향하는 첨단 기술과 감성 환대의 완벽한 교차점이자, 앞으로 나아가야 할 학술적, 실무적 방향성입니다.`,
-    category: 'Technology',
+    category: '1차수',
     date: '2026.07.01',
     readTime: '5 min read',
     likes: 24,
@@ -137,7 +182,7 @@ const PRE_SEEDED_COLUMNS = [
 ### 과제와 전망
 
 성공적인 DX를 위해서는 값비싼 장비를 도입하는 것만큼이나, 구성원들의 기술 적응 능력을 기르는 **'디지털 마인드셋 체인지'**가 필요합니다. 또한, 고객 개인 정보 수집에 따른 보안 가이드라인 준수가 철저히 동반되어야 할 것입니다.`,
-    category: 'Hospitality',
+    category: '1차수',
     date: '2026.06.28',
     readTime: '4 min read',
     likes: 18,
@@ -148,6 +193,52 @@ const PRE_SEEDED_COLUMNS = [
       role: '연구책임자',
       affiliation: 'HIVE Tech Division',
       image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150'
+    }
+  },
+  {
+    id: 'col-default-round-2-placeholder',
+    title: '[준비중] 2차수 학술 칼럼이 발행될 예정입니다',
+    subtitle: 'HIVE 학회원 및 파트너들의 차세대 융합 학술 기고 준비 중',
+    excerpt: '현재 2차수 학술 연구와 심층적인 트렌드 리포트를 성실하게 집필하고 있습니다. 조만간 공개될 새로운 통찰을 기대해 주세요.',
+    content: `### 2차수 학술 칼럼 준비 중
+
+현재 HIVE 학술 편집위원회와 글로벌서비스연구회, 투어리즘 & AI 연구회 소속 연구원들이 **2차수 공식 학술 기고**를 성실히 준비하고 있습니다.
+
+호스피탈리티 트렌드 분석, 모빌리티 및 AI 융합 관광 연구, 서비스 경험 디자인 등 다양한 주제의 논문과 칼럼이 게재될 예정이오니 학회원 여러분의 많은 관심 부탁드립니다.`,
+    category: '2차수',
+    date: '2026.07.05',
+    readTime: '1 min read',
+    likes: 0,
+    tags: ['ComingSoon', 'Round2'],
+    coverImage: 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=800',
+    author: {
+      name: 'HIVE 편집위원회',
+      role: 'Editor',
+      affiliation: 'HIVE Academic Portal',
+      image: 'https://i.ibb.co/TGvX4D7/28.png'
+    }
+  },
+  {
+    id: 'col-default-round-3-placeholder',
+    title: '[준비중] 3차수 학술 칼럼이 발행될 예정입니다',
+    subtitle: 'HIVE 학회원 및 파트너들의 차세대 융합 학술 기고 준비 중',
+    excerpt: '현재 3차수 학술 연구와 심층적인 트렌드 리포트를 성실하게 집필하고 있습니다. 조만간 공개될 새로운 통찰을 기대해 주세요.',
+    content: `### 3차수 학술 칼럼 준비 중
+
+현재 HIVE 학술 편집위원회와 글로벌서비스연구회, 투어리즘 & AI 연구회 소속 연구원들이 **3차수 공식 학술 기고**를 성실히 준비하고 있습니다.
+
+호스피탈리티 트렌드 분석, 모빌리티 및 AI 융합 관광 연구, 서비스 경험 디자인 등 다양한 주제의 논문과 칼럼이 게재될 예정이오니 학회원 여러분의 많은 관심 부탁드립니다.`,
+    category: '3차수',
+    date: '2026.07.05',
+    readTime: '1 min read',
+    likes: 0,
+    tags: ['ComingSoon', 'Round3'],
+    coverImage: 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=800',
+    author: {
+      name: 'HIVE 편집위원회',
+      role: 'Editor',
+      affiliation: 'HIVE Academic Portal',
+      image: 'https://i.ibb.co/TGvX4D7/28.png'
     }
   }
 ];
@@ -244,7 +335,14 @@ export default function Columns() {
       // Populate list from firestore snapshot
       const fetched: Column[] = [];
       snapshot.forEach((docSnapshot) => {
-        fetched.push({ id: docSnapshot.id, ...docSnapshot.data() } as Column);
+        const data = docSnapshot.data();
+        let cat = data.category || '1차수';
+        if (data.author?.name === '박유진') {
+          cat = '1차수';
+        } else if (cat !== '1차수' && cat !== '2차수' && cat !== '3차수') {
+          cat = '1차수';
+        }
+        fetched.push({ id: docSnapshot.id, ...data, category: cat } as Column);
       });
 
       // Robust in-memory sorting by createdAt (descending)
@@ -549,7 +647,7 @@ export default function Columns() {
 
                 {/* Categories Row */}
                 <div className="flex flex-wrap items-center gap-1.5 pt-4 border-t border-gray-50">
-                  <span className="text-xs font-bold text-gray-400 uppercase tracking-wide mr-2">주제분류</span>
+                  <span className="text-xs font-bold text-gray-400 uppercase tracking-wide mr-2">차수 분류</span>
                   <button
                     onClick={() => setSelectedCategory('All')}
                     className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${

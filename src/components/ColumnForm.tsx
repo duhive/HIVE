@@ -14,11 +14,9 @@ interface ColumnFormProps {
 }
 
 export const CATEGORY_PRESETS = [
-  'Technology',
-  'Hospitality',
-  'Tourism',
-  'Trends',
-  'Analysis'
+  '1차수',
+  '2차수',
+  '3차수'
 ];
 
 const COVER_PRESETS = [
@@ -46,7 +44,7 @@ export default function ColumnForm({
   const [subtitle, setSubtitle] = useState('');
   const [excerpt, setExcerpt] = useState('');
   const [content, setContent] = useState('');
-  const [category, setCategory] = useState('Technology');
+  const [category, setCategory] = useState('1차수');
   const [coverImage, setCoverImage] = useState(COVER_PRESETS[0].url);
   const [readTime, setReadTime] = useState('5 min read');
   const [tagInput, setTagInput] = useState('');
@@ -71,7 +69,7 @@ export default function ColumnForm({
       setSubtitle(editingColumn.subtitle || '');
       setExcerpt(editingColumn.excerpt || '');
       setContent(editingColumn.content || '');
-      setCategory(editingColumn.category || 'Technology');
+      setCategory(editingColumn.category || '1차수');
       setCoverImage(editingColumn.coverImage || COVER_PRESETS[0].url);
       setReadTime(editingColumn.readTime || '5 min read');
       setTagInput(editingColumn.tags ? editingColumn.tags.join(', ') : '');

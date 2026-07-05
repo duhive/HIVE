@@ -259,3 +259,17 @@ export const FAQS: FAQ[] = [
     answer: "기본적으로 1년(2학기) 활동을 원칙으로 합니다. 이는 프로젝트의 연속성과 심도 있는 성장을 위함입니다."
   }
 ];
+
+export function getAuthorDisplayGroup(name: string): string {
+  if (!name) return '호스피탈리티경영학회원';
+  const partner = PARTNER_MEMBERS.find(m => m.name === name);
+  if (partner) {
+    return partner.category || '글로벌서비스연구회';
+  }
+  const member = MEMBERS.find(m => m.name === name);
+  if (member) {
+    return '호스피탈리티경영학회원';
+  }
+  return '호스피탈리티경영학회원'; // Default fallback
+}
+

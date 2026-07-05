@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import ReactMarkdown from 'react-markdown';
 import { ArrowLeft, Calendar, BookOpen, Heart, Bookmark, Edit2, Trash2, ShieldAlert } from 'lucide-react';
 import { Column } from '../types';
+import { getAuthorDisplayGroup } from '../constants';
 
 interface ColumnDetailProps {
   column: Column;
@@ -137,6 +138,9 @@ export default function ColumnDetail({
         <div className="flex-grow text-center sm:text-left min-w-0">
           <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mb-1">
             <h4 className="font-bold text-gray-900">{column.author?.name || '익명 기고가'}</h4>
+            <span className="px-2 py-0.5 text-[10px] font-bold bg-slate-100 text-slate-700 rounded">
+              {getAuthorDisplayGroup(column.author?.name)}
+            </span>
             <span className="px-2 py-0.5 text-[10px] font-bold bg-emerald-50 text-emerald-700 rounded">
               {column.author?.role || '연구원'}
             </span>
