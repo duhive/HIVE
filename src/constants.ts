@@ -161,7 +161,7 @@ export const PARTNER_MEMBERS: Member[] = [
     id: 12,
     name: "박지호",
     role: "Convergence Partner",
-    category: "GST 연구회",
+    category: "글로벌서비스연구회",
     image: "https://i.ibb.co/TGvX4D7/28.png",
     bio: "Exploring the future of aviation through the fusion of English Education and Psychology.",
     education: "영어교육과 / 심리학과",
@@ -172,7 +172,7 @@ export const PARTNER_MEMBERS: Member[] = [
     id: 13,
     name: "전나영",
     role: "Convergence Partner",
-    category: "GST 연구회",
+    category: "글로벌서비스연구회",
     image: "https://i.ibb.co/KxdRcy4B/image.jpg",
     bio: "Creating new value through the fusion of Geography Education and Aviation Service.",
     education: "지리교육과",
@@ -183,7 +183,7 @@ export const PARTNER_MEMBERS: Member[] = [
     id: 14,
     name: "송수민",
     role: "Convergence Partner",
-    category: "GST 연구회",
+    category: "글로벌서비스연구회",
     image: "https://i.ibb.co/TGvX4D7/28.png",
     bio: "Creating synergistic value through various interdisciplinary approaches in Hospitality.",
     education: "경영학과",
@@ -194,7 +194,7 @@ export const PARTNER_MEMBERS: Member[] = [
     id: 15,
     name: "이시현",
     role: "Convergence Partner",
-    category: "GST 연구회",
+    category: "글로벌서비스연구회",
     image: "https://i.ibb.co/TGvX4D7/28.png",
     bio: "Exploring healthcare synergy and wellness tourism through the fusion of Nursing and Hospitality.",
     education: "간호학과",
@@ -205,7 +205,7 @@ export const PARTNER_MEMBERS: Member[] = [
     id: 102,
     name: "이정현",
     role: "Partner",
-    category: "GST 연구회",
+    category: "글로벌서비스연구회",
     image: "https://i.ibb.co/TGvX4D7/28.png",
     bio: "HIVE의 성장을 함께 응원하는 졸업생 파트너입니다.",
     education: "부산세연고등학교 교사",
@@ -216,7 +216,7 @@ export const PARTNER_MEMBERS: Member[] = [
     id: 105,
     name: "박유진",
     role: "Partner",
-    category: "GST 연구회",
+    category: "글로벌서비스연구회",
     image: "https://i.ibb.co/Z1Tk4T4L/2026-05-05-160901.png",
     bio: "사용자 경험 중심의 서비스 디자인을 연구합니다.",
     education: "대구대학교 호텔관광연구실",
@@ -226,6 +226,21 @@ export const PARTNER_MEMBERS: Member[] = [
       "2023. 08 한국관광공사 주관, 국제이벤트 지원사업 전문가 평가단",
       "2024. 08 경상남도 산청군 관광개발 예비사업 연구개발과제 인턴",
       "2026. 04 ~ : 대구관광고등학교 시간강사(관광문화와자원, 웨딩)"
+    ]
+  },
+  {
+    id: 104,
+    name: "김보민",
+    role: "Partner",
+    category: "투어리즘 & AI 연구회",
+    image: "https://i.ibb.co/TGvX4D7/28.png",
+    bio: "데이터 기반의 관광 연구를 통해 학문적 깊이를 더합니다.",
+    education: "대구대학교 호텔관광연구실",
+    skills: ["인공지능", "스마트관광"],
+    contact: "kbm010525@naver.com",
+    isAlumni: true,
+    experience: [
+      "2024. 08 경상남도 산청군 관광개발 예비사업 연구개발과제 인턴"
     ]
   }
 ];
