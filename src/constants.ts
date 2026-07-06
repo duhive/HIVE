@@ -161,7 +161,7 @@ export const PARTNER_MEMBERS: Member[] = [
     id: 12,
     name: "박지호",
     role: "Convergence Partner",
-    category: "글로벌서비스연구회",
+    category: "Global Service Group",
     image: "https://i.ibb.co/TGvX4D7/28.png",
     bio: "Exploring the future of aviation through the fusion of English Education and Psychology.",
     education: "영어교육과 / 심리학과",
@@ -172,7 +172,7 @@ export const PARTNER_MEMBERS: Member[] = [
     id: 13,
     name: "전나영",
     role: "Convergence Partner",
-    category: "글로벌서비스연구회",
+    category: "Global Service Group",
     image: "https://i.ibb.co/KxdRcy4B/image.jpg",
     bio: "Creating new value through the fusion of Geography Education and Aviation Service.",
     education: "지리교육과",
@@ -183,7 +183,7 @@ export const PARTNER_MEMBERS: Member[] = [
     id: 14,
     name: "송수민",
     role: "Convergence Partner",
-    category: "글로벌서비스연구회",
+    category: "Global Service Group",
     image: "https://i.ibb.co/TGvX4D7/28.png",
     bio: "Creating synergistic value through various interdisciplinary approaches in Hospitality.",
     education: "경영학과",
@@ -194,7 +194,7 @@ export const PARTNER_MEMBERS: Member[] = [
     id: 15,
     name: "이시현",
     role: "Convergence Partner",
-    category: "글로벌서비스연구회",
+    category: "Global Service Group",
     image: "https://i.ibb.co/TGvX4D7/28.png",
     bio: "Exploring healthcare synergy and wellness tourism through the fusion of Nursing and Hospitality.",
     education: "간호학과",
@@ -205,7 +205,7 @@ export const PARTNER_MEMBERS: Member[] = [
     id: 102,
     name: "이정현",
     role: "Partner",
-    category: "글로벌서비스연구회",
+    category: "Global Service Group",
     image: "https://i.ibb.co/TGvX4D7/28.png",
     bio: "HIVE의 성장을 함께 응원하는 졸업생 파트너입니다.",
     education: "부산세연고등학교 교사",
@@ -216,7 +216,7 @@ export const PARTNER_MEMBERS: Member[] = [
     id: 105,
     name: "박유진",
     role: "Partner",
-    category: "글로벌서비스연구회",
+    category: "Global Service Group",
     image: "https://i.ibb.co/Z1Tk4T4L/2026-05-05-160901.png",
     bio: "사용자 경험 중심의 서비스 디자인을 연구합니다.",
     education: "대구대학교 호텔관광연구실",
@@ -232,7 +232,7 @@ export const PARTNER_MEMBERS: Member[] = [
     id: 104,
     name: "김보민",
     role: "Partner",
-    category: "투어리즘 & AI 연구회",
+    category: "Tourism & AI Group",
     image: "https://i.ibb.co/TGvX4D7/28.png",
     bio: "데이터 기반의 관광 연구를 통해 학문적 깊이를 더합니다.",
     education: "대구대학교 호텔관광연구실",
@@ -263,7 +263,7 @@ export function getAuthorDisplayGroup(name: string): string {
   if (!name) return '호스피탈리티경영학회원';
   const partner = PARTNER_MEMBERS.find(m => m.name === name);
   if (partner) {
-    return partner.category || '글로벌서비스연구회';
+    return partner.category || 'Global Service Group';
   }
   const member = MEMBERS.find(m => m.name === name);
   if (member) {

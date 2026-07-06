@@ -14,7 +14,7 @@ const Members = () => {
   const [selectedFilter, setSelectedFilter] = useState<string>('전체');
 
   const generations = ['전체', '0-1기', '2기'];
-  const partnerFilters = ['글로벌서비스연구회', '투어리즘 & AI 연구회'];
+  const partnerFilters = ['Global Service Group', 'Tourism & AI Group'];
 
   const filteredMembers = (selectedCategory === 'GENERATIONS'
     ? (selectedFilter === '전체' ? MEMBERS : selectedFilter === '0-1기' ? MEMBERS : [])
