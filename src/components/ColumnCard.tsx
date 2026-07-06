@@ -47,16 +47,9 @@ export default function ColumnCard({
             <span className="px-2.5 py-0.5 text-[10px] font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-md tracking-wider">
               {column.category}
             </span>
-            <div className="flex items-center gap-3 text-[10px] text-gray-400 font-bold uppercase tracking-wider">
-              <span className="flex items-center gap-1">
-                <BookOpen className="w-3 h-3" />
-                <span>{column.readTime || '5 min read'}</span>
-              </span>
-              <span>•</span>
-              <span className="flex items-center gap-1">
-                <Calendar className="w-3 h-3" />
-                <span>{formattedDate}</span>
-              </span>
+            <div className="flex items-center gap-1 text-[10px] text-gray-400 font-bold uppercase tracking-wider">
+              <Calendar className="w-3 h-3 mr-0.5" />
+              <span>{formattedDate}</span>
             </div>
           </div>
 

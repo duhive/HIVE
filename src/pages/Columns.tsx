@@ -269,6 +269,12 @@ export default function Columns() {
   const [actionSuccess, setActionSuccess] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
 
+  // Password prompt state
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+  const [passwordInput, setPasswordInput] = useState('');
+  const [passwordError, setPasswordError] = useState(false);
+  const [pendingAction, setPendingAction] = useState<'create' | { type: 'edit'; column: Column } | null>(null);
+
   // Load Likes & Bookmarks from localStorage on mount
   useEffect(() => {
     try {
@@ -499,8 +505,27 @@ export default function Columns() {
   };
 
   const handleTriggerEdit = (column: Column) => {
-    setEditingColumn(column);
-    setIsFormOpen(true);
+    setPendingAction({ type: 'edit', column });
+    setIsPasswordModalOpen(true);
+  };
+
+  const handlePasswordSubmit = () => {
+    if (passwordInput === '2405') {
+      setIsPasswordModalOpen(false);
+      setPasswordInput('');
+      setPasswordError(false);
+      
+      if (pendingAction === 'create') {
+        setEditingColumn(null);
+        setIsFormOpen(true);
+      } else if (pendingAction && typeof pendingAction === 'object') {
+        setEditingColumn(pendingAction.column);
+        setIsFormOpen(true);
+      }
+      setPendingAction(null);
+    } else {
+      setPasswordError(true);
+    }
   };
 
   // Filter columns based on category, bookmarks, and search query
@@ -635,8 +660,8 @@ export default function Columns() {
                     <button
                       id="write-column-open-btn"
                       onClick={() => {
-                        setEditingColumn(null);
-                        setIsFormOpen(true);
+                        setPendingAction('create');
+                        setIsPasswordModalOpen(true);
                       }}
                       className="flex items-center gap-2 px-4.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-bold shadow-xs transition-colors cursor-pointer"
                     >
@@ -733,6 +758,90 @@ export default function Columns() {
                 setEditingColumn(null);
               }}
             />
+          )}
+        </AnimatePresence>
+
+        {/* Password Prompt Modal */}
+        <AnimatePresence>
+          {isPasswordModalOpen && (
+            <motion.div
+              id="password-prompt-modal"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-slate-950/40 backdrop-blur-xs z-50 flex items-center justify-center p-4"
+              onClick={() => {
+                setIsPasswordModalOpen(false);
+                setPasswordInput('');
+                setPasswordError(false);
+                setPendingAction(null);
+              }}
+            >
+              <motion.div
+                initial={{ scale: 0.95, y: 10 }}
+                animate={{ scale: 1, y: 0 }}
+                exit={{ scale: 0.95, y: 10 }}
+                onClick={(e) => e.stopPropagation()}
+                className="bg-white rounded-3xl border border-gray-100 p-6 max-w-sm w-full shadow-xl space-y-4"
+              >
+                <div className="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
+                  <Plus className="w-5 h-5" />
+                </div>
+                <div className="space-y-1 text-center">
+                  <h3 className="text-lg font-bold text-gray-900 font-sans">학술 칼럼 기고 권한</h3>
+                  <p className="text-xs text-gray-500 leading-relaxed font-sans">
+                    학술 칼럼을 기고하거나 수정하려면<br />
+                    학회 전용 비밀번호를 입력해 주세요.
+                  </p>
+                </div>
+                <div className="space-y-3">
+                  <div>
+                    <input
+                      type="password"
+                      placeholder="비밀번호 입력"
+                      value={passwordInput}
+                      onChange={(e) => {
+                        setPasswordInput(e.target.value);
+                        setPasswordError(false);
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          handlePasswordSubmit();
+                        }
+                      }}
+                      className={`w-full px-4 py-2.5 border rounded-xl text-center text-sm font-bold tracking-widest focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 ${
+                        passwordError ? 'border-red-500 focus:border-red-500' : 'border-gray-200 focus:border-emerald-500'
+                      }`}
+                      autoFocus
+                    />
+                    {passwordError && (
+                      <p className="text-center text-[10px] text-red-500 font-bold mt-1.5">비밀번호가 일치하지 않습니다.</p>
+                    )}
+                  </div>
+                  <div className="flex gap-3 pt-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsPasswordModalOpen(false);
+                        setPasswordInput('');
+                        setPasswordError(false);
+                        setPendingAction(null);
+                      }}
+                      className="flex-1 py-2 px-4 border border-gray-200 rounded-xl text-xs font-semibold text-gray-500 hover:bg-gray-50 transition-colors cursor-pointer"
+                    >
+                      취소
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handlePasswordSubmit}
+                      className="flex-1 py-2 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-colors cursor-pointer"
+                    >
+                      확인
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            </motion.div>
           )}
         </AnimatePresence>
 

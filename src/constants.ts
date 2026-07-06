@@ -158,9 +158,53 @@ export const BRAND_STORY = {
 
 export const PARTNER_MEMBERS: Member[] = [
   {
+    id: 201,
+    name: "김병국",
+    role: "교수",
+    category: "Professor Group",
+    image: "https://i.ibb.co/7tTLfhW9/2026-07-07-003052.png",
+    bio: "대구대학교 호텔외식관광학과 교수",
+    education: "대구대학교 호텔외식관광학과",
+    skills: ["호텔경영", "관광개발"],
+    contact: "TBD"
+  },
+  {
+    id: 202,
+    name: "김현정",
+    role: "교수",
+    category: "Professor Group",
+    image: "https://i.ibb.co/Z1WTwCSs/2026-07-07-003754.png",
+    bio: "대구대학교 호텔외식관광학과 교수",
+    education: "대구대학교 호텔외식관광학과",
+    skills: ["호텔경영", "관광마케팅"],
+    contact: "TBD"
+  },
+  {
+    id: 203,
+    name: "송자현",
+    role: "교수",
+    category: "Professor Group",
+    image: "https://i.ibb.co/Z1ph2nV8/2026-07-07-003114.png",
+    bio: "대구대학교 호텔외식관광학과 교수",
+    education: "대구대학교 호텔외식관광학과",
+    skills: ["항공서비스", "MICE"],
+    contact: "TBD"
+  },
+  {
+    id: 204,
+    name: "박은경",
+    role: "교수",
+    category: "Professor Group",
+    image: "https://i.ibb.co/XZQL4Vbm/2026-06-21-232508.png",
+    bio: "대구대학교 호텔외식관광학과 교수",
+    education: "대구대학교 호텔외식관광학과",
+    skills: ["호텔경영", "식음료 서비스"],
+    contact: "TBD"
+  },
+  {
     id: 12,
     name: "박지호",
-    role: "Convergence Partner",
+    role: "Partner",
     category: "Global Service Group",
     image: "https://i.ibb.co/TGvX4D7/28.png",
     bio: "Exploring the future of aviation through the fusion of English Education and Psychology.",
@@ -171,7 +215,7 @@ export const PARTNER_MEMBERS: Member[] = [
   {
     id: 13,
     name: "전나영",
-    role: "Convergence Partner",
+    role: "Partner",
     category: "Global Service Group",
     image: "https://i.ibb.co/KxdRcy4B/image.jpg",
     bio: "Creating new value through the fusion of Geography Education and Aviation Service.",
@@ -182,7 +226,7 @@ export const PARTNER_MEMBERS: Member[] = [
   {
     id: 14,
     name: "송수민",
-    role: "Convergence Partner",
+    role: "Partner",
     category: "Global Service Group",
     image: "https://i.ibb.co/TGvX4D7/28.png",
     bio: "Creating synergistic value through various interdisciplinary approaches in Hospitality.",
@@ -193,7 +237,7 @@ export const PARTNER_MEMBERS: Member[] = [
   {
     id: 15,
     name: "이시현",
-    role: "Convergence Partner",
+    role: "Partner",
     category: "Global Service Group",
     image: "https://i.ibb.co/TGvX4D7/28.png",
     bio: "Exploring healthcare synergy and wellness tourism through the fusion of Nursing and Hospitality.",

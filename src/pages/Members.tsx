@@ -16,9 +16,10 @@ const Members = () => {
   const generations = ['전체', '0-1기', '2기'];
   const partnerFilters = ['Global Service Group', 'Tourism & AI Group'];
 
-  const filteredMembers = (selectedCategory === 'GENERATIONS'
-    ? (selectedFilter === '전체' ? MEMBERS : selectedFilter === '0-1기' ? MEMBERS : [])
-    : PARTNER_MEMBERS.filter(m => m.category === selectedFilter)
+  const filteredMembers = (
+    selectedCategory === 'GENERATIONS'
+      ? (selectedFilter === '전체' ? MEMBERS : selectedFilter === '0-1기' ? MEMBERS : [])
+      : PARTNER_MEMBERS.filter(m => m.category === selectedFilter)
   ).slice().sort((a, b) => a.name.localeCompare(b.name, 'ko'));
 
   const isComingSoon = (selectedCategory === 'GENERATIONS' && selectedFilter === '2기') || 

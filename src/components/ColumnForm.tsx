@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { X, Save, User, AlertCircle, HelpCircle, Link as LinkIcon } from 'lucide-react';
+import { X, Save, User, AlertCircle, HelpCircle, Link as LinkIcon, ChevronDown } from 'lucide-react';
 import { Column } from '../types';
 import { MEMBERS, PARTNER_MEMBERS } from '../constants';
 
@@ -51,6 +51,7 @@ export default function ColumnForm({
 
   // Author linkage state
   const [selectedMemberId, setSelectedMemberId] = useState<string>('custom');
+  const [isAuthorDropdownOpen, setIsAuthorDropdownOpen] = useState(false);
 
   // Author sub-fields
   const [authorName, setAuthorName] = useState('김지민');
@@ -149,7 +150,7 @@ export default function ColumnForm({
       return;
     }
     if (authorAffiliation.trim().length > 200) {
-      setErrorMessage('소속 기관은 200자 이하로 작성해 주세요.');
+      setErrorMessage('소속은 200자 이하로 작성해 주세요.');
       return;
     }
 
@@ -240,7 +241,7 @@ export default function ColumnForm({
               1. 기고 정보 및 카테고리
             </h3>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 gap-4">
               <div>
                 <label className="block text-xs font-bold text-gray-700 mb-1.5">카테고리 *</label>
                 <select
@@ -252,18 +253,6 @@ export default function ColumnForm({
                     <option key={cat} value={cat}>{cat}</option>
                   ))}
                 </select>
-              </div>
-
-              <div className="md:col-span-2">
-                <label className="block text-xs font-bold text-gray-700 mb-1.5">독서 예측 시간 (예: 5 min read) *</label>
-                <input
-                  type="text"
-                  required
-                  placeholder="예: 5 min read"
-                  value={readTime}
-                  onChange={(e) => setReadTime(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
-                />
               </div>
             </div>
 
@@ -312,41 +301,213 @@ export default function ColumnForm({
                 목록에 없는 분들도 직접 입력이 가능하며, 이때 프로필 이미지는 기본 캐릭터 일러스트로 설정됩니다.
               </p>
               
-              <div>
-                <select
-                  value={selectedMemberId}
-                  onChange={(e) => handleMemberSelect(e.target.value)}
-                  className="w-full px-3 py-2 bg-white border border-emerald-500/30 rounded-xl text-sm font-medium text-emerald-900 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 cursor-pointer"
+              <div className="relative">
+                {/* Custom select trigger button */}
+                <button
+                  type="button"
+                  onClick={() => setIsAuthorDropdownOpen(!isAuthorDropdownOpen)}
+                  className="w-full flex items-center justify-between px-4 py-2.5 bg-white border border-emerald-500/30 rounded-xl text-sm font-medium text-emerald-900 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 cursor-pointer shadow-xs"
                 >
-                  <option value="custom">👤 직접 입력 / 등록되지 않은 사용자 (기본 캐릭터 설정)</option>
-                  {ALL_MEMBERS.map((member) => (
-                    <option key={member.id} value={String(member.id)}>
-                      🎓 {member.name} ({member.role} - {member.education})
-                    </option>
-                  ))}
-                </select>
+                  <div className="flex items-center gap-2 text-left">
+                    {selectedMemberId === 'custom' ? (
+                      <>
+                        <img
+                          src={DEFAULT_CHARACTER_IMAGE}
+                          className="w-6 h-6 rounded-full object-cover border border-emerald-100 shrink-0"
+                          referrerPolicy="no-referrer"
+                          alt="Default Avatar"
+                        />
+                        <span>👤 직접 입력 / 등록되지 않은 사용자 (기본 캐릭터 설정)</span>
+                      </>
+                    ) : (
+                      (() => {
+                        const m = ALL_MEMBERS.find(member => String(member.id) === selectedMemberId);
+                        if (!m) return <span>직접 입력 / 등록되지 않은 사용자</span>;
+                        return (
+                          <>
+                            <img
+                              src={m.image || DEFAULT_CHARACTER_IMAGE}
+                              className="w-6 h-6 rounded-full object-cover border border-emerald-100 shrink-0"
+                              referrerPolicy="no-referrer"
+                              alt={m.name}
+                            />
+                            <span>
+                              {m.name} {m.category === 'Professor Group' ? '교수' : `(${m.role})`}
+                            </span>
+                          </>
+                        );
+                      })()
+                    )}
+                  </div>
+                  <ChevronDown className="w-4 h-4 text-emerald-700 opacity-60" />
+                </button>
+
+                {/* Dropdown Options */}
+                {isAuthorDropdownOpen && (
+                  <>
+                    <div className="fixed inset-0 z-40" onClick={() => setIsAuthorDropdownOpen(false)} />
+                    <div className="absolute left-0 right-0 mt-1.5 max-h-80 overflow-y-auto bg-white border border-emerald-100 rounded-2xl shadow-xl z-50 divide-y divide-gray-100">
+                      
+                      {/* Option: Custom/Direct entry */}
+                      <div
+                        onClick={() => {
+                          handleMemberSelect('custom');
+                          setIsAuthorDropdownOpen(false);
+                        }}
+                        className={`flex items-center gap-3 px-4 py-3 hover:bg-emerald-50 cursor-pointer transition-colors ${
+                          selectedMemberId === 'custom' ? 'bg-emerald-50/70 font-bold' : ''
+                        }`}
+                      >
+                        <img
+                          src={DEFAULT_CHARACTER_IMAGE}
+                          className="w-7 h-7 rounded-full object-cover shrink-0 border border-gray-100"
+                          referrerPolicy="no-referrer"
+                          alt="Default Avatar"
+                        />
+                        <div className="text-xs text-gray-700">
+                          <span className="font-semibold block">직접 입력 / 등록되지 않은 사용자</span>
+                          <span className="text-[10px] text-gray-400">기본 캐릭터로 설정됩니다.</span>
+                        </div>
+                      </div>
+
+                      {/* 교수 */}
+                      {PARTNER_MEMBERS.filter(m => m.category === 'Professor Group').length > 0 && (
+                        <div className="py-2">
+                          <div className="px-4 py-1 text-[9px] font-black text-emerald-800 bg-emerald-500/5 uppercase tracking-widest select-none mb-1">
+                            🎓 교수 (Professor)
+                          </div>
+                          {PARTNER_MEMBERS.filter(m => m.category === 'Professor Group').map((member) => (
+                            <div
+                              key={member.id}
+                              onClick={() => {
+                                handleMemberSelect(String(member.id));
+                                setIsAuthorDropdownOpen(false);
+                              }}
+                              className={`flex items-center gap-3 px-4 py-2 hover:bg-emerald-50 cursor-pointer transition-colors ${
+                                selectedMemberId === String(member.id) ? 'bg-emerald-50/70 font-bold' : ''
+                              }`}
+                            >
+                              <img
+                                src={member.image || DEFAULT_CHARACTER_IMAGE}
+                                className="w-7 h-7 rounded-full object-cover shrink-0 border border-gray-200"
+                                referrerPolicy="no-referrer"
+                                alt={member.name}
+                              />
+                              <div className="text-xs text-gray-850">
+                                <span className="font-semibold block">{member.name} 교수</span>
+                                <span className="text-[10px] text-gray-400">{member.role} - {member.education}</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* HIVE 학회원 */}
+                      {MEMBERS.length > 0 && (
+                        <div className="py-2">
+                          <div className="px-4 py-1 text-[9px] font-black text-emerald-800 bg-emerald-500/5 uppercase tracking-widest select-none mb-1">
+                            🐝 HIVE 학회원
+                          </div>
+                          {MEMBERS.map((member) => (
+                            <div
+                              key={member.id}
+                              onClick={() => {
+                                handleMemberSelect(String(member.id));
+                                setIsAuthorDropdownOpen(false);
+                              }}
+                              className={`flex items-center gap-3 px-4 py-2 hover:bg-emerald-50 cursor-pointer transition-colors ${
+                                selectedMemberId === String(member.id) ? 'bg-emerald-50/70 font-bold' : ''
+                              }`}
+                            >
+                              <img
+                                src={member.image || DEFAULT_CHARACTER_IMAGE}
+                                className="w-7 h-7 rounded-full object-cover shrink-0 border border-gray-200"
+                                referrerPolicy="no-referrer"
+                                alt={member.name}
+                              />
+                              <div className="text-xs text-gray-850">
+                                <span className="font-semibold block">{member.name}</span>
+                                <span className="text-[10px] text-gray-400">{member.role} - {member.education}</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* 파트너 그룹 */}
+                      {['Global Service Group', 'Tourism & AI Group'].map((grp) => {
+                        const grpMembers = PARTNER_MEMBERS.filter(m => m.category === grp);
+                        if (grpMembers.length === 0) return null;
+                        return (
+                          <div key={grp} className="py-2">
+                            <div className="px-4 py-1 text-[9px] font-black text-emerald-800 bg-emerald-500/5 uppercase tracking-widest select-none mb-1">
+                              💼 파트너 - {grp === 'Global Service Group' ? 'Global Service Group' : 'Tourism & AI Group'}
+                            </div>
+                            {grpMembers.map((member) => (
+                              <div
+                                key={member.id}
+                                onClick={() => {
+                                  handleMemberSelect(String(member.id));
+                                  setIsAuthorDropdownOpen(false);
+                                }}
+                                className={`flex items-center gap-3 px-4 py-2 hover:bg-emerald-50 cursor-pointer transition-colors ${
+                                  selectedMemberId === String(member.id) ? 'bg-emerald-50/70 font-bold' : ''
+                                }`}
+                              >
+                                <img
+                                  src={member.image || DEFAULT_CHARACTER_IMAGE}
+                                  className="w-7 h-7 rounded-full object-cover shrink-0 border border-gray-200"
+                                  referrerPolicy="no-referrer"
+                                  alt={member.name}
+                                />
+                                <div className="text-xs text-gray-850">
+                                  <span className="font-semibold block">{member.name}</span>
+                                  <span className="text-[10px] text-gray-400">{member.role} - {member.education || 'HIVE'}</span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </>
+                )}
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
                 <label className="block text-xs font-bold text-gray-700 mb-1.5">이름 *</label>
-                <input
-                  type="text"
-                  required
-                  placeholder="예: 김지민"
-                  value={authorName}
-                  onChange={(e) => {
-                    setAuthorName(e.target.value);
-                    const matched = ALL_MEMBERS.find(m => m.name === e.target.value);
-                    if (!matched) {
-                      setSelectedMemberId('custom');
-                    } else {
-                      setSelectedMemberId(String(matched.id));
-                    }
-                  }}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
-                />
+                <div className="relative flex items-center">
+                  <div className="absolute left-3 flex items-center justify-center">
+                    <img
+                      src={authorImage || DEFAULT_CHARACTER_IMAGE}
+                      alt="Profile"
+                      referrerPolicy="no-referrer"
+                      className="w-6 h-6 rounded-full object-cover border border-gray-150 shrink-0"
+                    />
+                  </div>
+                  <input
+                    type="text"
+                    required
+                    placeholder="예: 김지민"
+                    value={authorName}
+                    onChange={(e) => {
+                      const nameValue = e.target.value;
+                      setAuthorName(nameValue);
+                      const matched = ALL_MEMBERS.find(m => m.name === nameValue);
+                      if (!matched) {
+                        setSelectedMemberId('custom');
+                      } else {
+                        setSelectedMemberId(String(matched.id));
+                        setAuthorImage(matched.image || DEFAULT_CHARACTER_IMAGE);
+                        setAuthorRole(matched.role);
+                        setAuthorAffiliation(matched.education || 'HIVE');
+                      }
+                    }}
+                    className="w-full pl-10 pr-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
+                  />
+                </div>
               </div>
               <div>
                 <label className="block text-xs font-bold text-gray-700 mb-1.5">역할 / 직함 *</label>
@@ -363,11 +524,11 @@ export default function ColumnForm({
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1.5">소속 기관 *</label>
+                <label className="block text-xs font-bold text-gray-700 mb-1.5">소속 *</label>
                 <input
                   type="text"
                   required
-                  placeholder="예: HIVE Hospitality Lab"
+                  placeholder="예: 호텔외식관광학과 / HIVE"
                   value={authorAffiliation}
                   onChange={(e) => {
                     setAuthorAffiliation(e.target.value);
@@ -375,69 +536,6 @@ export default function ColumnForm({
                   }}
                   className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
                 />
-              </div>
-            </div>
-
-            {/* Author Avatar selection */}
-            <div>
-              <label className="block text-xs font-bold text-gray-700 mb-2">기고가 프로필 아바타 선택</label>
-              <div className="flex items-center gap-4">
-                <img
-                  src={authorImage || DEFAULT_CHARACTER_IMAGE}
-                  alt="Author preview"
-                  referrerPolicy="no-referrer"
-                  className="w-12 h-12 rounded-full object-cover border border-gray-200 shrink-0"
-                />
-                <div className="flex flex-wrap gap-2 items-center">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setAuthorImage(DEFAULT_CHARACTER_IMAGE);
-                      setSelectedMemberId('custom');
-                    }}
-                    className={`w-10 h-10 rounded-full overflow-hidden border-2 transition-all ${
-                      authorImage === DEFAULT_CHARACTER_IMAGE ? 'border-emerald-500 scale-105' : 'border-transparent opacity-70 hover:opacity-100'
-                    }`}
-                    title="기본 캐릭터 일러스트 (박지호 동일)"
-                  >
-                    <img src={DEFAULT_CHARACTER_IMAGE} alt="Default Character" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                  </button>
-                  {AUTHOR_IMAGE_PRESETS.map((preset, idx) => (
-                    <button
-                      type="button"
-                      key={idx}
-                      onClick={() => {
-                        setAuthorImage(preset.url);
-                        setSelectedMemberId('custom');
-                      }}
-                      className={`w-10 h-10 rounded-full overflow-hidden border-2 transition-all ${
-                        authorImage === preset.url ? 'border-emerald-500 scale-105' : 'border-transparent opacity-70 hover:opacity-100'
-                      }`}
-                    >
-                      <img src={preset.url} alt={preset.name} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                    </button>
-                  ))}
-                  {selectedMemberId !== 'custom' && (
-                    (() => {
-                      const found = ALL_MEMBERS.find(m => String(m.id) === selectedMemberId);
-                      if (found && found.image !== DEFAULT_CHARACTER_IMAGE && !AUTHOR_IMAGE_PRESETS.some(p => p.url === found.image)) {
-                        return (
-                          <button
-                            type="button"
-                            onClick={() => setAuthorImage(found.image)}
-                            className={`w-10 h-10 rounded-full overflow-hidden border-2 transition-all ${
-                              authorImage === found.image ? 'border-emerald-500 scale-105' : 'border-transparent opacity-70 hover:opacity-100'
-                            }`}
-                            title="학회원 프로필 사진"
-                          >
-                            <img src={found.image} alt={found.name} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                          </button>
-                        );
-                      }
-                      return null;
-                    })()
-                  )}
-                </div>
               </div>
             </div>
           </div>

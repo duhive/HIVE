@@ -67,9 +67,10 @@ export default function ColumnDetail({
             {column.tags && column.tags.length > 0 ? column.tags[0].toUpperCase() : 'SERVICE INNOVATION'}
           </span>
           <span>•</span>
-          <span>{formattedDate}</span>
-          <span>•</span>
-          <span className="font-mono">{column.readTime || '5 MIN READ'}</span>
+          <span className="flex items-center gap-1">
+            <Calendar className="w-3.5 h-3.5" />
+            <span>{formattedDate}</span>
+          </span>
         </div>
 
         <h1 className="text-2xl md:text-3xl font-extrabold text-slate-950 tracking-tight leading-snug mb-6">
