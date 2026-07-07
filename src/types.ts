@@ -8,7 +8,7 @@ export interface CurriculumItem {
 }
 
 export interface Member {
-  id: number;
+  id: number | string;
   name: string;
   role: string;
   category?: string;

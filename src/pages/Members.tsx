@@ -1,34 +1,244 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { MEMBERS, PARTNER_MEMBERS } from '../constants';
 import { Member } from '../types';
-import { X, Mail, GraduationCap, Briefcase, Award, Users } from 'lucide-react';
+import { X, Mail, GraduationCap, Briefcase, Award, Users, Plus, Trash, Edit } from 'lucide-react';
+import { db } from '../firebase';
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy } from 'firebase/firestore';
 
 const Members = () => {
   const [selectedMember, setSelectedMember] = useState<Member | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('GENERATIONS');
-
-  const handleSelectMember = (member: Member) => {
-    setSelectedMember(member);
-  };
   const [selectedFilter, setSelectedFilter] = useState<string>('전체');
+
+  // Load dynamic custom members from Firestore
+  const [customMembers, setCustomMembers] = useState<Member[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Form & action state
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [editingMember, setEditingMember] = useState<Member | null>(null);
+
+  // Password Verification Modal state
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+  const [passwordInput, setPasswordInput] = useState('');
+  const [passwordError, setPasswordError] = useState(false);
+  const [pendingAction, setPendingAction] = useState<'create' | { type: 'edit'; member: Member } | { type: 'delete'; member: Member } | null>(null);
+
+  // Form states for adding/editing members
+  const [formName, setFormName] = useState('');
+  const [formRole, setFormRole] = useState('');
+  const [formCategory, setFormCategory] = useState<'GENERATIONS' | 'PARTNERS'>('GENERATIONS');
+  const [formSubFilter, setFormSubFilter] = useState('2기');
+  const [formImage, setFormImage] = useState('https://i.ibb.co/TGvX4D7/28.png');
+  const [formBio, setFormBio] = useState('');
+  const [formEducation, setFormEducation] = useState('');
+  const [formSkills, setFormSkills] = useState('');
+  const [formContact, setFormContact] = useState('');
+  const [formIsAlumni, setFormIsAlumni] = useState(false);
+
+  const [formLoading, setFormLoading] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   const generations = ['전체', '0-1기', '2기'];
   const partnerFilters = ['Global Service Group', 'Tourism & AI Group'];
 
-  const filteredMembers = (
-    selectedCategory === 'GENERATIONS'
-      ? (selectedFilter === '전체' ? MEMBERS : selectedFilter === '0-1기' ? MEMBERS : [])
-      : PARTNER_MEMBERS.filter(m => m.category === selectedFilter)
-  ).slice().sort((a, b) => a.name.localeCompare(b.name, 'ko'));
+  const fetchCustomMembers = async () => {
+    try {
+      const q = query(collection(db, 'customMembers'), orderBy('createdAt', 'desc'));
+      const snapshot = await getDocs(q);
+      const membersList: Member[] = [];
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        membersList.push({
+          id: doc.id,
+          name: data.name,
+          role: data.role,
+          category: data.category,
+          subFilter: data.subFilter || '',
+          image: data.image,
+          bio: data.bio || '',
+          education: data.education,
+          skills: data.skills || [],
+          contact: data.contact,
+          isAlumni: data.isAlumni || false,
+        } as unknown as Member);
+      });
+      setCustomMembers(membersList);
+    } catch (err) {
+      console.error("Error fetching custom members:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const isComingSoon = (selectedCategory === 'GENERATIONS' && selectedFilter === '2기') || 
-                     (selectedCategory === 'PARTNERS' && filteredMembers.length === 0);
+  useEffect(() => {
+    fetchCustomMembers();
+  }, []);
+
+  const handleSelectMember = (member: Member) => {
+    setSelectedMember(member);
+  };
+
+  const handlePasswordSubmit = () => {
+    if (passwordInput === '2405') {
+      setIsPasswordModalOpen(false);
+      setPasswordInput('');
+      setPasswordError(false);
+
+      if (pendingAction === 'create') {
+        setEditingMember(null);
+        setFormName('');
+        setFormRole('');
+        setFormCategory('GENERATIONS');
+        setFormSubFilter('2기');
+        setFormImage('https://i.ibb.co/TGvX4D7/28.png');
+        setFormBio('');
+        setFormEducation('');
+        setFormSkills('');
+        setFormContact('');
+        setFormIsAlumni(false);
+        setFormError(null);
+        setIsFormOpen(true);
+      } else if (pendingAction && pendingAction.type === 'edit') {
+        const m = pendingAction.member;
+        setEditingMember(m);
+        setFormName(m.name);
+        setFormRole(m.role);
+        setFormCategory((m as any).groupType === 'GENERATIONS' ? 'GENERATIONS' : 'PARTNERS');
+        setFormSubFilter((m as any).subFilter || '2기');
+        setFormImage(m.image || 'https://i.ibb.co/TGvX4D7/28.png');
+        setFormBio(m.bio || '');
+        setFormEducation(m.education);
+        setFormSkills(m.skills.join(', '));
+        setFormContact(m.contact);
+        setFormIsAlumni(m.isAlumni || false);
+        setFormError(null);
+        setIsFormOpen(true);
+      } else if (pendingAction && pendingAction.type === 'delete') {
+        handleDeleteMember(pendingAction.member.id);
+      }
+      setPendingAction(null);
+    } else {
+      setPasswordError(true);
+    }
+  };
+
+  const handleDeleteMember = async (memberId: string | number) => {
+    try {
+      await deleteDoc(doc(db, 'customMembers', String(memberId)));
+      setSelectedMember(null);
+      fetchCustomMembers();
+    } catch (err) {
+      console.error("Error deleting member:", err);
+      alert("삭제 중 오류가 발생했습니다.");
+    }
+  };
+
+  const handleSubmitMember = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formName.trim() || !formRole.trim() || !formEducation.trim() || !formContact.trim()) {
+      setFormError('필수 입력 항목을 모두 작성해 주세요.');
+      return;
+    }
+
+    setFormLoading(true);
+    setFormError(null);
+
+    const skillsArray = formSkills
+      .split(',')
+      .map(s => s.trim())
+      .filter(s => s.length > 0);
+
+    const finalCategory = formCategory === 'GENERATIONS' ? 'GENERATIONS' : formSubFilter;
+    const finalSubFilter = formCategory === 'GENERATIONS' ? formSubFilter : '';
+
+    const memberData = {
+      name: formName.trim(),
+      role: formRole.trim(),
+      category: finalCategory,
+      subFilter: finalSubFilter,
+      image: formImage.trim() || 'https://i.ibb.co/TGvX4D7/28.png',
+      bio: formBio.trim(),
+      education: formEducation.trim(),
+      skills: skillsArray,
+      contact: formContact.trim(),
+      isAlumni: formIsAlumni,
+    };
+
+    try {
+      if (editingMember) {
+        const memberRef = doc(db, 'customMembers', String(editingMember.id));
+        await updateDoc(memberRef, {
+          ...memberData
+        });
+        
+        setSelectedMember({
+          id: editingMember.id,
+          ...memberData,
+          category: formCategory === 'GENERATIONS' ? undefined : finalCategory
+        } as unknown as Member);
+      } else {
+        await addDoc(collection(db, 'customMembers'), {
+          ...memberData,
+          createdAt: new Date()
+        });
+      }
+      setIsFormOpen(false);
+      fetchCustomMembers();
+    } catch (err) {
+      console.error("Error saving member:", err);
+      setFormError('저장하는 중 오류가 발생했습니다.');
+    } finally {
+      setFormLoading(false);
+    }
+  };
+
+  const staticGenerations = MEMBERS.map(m => ({
+    ...m,
+    groupType: 'GENERATIONS' as const,
+    subFilter: '0-1기'
+  }));
+
+  const staticPartners = PARTNER_MEMBERS.map(m => ({
+    ...m,
+    groupType: 'PARTNERS' as const,
+    subFilter: m.category || ''
+  }));
+
+  const mappedCustomMembers = customMembers.map(m => {
+    const isGen = m.category === 'GENERATIONS';
+    return {
+      ...m,
+      groupType: isGen ? ('GENERATIONS' as const) : ('PARTNERS' as const),
+      subFilter: isGen ? ((m as any).subFilter || '2기') : (m.category || ''),
+      category: isGen ? undefined : m.category
+    };
+  });
+
+  const allMembersList = [
+    ...staticGenerations,
+    ...staticPartners,
+    ...mappedCustomMembers
+  ];
+
+  const filteredMembers = allMembersList.filter(m => {
+    if (selectedCategory === 'GENERATIONS') {
+      if (m.groupType !== 'GENERATIONS') return false;
+      if (selectedFilter === '전체') return true;
+      return m.subFilter === selectedFilter;
+    } else {
+      if (m.groupType !== 'PARTNERS') return false;
+      return m.subFilter === selectedFilter;
+    }
+  }).slice().sort((a, b) => a.name.localeCompare(b.name, 'ko'));
+
+  const isComingSoon = filteredMembers.length === 0;
 
   return (
     <section id="members" className="py-24 bg-white min-h-screen">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center mb-16">
+        <div className="text-center mb-16 relative">
           <h2 className="text-4xl md:text-5xl font-display font-bold mb-2 text-hive-green">Members</h2>
           <p className="text-navy-900/60 max-w-2xl mx-auto">
             {selectedCategory === 'GENERATIONS' 
@@ -246,7 +456,15 @@ const Members = () => {
                   )}
                 </div>
 
-                <div className="space-y-6">
+                 <div className="space-y-6">
+                  {selectedMember.bio && (
+                    <section className="bg-navy-900/5 p-4 rounded-2xl border border-navy-900/5">
+                      <p className="text-navy-900/80 text-sm leading-relaxed italic">
+                        "{selectedMember.bio}"
+                      </p>
+                    </section>
+                  )}
+
                   <section>
                     <div className="flex items-center space-x-2 text-hive-green mb-3">
                       {selectedMember.category ? (
@@ -295,10 +513,323 @@ const Members = () => {
                     </section>
 
                   </div>
+
+                  {typeof selectedMember.id === 'string' && (
+                    <div className="flex gap-3 pt-6 border-t border-navy-900/10 mt-6">
+                      <button
+                        onClick={() => {
+                          setPendingAction({ type: 'edit', member: selectedMember });
+                          setIsPasswordModalOpen(true);
+                        }}
+                        className="flex-1 flex items-center justify-center gap-1.5 py-2 px-4 bg-navy-900/5 hover:bg-navy-900/10 text-navy-900/70 border border-navy-900/10 rounded-xl text-xs font-bold transition-colors cursor-pointer"
+                      >
+                        <Edit size={13} />
+                        프로필 수정
+                      </button>
+                      <button
+                        onClick={() => {
+                          setPendingAction({ type: 'delete', member: selectedMember });
+                          setIsPasswordModalOpen(true);
+                        }}
+                        className="flex items-center justify-center gap-1.5 py-2 px-4 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 rounded-xl text-xs font-bold transition-colors cursor-pointer"
+                      >
+                        <Trash size={13} />
+                        삭제
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             </motion.div>
           </div>
+        )}
+      </AnimatePresence>
+
+      {/* Password Prompt Modal */}
+      <AnimatePresence>
+        {isPasswordModalOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-slate-950/40 backdrop-blur-xs z-[150] flex items-center justify-center p-4"
+            onClick={() => {
+              setIsPasswordModalOpen(false);
+              setPasswordInput('');
+              setPasswordError(false);
+              setPendingAction(null);
+            }}
+          >
+            <motion.div
+              initial={{ scale: 0.95, y: 10 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 10 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white rounded-3xl border border-gray-100 p-6 max-w-sm w-full shadow-xl space-y-4"
+            >
+              <div className="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
+                <Users className="w-5 h-5" />
+              </div>
+              <div className="space-y-1 text-center">
+                <h3 className="text-lg font-bold text-gray-900 font-sans">멤버 프로필 관리 권한</h3>
+                <p className="text-xs text-gray-500 leading-relaxed font-sans">
+                  멤버 프로필을 등록, 수정 또는 삭제하려면<br />
+                  학회 전용 비밀번호를 입력해 주세요.
+                </p>
+              </div>
+              <div className="space-y-3">
+                <div>
+                  <input
+                    type="password"
+                    placeholder="비밀번호 입력"
+                    value={passwordInput}
+                    onChange={(e) => {
+                      setPasswordInput(e.target.value);
+                      setPasswordError(false);
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        handlePasswordSubmit();
+                      }
+                    }}
+                    className={`w-full px-4 py-2.5 border rounded-xl text-center text-sm font-bold tracking-widest focus:outline-hidden focus:ring-2 focus:ring-hive-green/20 ${
+                      passwordError ? 'border-red-500 focus:border-red-500' : 'border-gray-200 focus:border-hive-green'
+                    }`}
+                    autoFocus
+                  />
+                  {passwordError && (
+                    <p className="text-center text-[10px] text-red-500 font-bold mt-1.5">비밀번호가 일치하지 않습니다.</p>
+                  )}
+                </div>
+                <div className="flex gap-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsPasswordModalOpen(false);
+                      setPasswordInput('');
+                      setPasswordError(false);
+                      setPendingAction(null);
+                    }}
+                    className="flex-1 py-2 px-4 border border-gray-200 rounded-xl text-xs font-semibold text-gray-500 hover:bg-gray-50 transition-colors cursor-pointer"
+                  >
+                    취소
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handlePasswordSubmit}
+                    className="flex-1 py-2 px-4 bg-hive-green hover:bg-hive-green/90 text-white rounded-xl text-xs font-bold transition-colors cursor-pointer"
+                  >
+                    확인
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Member Form Modal */}
+      <AnimatePresence>
+        {isFormOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-slate-950/40 backdrop-blur-xs z-[140] flex items-center justify-center p-4 md:p-8"
+            onClick={() => setIsFormOpen(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, y: 10 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 10 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white rounded-3xl border border-gray-100 p-6 md:p-8 max-w-2xl w-full shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto"
+            >
+              <div className="flex justify-between items-center pb-4 border-b border-gray-100">
+                <h3 className="text-xl font-bold text-gray-900 font-sans">
+                  {editingMember ? '멤버 프로필 수정' : '새 멤버 프로필 등록'}
+                </h3>
+                <button
+                  onClick={() => setIsFormOpen(false)}
+                  className="p-1.5 hover:bg-gray-100 rounded-full text-gray-400 transition-colors cursor-pointer animate-none"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+
+              <form onSubmit={handleSubmitMember} className="space-y-5">
+                {formError && (
+                  <div className="p-3 bg-red-50 border border-red-200 text-red-600 text-xs font-semibold rounded-xl">
+                    {formError}
+                  </div>
+                )}
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 mb-1.5">이름 *</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="예: 강경임"
+                      value={formName}
+                      onChange={(e) => setFormName(e.target.value)}
+                      className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-hive-green/20 focus:border-hive-green"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 mb-1.5">역할 / 직책 *</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="예: 2기 YB, 학회장, Partner 등"
+                      value={formRole}
+                      onChange={(e) => setFormRole(e.target.value)}
+                      className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-hive-green/20 focus:border-hive-green"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 mb-1.5">분류 *</label>
+                    <select
+                      value={formCategory}
+                      onChange={(e) => {
+                        const val = e.target.value as 'GENERATIONS' | 'PARTNERS';
+                        setFormCategory(val);
+                        setFormSubFilter(val === 'GENERATIONS' ? '2기' : 'Global Service Group');
+                      }}
+                      className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-hive-green/20 focus:border-hive-green bg-white"
+                    >
+                      <option value="GENERATIONS">HIVE 학회원 (Generations)</option>
+                      <option value="PARTNERS">파트너 (Partners)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 mb-1.5">상세 그룹 *</label>
+                    {formCategory === 'GENERATIONS' ? (
+                      <select
+                        value={formSubFilter}
+                        onChange={(e) => setFormSubFilter(e.target.value)}
+                        className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-hive-green/20 focus:border-hive-green bg-white"
+                      >
+                        <option value="0-1기">0-1기</option>
+                        <option value="2기">2기</option>
+                      </select>
+                    ) : (
+                      <select
+                        value={formSubFilter}
+                        onChange={(e) => setFormSubFilter(e.target.value)}
+                        className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-hive-green/20 focus:border-hive-green bg-white"
+                      >
+                        <option value="Global Service Group">Global Service Group</option>
+                        <option value="Tourism & AI Group">Tourism & AI Group</option>
+                      </select>
+                    )}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 mb-1.5">소속 학과 / 소속 *</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="예: 호텔외식관광학과"
+                      value={formEducation}
+                      onChange={(e) => setFormEducation(e.target.value)}
+                      className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-hive-green/20 focus:border-hive-green"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 mb-1.5">연락처 *</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="예: example@naver.com"
+                      value={formContact}
+                      onChange={(e) => setFormContact(e.target.value)}
+                      className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-hive-green/20 focus:border-hive-green"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-gray-700 mb-1.5">프로필 사진 URL *</label>
+                  <div className="flex gap-3">
+                    <input
+                      type="text"
+                      required
+                      placeholder="이미지 웹 주소 (URL)"
+                      value={formImage}
+                      onChange={(e) => setFormImage(e.target.value)}
+                      className="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-hive-green/20 focus:border-hive-green"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setFormImage('https://i.ibb.co/TGvX4D7/28.png')}
+                      className="px-3.5 py-2.5 border border-gray-200 rounded-xl text-xs font-semibold hover:bg-gray-50 text-gray-500 transition-colors cursor-pointer"
+                    >
+                      기본 이미지
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-gray-700 mb-1.5">전문 분야 / 관심사 (쉼표로 구분)</label>
+                  <input
+                    type="text"
+                    placeholder="예: 호텔경영, 관광마케팅, 인공지능 등"
+                    value={formSkills}
+                    onChange={(e) => setFormSkills(e.target.value)}
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-hive-green/20 focus:border-hive-green"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-gray-700 mb-1.5">소개글 *</label>
+                  <textarea
+                    required
+                    placeholder="자신을 소개하는 한 줄 소개글을 적어주세요."
+                    value={formBio}
+                    onChange={(e) => setFormBio(e.target.value)}
+                    rows={3}
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-hive-green/20 focus:border-hive-green resize-none"
+                  />
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="formIsAlumni"
+                    checked={formIsAlumni}
+                    onChange={(e) => setFormIsAlumni(e.target.checked)}
+                    className="rounded border-gray-300 text-hive-green focus:ring-hive-green cursor-pointer"
+                  />
+                  <label htmlFor="formIsAlumni" className="text-xs font-bold text-gray-700 cursor-pointer select-none">
+                    졸업생 (Alumni) 여부
+                  </label>
+                </div>
+
+                <div className="flex gap-3 pt-4 border-t border-gray-100">
+                  <button
+                    type="button"
+                    onClick={() => setIsFormOpen(false)}
+                    className="flex-1 py-2.5 border border-gray-200 rounded-xl text-xs font-semibold text-gray-500 hover:bg-gray-50 transition-colors cursor-pointer"
+                  >
+                    취소
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={formLoading}
+                    className="flex-1 py-2.5 bg-hive-green hover:bg-hive-green/90 disabled:bg-hive-green/50 text-white rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5"
+                  >
+                    {formLoading ? '저장 중...' : editingMember ? '수정 완료' : '등록 완료'}
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </motion.div>
         )}
       </AnimatePresence>
     </section>

@@ -150,6 +150,56 @@
         }
       },
       "required": ["week", "track", "title", "description", "deliverable", "semester", "createdAt"]
+    },
+    "customMember": {
+      "title": "Custom Member",
+      "description": "A dynamically added member profile registered by users",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Full name of the member"
+        },
+        "role": {
+          "type": "string",
+          "description": "Role in the society"
+        },
+        "category": {
+          "type": "string",
+          "description": "Category: GENERATIONS or Global Service Group or Tourism & AI Group"
+        },
+        "image": {
+          "type": "string",
+          "description": "URL of the member's profile image"
+        },
+        "bio": {
+          "type": "string",
+          "description": "A short bio of the member"
+        },
+        "education": {
+          "type": "string",
+          "description": "Education background"
+        },
+        "skills": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Skills or areas of interest"
+        },
+        "contact": {
+          "type": "string",
+          "description": "Email or contact info"
+        },
+        "isAlumni": {
+          "type": "boolean",
+          "description": "Whether the member is an alumnus"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation timestamp"
+        }
+      },
+      "required": ["name", "role", "category", "image", "bio", "education", "skills", "contact", "createdAt"]
     }
   },
   "firestore": {
@@ -164,6 +214,10 @@
     "/weeklySessions/{sessionId}": {
       "schema": "weeklySession",
       "description": "Collection of weekly academic sessions"
+    },
+    "/customMembers/{memberId}": {
+      "schema": "customMember",
+      "description": "Collection of dynamically added member profiles"
     }
   }
 }

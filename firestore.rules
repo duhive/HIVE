@@ -81,6 +81,19 @@ service cloud.firestore {
         && data.createdAt is timestamp;
     }
 
+    function isValidMember(data) {
+      return data.keys().hasAll(['name', 'role', 'category', 'image', 'bio', 'education', 'skills', 'contact', 'createdAt'])
+        && data.name is string && data.name.size() >= 1 && data.name.size() <= 100
+        && data.role is string && data.role.size() <= 100
+        && data.category is string && data.category.size() <= 100
+        && data.image is string && data.image.size() <= 2000
+        && data.bio is string && data.bio.size() <= 2000
+        && data.education is string && data.education.size() <= 200
+        && data.skills is list
+        && data.contact is string && data.contact.size() <= 150
+        && data.createdAt is timestamp;
+    }
+
     match /applications/{applicationId} {
       allow create: if isValidId(applicationId) && isValidApplication(incoming());
       allow read, update, delete: if false;
@@ -104,6 +117,13 @@ service cloud.firestore {
       allow read: if true;
       allow create: if isValidId(postId) && isValidCommunityPost(incoming()) && incoming().createdAt == request.time;
       allow update: if isValidId(postId) && isValidCommunityPost(incoming()) && incoming().createdAt == existing().createdAt;
+      allow delete: if true;
+    }
+
+    match /customMembers/{memberId} {
+      allow read: if true;
+      allow create: if isValidId(memberId) && isValidMember(incoming()) && incoming().createdAt == request.time;
+      allow update: if isValidId(memberId) && isValidMember(incoming()) && incoming().createdAt == existing().createdAt;
       allow delete: if true;
     }
   }
