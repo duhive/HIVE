@@ -4,7 +4,7 @@ import { MEMBERS, PARTNER_MEMBERS } from '../constants';
 import { Member } from '../types';
 import { X, Mail, GraduationCap, Briefcase, Award, Users, Plus, Trash, Edit } from 'lucide-react';
 import { db } from '../firebase';
-import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy } from 'firebase/firestore';
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
 
 const Members = () => {
   const [selectedMember, setSelectedMember] = useState<Member | null>(null);
@@ -41,12 +41,11 @@ const Members = () => {
   const [formError, setFormError] = useState<string | null>(null);
 
   const generations = ['전체', '0-1기', '2기'];
-  const partnerFilters = ['Global Service Group', 'Tourism & AI Group'];
+  const partnerFilters: string[] = []; // ['Global Service Group', 'Tourism & AI Group'] (일시 숨김 처리)
 
   const fetchCustomMembers = async () => {
     try {
-      const q = query(collection(db, 'customMembers'), orderBy('createdAt', 'desc'));
-      const snapshot = await getDocs(q);
+      const snapshot = await getDocs(collection(db, 'customMembers'));
       const membersList: Member[] = [];
       snapshot.forEach((doc) => {
         const data = doc.data();
@@ -62,8 +61,16 @@ const Members = () => {
           skills: data.skills || [],
           contact: data.contact,
           isAlumni: data.isAlumni || false,
+          createdAt: data.createdAt?.toDate ? data.createdAt.toDate() : new Date(data.createdAt || Date.now())
         } as unknown as Member);
       });
+      
+      membersList.sort((a, b) => {
+        const dateA = (a as any).createdAt instanceof Date ? (a as any).createdAt.getTime() : 0;
+        const dateB = (b as any).createdAt instanceof Date ? (b as any).createdAt.getTime() : 0;
+        return dateB - dateA;
+      });
+      
       setCustomMembers(membersList);
     } catch (err) {
       console.error("Error fetching custom members:", err);
@@ -275,27 +282,29 @@ const Members = () => {
               </div>
 
               {/* Partners Section */}
-              <div>
-                <h3 className="text-sm font-bold text-navy-900/40 uppercase tracking-widest mb-6">Partners</h3>
-                <div className="flex lg:flex-col gap-2 overflow-x-auto pb-4 lg:pb-0 no-scrollbar">
-                  {partnerFilters.map((filter) => (
-                    <button
-                      key={filter}
-                      onClick={() => {
-                        setSelectedCategory('PARTNERS');
-                        setSelectedFilter(filter);
-                      }}
-                      className={`px-6 py-3 rounded-xl text-sm font-medium transition-all duration-200 whitespace-nowrap text-left cursor-pointer ${
-                        selectedCategory === 'PARTNERS' && selectedFilter === filter
-                          ? 'bg-hive-green text-white shadow-lg shadow-hive-green/20'
-                          : 'bg-navy-900/5 text-navy-900/60 hover:bg-navy-900/10'
-                      }`}
-                    >
-                      {filter}
-                    </button>
-                  ))}
+              {partnerFilters.length > 0 && (
+                <div>
+                  <h3 className="text-sm font-bold text-navy-900/40 uppercase tracking-widest mb-6">Partners</h3>
+                  <div className="flex lg:flex-col gap-2 overflow-x-auto pb-4 lg:pb-0 no-scrollbar">
+                    {partnerFilters.map((filter) => (
+                      <button
+                        key={filter}
+                        onClick={() => {
+                          setSelectedCategory('PARTNERS');
+                          setSelectedFilter(filter);
+                        }}
+                        className={`px-6 py-3 rounded-xl text-sm font-medium transition-all duration-200 whitespace-nowrap text-left cursor-pointer ${
+                          selectedCategory === 'PARTNERS' && selectedFilter === filter
+                            ? 'bg-hive-green text-white shadow-lg shadow-hive-green/20'
+                            : 'bg-navy-900/5 text-navy-900/60 hover:bg-navy-900/10'
+                        }`}
+                      >
+                        {filter}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
 

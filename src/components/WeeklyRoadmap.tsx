@@ -142,9 +142,112 @@ export const DEFAULT_WEEKLY_SESSIONS: Omit<WeeklySession, 'id'>[] = [
   }
 ];
 
+interface PresentationTopic {
+  title: string;
+  category: string;
+  description: string;
+  round: number; // 1 or 2
+}
+
+const FIRST_SEMESTER_TOPICS: PresentationTopic[] = [
+  // Round 1
+  {
+    title: '제주특별자치도 관광 산업의 발전 전략',
+    category: '로컬 관광 개발',
+    description: '제주 관광 산업의 지속 가능한 미래 발전 방안 및 인프라 고도화 연구',
+    round: 1
+  },
+  {
+    title: '스포츠 메가 이벤트(마라톤 축제)와 관광산업 시너지',
+    category: '스포츠 레저 관광',
+    description: '참여형 스포츠 이벤트 활성화가 지역 목적지 관광 수요 및 상권에 미치는 효과',
+    round: 1
+  },
+  {
+    title: '지역 대표 축제의 경제적 효과와 지속 가능성',
+    category: '축제 경제학',
+    description: '로컬 축제의 실질적 경제 파급 효과 측정 모델 및 지속 가능한 친환경 관리 설계',
+    round: 1
+  },
+  {
+    title: '글로벌 호스피탈리티 호텔 서비스 오퍼레이션의 이해',
+    category: '호스피탈리티',
+    description: '현대 호텔 산업 내 핵심 서비스 접점 및 효율적 고객 여정 관리 모델링',
+    round: 1
+  },
+  {
+    title: '축제/이벤트가 도시 목적지 브랜드 이미지에 미치는 영향',
+    category: '목적지 브랜딩',
+    description: '메가 이벤트 기획과 브랜딩 활동이 도시 이미지 및 관광객 재방문 의도에 미치는 영향',
+    round: 1
+  },
+  {
+    title: '서비스 여정 단계별 맞춤형 고객 경험(CX) 설계',
+    category: '경험 디자인 (CX)',
+    description: '디지털 및 대면 터치포인트 진단을 통한 고객 여정 지도(CJM) 고도화 방법론',
+    round: 1
+  },
+  {
+    title: '지방 소도시 활성화를 위한 로컬 관광 콘텐츠 제안',
+    category: '소도시 활성화',
+    description: '인구 감소 지역의 생존을 위한 특색 있는 로컬 콘텐츠 발굴 및 관광 생태계 활성화',
+    round: 1
+  },
+  {
+    title: '국내 크루즈 관광 산업 분석 및 연계 고도화',
+    category: '모빌리티 & 크루즈',
+    description: '크루즈 관광 시장 동향 및 국내 주요 기항지 연계 관광 활성화 서비스 프레임워크',
+    round: 1
+  },
+  // Round 2
+  {
+    title: '국제 지정학적 리스크 및 유가 상승과 글로벌 관광 산업 영향',
+    category: '거시경제 분석',
+    description: '거시 정세 변화와 에너지 비용 변동이 국제 관광 수요 및 교통 인프라에 미치는 복합 영향',
+    round: 2
+  },
+  {
+    title: '역사·문화유산 보존과 지속 가능한 관광 수요의 상관관계',
+    category: '문화유산 연계',
+    description: '역사 문화재 보존 상태 및 매력도가 글로벌 관광 수요 촉진에 미치는 인과 분석',
+    round: 2
+  },
+  {
+    title: '저비용 항공사(LCC) 성장과 아웃바운드 관광 확대',
+    category: '항공 모빌리티',
+    description: 'LCC 신규 취항 및 요금 전략이 글로벌 관광객 행동 및 여행 접근성 개선에 미치는 영향',
+    round: 2
+  },
+  {
+    title: '가상자산(Blockchain, BTC, ETH)의 이해와 호스피탈리티 접목',
+    category: '핀테크 융합',
+    description: '분산 원장 기술 및 가상자산 결제 도입이 관광 서비스 접점 편의성에 미치는 변화 예측',
+    round: 2
+  },
+  {
+    title: '한·미 호스피탈리티 서비스 스타일과 접대 문화 비교',
+    category: '글로벌 서비스 비교',
+    description: '한국 고유의 인적 서비스 강점과 미국의 비즈니스 지향적 프로페셔널 서비스 강단 분석',
+    round: 2
+  },
+  {
+    title: 'MZ세대의 새로운 소셜 네트워크와 글로벌 주류 소비 시장 변화',
+    category: '주류 소비 트렌드',
+    description: '글로벌 주류 트렌드와 웰니스 음주 소비 패턴(스마도리 등)의 변화가 미치는 상업적 가치',
+    round: 2
+  },
+  {
+    title: '호스피탈리티 근무환경이 직무만족 및 이직의도에 미치는 인과 분석',
+    category: '인적 자원 관리',
+    description: '서비스 직무 몰입에 영향을 미치는 내부 마케팅 및 근무 만족도 제고 전략 제안',
+    round: 2
+  }
+];
+
 export const WeeklyRoadmap = () => {
   const [sessions, setSessions] = useState<WeeklySession[]>([]);
   const [selectedSemester, setSelectedSemester] = useState<string>('1학기');
+  const [presentationRound, setPresentationRound] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -523,6 +626,89 @@ export const WeeklyRoadmap = () => {
             )}
           </AnimatePresence>
         </div>
+      )}
+
+      {/* 1학기 학술 세미나 연구 주제 Section */}
+      {selectedSemester === '1학기' && (
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="mt-16 pt-16 border-t border-navy-900/10"
+        >
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-8 gap-4">
+            <div>
+              <span className="inline-flex items-center space-x-1 px-2.5 py-0.5 bg-hive-green/10 text-hive-green text-[10px] font-bold rounded-full mb-3 uppercase tracking-wider">
+                💡 Academic Seminar Topics
+              </span>
+              <h4 className="text-2xl font-bold text-navy-900 font-display">
+                1학기 학회원 학술 세미나 연구 주제
+              </h4>
+              <p className="text-xs text-navy-900/50 font-semibold mt-1">
+                학회원들이 1학기 동안 진행한 개인별 연구 주제 및 글로벌 서비스 관광 이슈 분석 세션의 실무 발표 아카이브입니다.
+              </p>
+            </div>
+            
+            {/* Round Filter Tabs */}
+            <div className="flex gap-1 bg-navy-900/5 p-1 rounded-xl self-start lg:self-end">
+              <button
+                type="button"
+                onClick={() => setPresentationRound(1)}
+                className={`px-4 py-2 rounded-lg text-xs font-extrabold transition-all duration-300 cursor-pointer ${
+                  presentationRound === 1
+                    ? 'bg-hive-green text-white shadow-xs'
+                    : 'text-navy-900/50 hover:text-navy-900 hover:bg-hive-green/5'
+                }`}
+              >
+                1차 학술 세미나 발표
+              </button>
+              <button
+                type="button"
+                onClick={() => setPresentationRound(2)}
+                className={`px-4 py-2 rounded-lg text-xs font-extrabold transition-all duration-300 cursor-pointer ${
+                  presentationRound === 2
+                    ? 'bg-hive-green text-white shadow-xs'
+                    : 'text-navy-900/50 hover:text-navy-900 hover:bg-hive-green/5'
+                }`}
+              >
+                2차 글로벌 관광 이슈 분석
+              </button>
+            </div>
+          </div>
+
+          {/* Grid of Topics */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {FIRST_SEMESTER_TOPICS.filter(t => t.round === presentationRound).map((topic, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3, delay: i * 0.05 }}
+                className="bg-white rounded-2xl p-6 border border-navy-900/5 shadow-xs hover:shadow-md hover:border-hive-green/20 transition-all duration-300 flex flex-col justify-between"
+              >
+                <div>
+                  <span className="inline-block px-2.5 py-0.5 bg-navy-900/5 text-navy-900/70 border border-navy-900/10 text-[9px] font-extrabold rounded-md mb-3.5 tracking-wider uppercase">
+                    {topic.category}
+                  </span>
+                  <h5 className="text-sm font-extrabold text-navy-900 mb-2 leading-snug">
+                    {topic.title}
+                  </h5>
+                  <p className="text-[11px] text-navy-900/60 font-semibold leading-relaxed">
+                    {topic.description}
+                  </p>
+                </div>
+                <div className="mt-5 pt-3.5 border-t border-navy-900/5 flex items-center justify-between">
+                  <span className="text-[9px] font-black text-hive-green uppercase tracking-wider">
+                    {presentationRound === 1 ? 'Academic Research' : 'Global Issues'}
+                  </span>
+                  <span className="text-[10px] font-bold text-navy-900/30 font-mono">
+                    HIVE-{presentationRound === 1 ? 'R1' : 'R2'}-0{i + 1}
+                  </span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
       )}
 
       {/* MODAL: Add/Edit Form */}
