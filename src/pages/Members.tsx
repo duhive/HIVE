@@ -41,7 +41,7 @@ const Members = () => {
   const [formError, setFormError] = useState<string | null>(null);
 
   const generations = ['전체', '0-1기', '2기'];
-  const partnerFilters: string[] = []; // ['Global Service Group', 'Tourism & AI Group'] (일시 숨김 처리)
+  const partnerFilters = ['Global Service Group', 'Tourism & AI Group'];
 
   const fetchCustomMembers = async () => {
     try {
