@@ -263,8 +263,8 @@ export const PARTNER_MEMBERS: Member[] = [
     category: "Global Service Group",
     image: "https://i.ibb.co/Z1Tk4T4L/2026-05-05-160901.png",
     bio: "",
-    education: "대구대학교 호텔관광연구실",
-    skills: ["지역관광개발", "서비스 경험 디자인"],
+    education: "대구대학교 호텔관광연구실 / 대구관광고등학교 시간강사",
+    skills: ["호스피탈리티 경영", "서비스혁신"],
     contact: "yujinpark0311@naver.com",
     experience: [
       "2023. 08 한국관광공사 주관, 국제이벤트 지원사업 전문가 평가단",
