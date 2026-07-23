@@ -83,7 +83,9 @@ export default function ColumnDetail({
             src={column.author?.image || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120'}
             alt={column.author?.name}
             referrerPolicy="no-referrer"
-            className="w-12 h-12 rounded-full object-cover border-2 border-white shadow-xs shrink-0"
+            className="w-12 h-12 rounded-full object-cover border-2 border-white shadow-xs shrink-0 pointer-events-none select-none"
+            draggable={false}
+            onContextMenu={(e) => e.preventDefault()}
           />
           <div className="flex-grow min-w-0">
             <div className="flex items-baseline gap-1.5 flex-wrap">

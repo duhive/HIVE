@@ -347,13 +347,16 @@ const Members = () => {
                             viewport={{ once: true }}
                             transition={{ delay: i * 0.05 }}
                             onClick={() => handleSelectMember(member)}
-                            className="cursor-pointer group relative aspect-[4/5] overflow-hidden rounded-2xl bg-navy-900/5 hover:shadow-lg transition-all duration-300"
+                            onContextMenu={(e) => e.preventDefault()}
+                            className="cursor-pointer group relative aspect-[4/5] overflow-hidden rounded-2xl bg-navy-900/5 hover:shadow-lg transition-all duration-300 select-none"
                           >
                             <img
                               src={member.image}
                               alt={member.name}
-                              className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110"
+                              className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110 pointer-events-none select-none"
                               referrerPolicy="no-referrer"
+                              draggable={false}
+                              onContextMenu={(e) => e.preventDefault()}
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
                             
@@ -400,13 +403,16 @@ const Members = () => {
                         viewport={{ once: true }}
                         transition={{ delay: i * 0.05 }}
                         onClick={() => handleSelectMember(member)}
-                        className="cursor-pointer group relative aspect-[4/5] overflow-hidden rounded-2xl bg-navy-900/5"
+                        onContextMenu={(e) => e.preventDefault()}
+                        className="cursor-pointer group relative aspect-[4/5] overflow-hidden rounded-2xl bg-navy-900/5 select-none"
                       >
                         <img
                           src={member.image}
                           alt={member.name}
-                          className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110"
+                          className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110 pointer-events-none select-none"
                           referrerPolicy="no-referrer"
+                          draggable={false}
+                          onContextMenu={(e) => e.preventDefault()}
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
                         
@@ -459,13 +465,19 @@ const Members = () => {
                 <X size={18} />
               </button>
 
-              <div className="w-full md:w-2/5 aspect-[4/5] md:aspect-[3/4] self-start relative bg-navy-900/5 flex-shrink-0">
+              <div 
+                className="w-full md:w-2/5 aspect-[4/5] md:aspect-[3/4] self-start relative bg-navy-900/5 flex-shrink-0 select-none overflow-hidden"
+                onContextMenu={(e) => e.preventDefault()}
+              >
                 <img
                   src={selectedMember.image}
                   alt={selectedMember.name}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover pointer-events-none select-none"
                   referrerPolicy="no-referrer"
+                  draggable={false}
+                  onContextMenu={(e) => e.preventDefault()}
                 />
+                <div className="absolute inset-0 bg-transparent select-none pointer-events-auto" onContextMenu={(e) => e.preventDefault()} />
               </div>
 
               <div className="w-full md:w-3/5 p-6 md:p-10 flex flex-col justify-start md:max-h-[90vh] md:overflow-y-auto">

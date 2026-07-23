@@ -69,7 +69,9 @@ export default function ColumnCard({
               src={column.author?.image || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100'}
               alt={column.author?.name}
               referrerPolicy="no-referrer"
-              className="w-9 h-9 rounded-full object-cover ring-2 ring-gray-100"
+              className="w-9 h-9 rounded-full object-cover ring-2 ring-gray-100 pointer-events-none select-none"
+              draggable={false}
+              onContextMenu={(e) => e.preventDefault()}
             />
             <div className="min-w-0 flex-grow">
               <div className="flex items-center gap-1.5 flex-wrap">

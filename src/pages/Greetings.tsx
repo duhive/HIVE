@@ -20,13 +20,16 @@ const Greetings = () => {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
               {/* Left Column: Photo & Title */}
               <div className="lg:col-span-4 flex flex-col items-center lg:items-start">
-                <div className="w-full max-w-[260px] aspect-[3/4] rounded-2xl overflow-hidden bg-slate-100 border border-slate-100 shadow-md">
+                <div className="w-full max-w-[260px] aspect-[3/4] rounded-2xl overflow-hidden bg-slate-100 border border-slate-100 shadow-md relative select-none" onContextMenu={(e) => e.preventDefault()}>
                   <img 
                     src="https://i.ibb.co/v6z0pWtm/image.jpg" 
                     alt="President 강경임" 
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover pointer-events-none select-none"
                     referrerPolicy="no-referrer"
+                    draggable={false}
+                    onContextMenu={(e) => e.preventDefault()}
                   />
+                  <div className="absolute inset-0 bg-transparent select-none pointer-events-auto" onContextMenu={(e) => e.preventDefault()} />
                 </div>
                 
                 <div className="mt-6 text-center lg:text-left">
