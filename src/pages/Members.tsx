@@ -250,7 +250,11 @@ const Members = () => {
           <p className="text-navy-900/60 max-w-2xl mx-auto">
             {selectedCategory === 'GENERATIONS' 
               ? "HIVE를 이끄는 핵심 멤버들을 소개합니다. 각 분야의 전문성을 바탕으로 시너지를 창출합니다."
-              : "융합 역량 강화를 위해 함께하는 졸업생 및 타 분야 전공 학생들로 구성된 파트너 네트워크입니다."}
+              : selectedFilter === 'Global Service Group'
+                ? "글로벌 서비스 그룹은 항공서비스, 서비스 혁신, 서비스 디자인 등을 분석하고 이를 바탕으로 새로운 서비스 모델을 기획하는 그룹입니다."
+                : selectedFilter === 'Tourism & AI Group'
+                  ? "투어리즘 & AI 그룹은 관광 서비스 산업에 최신 인공지능 기술과 데이터 분석을 융합하여 혁신적인 스마트관광 솔루션을 연구하는 연구 그룹입니다."
+                  : "융합 역량 강화를 위해 함께하는 졸업생 및 타 분야 전공 학생들로 구성된 파트너 네트워크입니다."}
           </p>
         </div>
 
@@ -372,41 +376,57 @@ const Members = () => {
                   )}
                 </div>
               ) : (
-                <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
-                  {filteredMembers.map((member, i) => (
-                    <motion.div
-                      key={member.id}
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: i * 0.05 }}
-                      onClick={() => handleSelectMember(member)}
-                      className="cursor-pointer group relative aspect-[4/5] overflow-hidden rounded-2xl bg-navy-900/5"
-                    >
-                      <img
-                        src={member.image}
-                        alt={member.name}
-                        className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110"
-                        referrerPolicy="no-referrer"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
-                      
-                      <div className="absolute bottom-0 left-0 p-6 w-full transform translate-y-2 group-hover:translate-y-0 transition-transform">
-                        <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                          <span>{member.name}</span>
-                          {member.isAlumni && (
-                            <span className="text-[9px] text-white bg-hive-green px-1.5 py-0.5 rounded font-bold uppercase tracking-wider select-none leading-none">
-                              Alumni
-                            </span>
-                          )}
-                        </h3>
-                        <p className="text-white/80 text-[10px] font-medium uppercase tracking-widest mt-1">
-                          {member.education || member.role}
-                        </p>
-                        <div className="h-0.5 w-0 group-hover:w-full bg-white/60 transition-all duration-300 mt-2" />
-                      </div>
-                    </motion.div>
-                  ))}
+                <div className="space-y-8">
+                  {/* Partner Group Description header */}
+                  <div className="bg-navy-900/[0.02] border border-navy-900/5 rounded-2xl p-6 mb-8">
+                    <h4 className="text-xl font-bold text-navy-900 mb-2 flex items-center gap-2 font-display">
+                      <span className="w-1.5 h-6 bg-hive-green rounded-full block"></span>
+                      {selectedFilter}
+                    </h4>
+                    <p className="text-sm text-navy-900/60 leading-relaxed">
+                      {selectedFilter === 'Global Service Group'
+                        ? "항공서비스, 서비스 혁신, 서비스 디자인 분야를 다각도로 분석하고, 최신 트렌드를 반영한 실무 중심의 서비스 모델을 직접 기획하고 설계합니다."
+                        : selectedFilter === 'Tourism & AI Group'
+                          ? "데이터 분석과 인공지능(AI) 기술을 전통적인 관광/로컬 문화 콘텐츠에 융합하여 미래 지향적인 스마트관광 솔루션을 연구합니다."
+                          : "HIVE의 시너지 창출과 역량 강화를 위해 함께 협업하는 파트너 네트워크입니다."}
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
+                    {filteredMembers.map((member, i) => (
+                      <motion.div
+                        key={member.id}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: i * 0.05 }}
+                        onClick={() => handleSelectMember(member)}
+                        className="cursor-pointer group relative aspect-[4/5] overflow-hidden rounded-2xl bg-navy-900/5"
+                      >
+                        <img
+                          src={member.image}
+                          alt={member.name}
+                          className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110"
+                          referrerPolicy="no-referrer"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+                        
+                        <div className="absolute bottom-0 left-0 p-6 w-full transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                          <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                            <span>{member.name}</span>
+                            {member.isAlumni && (
+                              <span className="text-[9px] text-white bg-hive-green px-1.5 py-0.5 rounded font-bold uppercase tracking-wider select-none leading-none">
+                                Alumni
+                              </span>
+                            )}
+                          </h3>
+                          <p className="text-white/80 text-[10px] font-medium uppercase tracking-widest mt-1">
+                            {member.education || member.role}
+                          </p>
+                          <div className="h-0.5 w-0 group-hover:w-full bg-white/60 transition-all duration-300 mt-2" />
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
                 </div>
               )
             )}

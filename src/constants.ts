@@ -263,7 +263,7 @@ export const PARTNER_MEMBERS: Member[] = [
     category: "Global Service Group",
     image: "https://i.ibb.co/Z1Tk4T4L/2026-05-05-160901.png",
     bio: "",
-    education: "대구대학교 호텔관광연구실 / 대구관광고등학교 강사",
+    education: "호텔관광연구실 / 대구관광고등학교 강사",
     skills: ["호스피탈리티 경영", "서비스혁신"],
     contact: "yujinpark0311@naver.com",
     experience: [
@@ -279,12 +279,23 @@ export const PARTNER_MEMBERS: Member[] = [
     category: "Tourism & AI Group",
     image: "https://i.ibb.co/TGvX4D7/28.png",
     bio: "",
-    education: "대구대학교 호텔관광연구실",
+    education: "호텔관광연구실",
     skills: ["인공지능", "스마트관광"],
     contact: "kbm010525@naver.com",
     experience: [
       "2024. 08 경상남도 산청군 관광개발 예비사업 연구개발과제 인턴"
     ]
+  },
+  {
+    id: 106,
+    name: "김예라",
+    role: "Partner",
+    category: "Global Service Group",
+    image: "https://i.ibb.co/5XgG6h18/image.jpg",
+    bio: "",
+    education: "영어교육과 / 관광항공경영학과",
+    skills: ["항공서비스", "항공경영"],
+    contact: "TBD"
   }
 ];
 
