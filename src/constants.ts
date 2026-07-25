@@ -219,7 +219,7 @@ export const PARTNER_MEMBERS: Member[] = [
     category: "Global Service Group",
     image: "https://i.ibb.co/KxdRcy4B/image.jpg",
     bio: "",
-    education: "지리교육과 / JEJUAIR SERVICE",
+    education: "지리교육과 / JAS(JEJUAIR SERVICE)",
     skills: ["항공서비스", "지리교육"],
     contact: "pss76@naver.com"
   },
