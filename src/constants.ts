@@ -285,17 +285,6 @@ export const PARTNER_MEMBERS: Member[] = [
     experience: [
       "2024. 08 경상남도 산청군 관광개발 예비사업 연구개발과제 인턴"
     ]
-  },
-  {
-    id: 106,
-    name: "김예라",
-    role: "Partner",
-    category: "Global Service Group",
-    image: "https://i.ibb.co/5XgG6h18/image.jpg",
-    bio: "",
-    education: "영어교육과 / 관광항공경영학과",
-    skills: ["항공서비스", "항공경영"],
-    contact: "TBD"
   }
 ];
 
