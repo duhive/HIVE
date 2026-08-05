@@ -17,11 +17,13 @@ import Join from './pages/Join';
 import Contact from './pages/Contact';
 import { AuthProvider, AuthModal } from './components/Auth';
 import ErrorBoundary from './components/ErrorBoundary';
+import { recordPageView } from './utils/visitorTracker';
 
-function ScrollToTop() {
+function ScrollToTopAndTrack() {
   const { pathname } = useLocation();
   useEffect(() => {
     window.scrollTo(0, 0);
+    recordPageView(pathname);
   }, [pathname]);
   return null;
 }
@@ -31,7 +33,7 @@ export default function App() {
     <ErrorBoundary>
       <AuthProvider>
         <Router>
-          <ScrollToTop />
+          <ScrollToTopAndTrack />
           <div className="flex flex-col min-h-screen">
             <Navbar />
             <main className="flex-grow">

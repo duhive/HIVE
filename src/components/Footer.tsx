@@ -1,8 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Instagram, Linkedin, Globe } from 'lucide-react';
+import { Instagram, Linkedin, Globe, Lock } from 'lucide-react';
+import { VisitorAnalyticsModal } from './VisitorAnalyticsModal';
 
 const Footer = () => {
+  const [clickCount, setClickCount] = useState(0);
+  const [isVisitorModalOpen, setIsVisitorModalOpen] = useState(false);
+  const [clickTimer, setClickTimer] = useState<NodeJS.Timeout | null>(null);
+
+  const handleSecretClick = () => {
+    if (clickTimer) clearTimeout(clickTimer);
+
+    const nextCount = clickCount + 1;
+    setClickCount(nextCount);
+
+    if (nextCount >= 5) {
+      setIsVisitorModalOpen(true);
+      setClickCount(0);
+    } else {
+      const timer = setTimeout(() => {
+        setClickCount(0);
+      }, 3000);
+      setClickTimer(timer);
+    }
+  };
+
   return (
     <footer className="bg-white text-navy-900 py-16 border-t border-navy-900/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -60,10 +82,31 @@ const Footer = () => {
         </div>
         
         <div className="mt-16 pt-8 border-t border-navy-900/10 flex flex-col md:flex-row justify-between items-center text-[10px] uppercase tracking-widest text-navy-900/30 font-bold">
-          <p>© 2026 HIVE. All Rights Reserved.</p>
+          <div className="flex items-center gap-2 select-none">
+            <span 
+              onClick={handleSecretClick}
+              className="cursor-pointer hover:text-navy-900/60 transition-colors"
+              title="비밀 대시보드 (5회연속 클릭)"
+            >
+              © 2026 HIVE. All Rights Reserved.
+            </span>
+            <button
+              onClick={() => setIsVisitorModalOpen(true)}
+              className="p-1 opacity-20 hover:opacity-100 hover:text-hive-green transition-all cursor-pointer"
+              title="비밀 방문자 분석 보기"
+            >
+              <Lock size={10} />
+            </button>
+          </div>
           <p className="mt-4 md:mt-0">Hospitality Management Society</p>
         </div>
       </div>
+
+      {/* Secret Visitor Analytics Modal */}
+      <VisitorAnalyticsModal 
+        isOpen={isVisitorModalOpen}
+        onClose={() => setIsVisitorModalOpen(false)}
+      />
     </footer>
   );
 };
