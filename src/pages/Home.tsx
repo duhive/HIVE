@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowRight, Globe, Users, Target, Zap, ChevronLeft, ChevronRight, Play, Pause, Plus, X } from 'lucide-react';
+import { ArrowRight, Globe, Users, Target, Zap, ChevronLeft, ChevronRight, Play, Pause, Plus, X, Briefcase, Building2, Clock, MapPin } from 'lucide-react';
 import Contact from '../components/Contact';
 import { BRAND_STORY } from '../constants';
 
@@ -28,7 +28,19 @@ export interface NewsItem {
   content: string;
 }
 
+export interface JobItem {
+  id: number;
+  category: string;
+  company: string;
+  title: string;
+  deadline: string;
+  location: string;
+  content: string;
+}
+
 const INITIAL_NOTICES: NoticeItem[] = [];
+
+const INITIAL_JOBS: JobItem[] = [];
 
 const INITIAL_NEWS: NewsItem[] = [
   {
@@ -146,6 +158,26 @@ const Home = () => {
 
   const [selectedNotice, setSelectedNotice] = useState<NoticeItem | null>(null);
   const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null);
+
+  // Job / Career State
+  const [jobs, setJobs] = useState<JobItem[]>(() => {
+    const saved = localStorage.getItem('hive_jobs');
+    if (saved) {
+      try {
+        const parsed: JobItem[] = JSON.parse(saved);
+        // Filter out initial sample jobs if present
+        return parsed.filter(j => j.id !== 1 && j.id !== 2 && j.id !== 3);
+      } catch (e) {
+        return INITIAL_JOBS;
+      }
+    }
+    return INITIAL_JOBS;
+  });
+  const [selectedJob, setSelectedJob] = useState<JobItem | null>(null);
+
+  useEffect(() => {
+    localStorage.setItem('hive_jobs', JSON.stringify(jobs));
+  }, [jobs]);
 
   // Write Modal State
   const [isWriteOpen, setIsWriteOpen] = useState(false);
@@ -337,69 +369,132 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
             
-            {/* NOTICE Card */}
-            <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-6 md:p-8 flex flex-col justify-between">
-              <div>
-                {/* Header */}
-                <div className="flex items-center justify-between pb-5 mb-4 border-b border-slate-100">
-                  <div className="flex items-center gap-3">
-                    <h2 className="text-2xl font-black text-slate-900 font-sans tracking-tight">NOTICE</h2>
-                    <span className="px-3 py-0.5 bg-slate-100 text-slate-600 rounded-full text-xs font-bold border border-slate-200/50">
-                      공지사항
-                    </span>
-                  </div>
-                  <button 
-                    onClick={() => setIsWriteOpen(true)}
-                    className="flex items-center gap-1.5 text-slate-600 hover:text-hive-green text-xs md:text-sm font-semibold border border-slate-200 rounded-lg px-3 py-1.5 bg-white hover:bg-slate-50 transition-all cursor-pointer shadow-2xs"
-                  >
-                    <span className="text-xs">+ 작성</span>
-                    <Plus size={14} className="text-slate-500" />
-                  </button>
-                </div>
-
-                {/* Notices List */}
-                <div className="divide-y divide-slate-100 min-h-[300px] flex flex-col justify-start">
-                  {notices.length === 0 ? (
-                    <div className="my-auto py-12 text-center text-slate-400 text-sm">
-                      등록된 공지사항이 없습니다.
+            {/* Left Column: NOTICE Card & CAREER Card */}
+            <div className="flex flex-col gap-6 justify-between">
+              
+              {/* NOTICE Card (Reduced Height) */}
+              <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-5 md:p-6 flex flex-col justify-between">
+                <div>
+                  {/* Header */}
+                  <div className="flex items-center justify-between pb-3.5 mb-3 border-b border-slate-100">
+                    <div className="flex items-center gap-2.5">
+                      <h2 className="text-xl md:text-2xl font-black text-slate-900 font-sans tracking-tight">NOTICE</h2>
+                      <span className="px-2.5 py-0.5 bg-slate-100 text-slate-600 rounded-full text-xs font-bold border border-slate-200/50">
+                        공지사항
+                      </span>
                     </div>
-                  ) : (
-                    notices.map((item) => (
-                      <div 
-                        key={item.id}
-                        onClick={() => setSelectedNotice(item)}
-                        className="flex items-center justify-between py-3.5 px-2.5 rounded-xl hover:bg-slate-50/80 transition-colors group cursor-pointer"
-                      >
-                        <div className="flex items-center gap-2.5 min-w-0 pr-3">
-                          {item.isImportant && (
-                            <span className="bg-rose-50 text-rose-500 border border-rose-200/60 text-[11px] font-bold px-1.5 py-0.5 rounded-md shrink-0">
-                              중요
-                            </span>
-                          )}
-                          <span className="text-slate-800 font-medium text-sm md:text-[15px] group-hover:text-hive-green transition-colors truncate">
-                            {item.title}
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-3.5 shrink-0 text-xs md:text-sm text-slate-400 font-mono">
-                          <span>{item.date}</span>
-                          <span className="text-slate-700 font-medium font-sans w-12 text-right">{item.author}</span>
-                        </div>
+                    <button 
+                      onClick={() => setIsWriteOpen(true)}
+                      className="flex items-center gap-1.5 text-slate-600 hover:text-hive-green text-xs font-semibold border border-slate-200 rounded-lg px-2.5 py-1 bg-white hover:bg-slate-50 transition-all cursor-pointer shadow-2xs"
+                    >
+                      <span className="text-xs">+ 작성</span>
+                      <Plus size={13} className="text-slate-500" />
+                    </button>
+                  </div>
+
+                  {/* Notices List (Compact) */}
+                  <div className="divide-y divide-slate-100 min-h-[120px] flex flex-col justify-start">
+                    {notices.length === 0 ? (
+                      <div className="my-auto py-8 text-center text-slate-400 text-xs md:text-sm">
+                        등록된 공지사항이 없습니다.
                       </div>
-                    ))
-                  )}
+                    ) : (
+                      notices.slice(0, 3).map((item) => (
+                        <div 
+                          key={item.id}
+                          onClick={() => setSelectedNotice(item)}
+                          className="flex items-center justify-between py-2.5 px-2 rounded-lg hover:bg-slate-50/80 transition-colors group cursor-pointer"
+                        >
+                          <div className="flex items-center gap-2 min-w-0 pr-2">
+                            {item.isImportant && (
+                              <span className="bg-rose-50 text-rose-500 border border-rose-200/60 text-[10px] font-bold px-1.5 py-0.2 rounded shrink-0">
+                                중요
+                              </span>
+                            )}
+                            <span className="text-slate-800 font-medium text-xs md:text-sm group-hover:text-hive-green transition-colors truncate">
+                              {item.title}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2 shrink-0 text-[11px] md:text-xs text-slate-400 font-mono">
+                            <span>{item.date}</span>
+                            <span className="text-slate-700 font-medium font-sans text-right">{item.author}</span>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+
+                {/* Notice Footer */}
+                <div className="pt-3 mt-2 border-t border-slate-100 text-center">
+                  <Link 
+                    to="/notices"
+                    className="inline-flex items-center gap-1 text-slate-600 hover:text-slate-900 font-bold text-xs transition-colors cursor-pointer group"
+                  >
+                    <span>전체 공지사항 목록보기</span>
+                    <ChevronRight size={13} className="text-slate-400 group-hover:translate-x-0.5 transition-transform" />
+                  </Link>
                 </div>
               </div>
 
-              {/* Notice Footer */}
-              <div className="pt-6 mt-4 border-t border-slate-100 text-center">
-                <Link 
-                  to="/notices"
-                  className="inline-flex items-center gap-1.5 text-slate-600 hover:text-slate-900 font-bold text-xs md:text-sm transition-colors cursor-pointer group"
-                >
-                  <span>전체 공지사항 목록보기</span>
-                  <ChevronRight size={14} className="text-slate-400 group-hover:translate-x-0.5 transition-transform" />
-                </Link>
+              {/* CAREER / JOB INFO Card */}
+              <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-5 md:p-6 flex flex-col justify-between flex-1">
+                <div>
+                  {/* Header */}
+                  <div className="flex items-center justify-between pb-3.5 mb-3 border-b border-slate-100">
+                    <div className="flex items-center gap-2.5">
+                      <div className="p-1.5 bg-blue-50 text-blue-600 rounded-lg shrink-0">
+                        <Briefcase size={18} />
+                      </div>
+                      <h2 className="text-xl md:text-2xl font-black text-slate-900 font-sans tracking-tight">CAREER</h2>
+                      <span className="px-2.5 py-0.5 bg-blue-50 text-blue-600 rounded-full text-xs font-bold border border-blue-200/60">
+                        취업 정보
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Jobs List */}
+                  <div className="space-y-2.5 my-1 min-h-[120px] flex flex-col justify-center">
+                    {jobs.length === 0 ? (
+                      <div className="py-8 text-center text-slate-400 text-xs md:text-sm">
+                        등록된 취업 정보가 없습니다.
+                      </div>
+                    ) : (
+                      jobs.map((job) => (
+                        <div 
+                          key={job.id}
+                          onClick={() => setSelectedJob(job)}
+                          className="p-3 rounded-xl border border-slate-100 hover:border-blue-200 hover:bg-blue-50/30 transition-all cursor-pointer group"
+                        >
+                          <div className="flex items-center justify-between gap-2 mb-1">
+                            <div className="flex items-center gap-1.5 min-w-0">
+                              <span className="px-1.5 py-0.5 bg-slate-100 text-slate-700 font-bold text-[10px] rounded shrink-0">
+                                {job.category}
+                              </span>
+                              <span className="text-xs font-bold text-slate-900 truncate">
+                                {job.company}
+                              </span>
+                            </div>
+                            <span className="flex items-center gap-1 text-[10px] md:text-[11px] font-mono text-rose-500 bg-rose-50 px-2 py-0.5 rounded-full font-semibold shrink-0">
+                              <Clock size={10} />
+                              ~{job.deadline}
+                            </span>
+                          </div>
+                          <p className="text-xs md:text-sm font-semibold text-slate-800 group-hover:text-blue-600 transition-colors line-clamp-1">
+                            {job.title}
+                          </p>
+                          <div className="mt-1 flex items-center gap-3 text-[11px] text-slate-400">
+                            <span className="flex items-center gap-1">
+                              <MapPin size={11} /> {job.location}
+                            </span>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
               </div>
+
             </div>
 
             {/* PHOTO Card */}
@@ -561,6 +656,53 @@ const Home = () => {
                   닫기
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Job Detail Modal */}
+      {selectedJob && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs animate-fadeIn">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative border border-slate-100">
+            <button 
+              onClick={() => setSelectedJob(null)}
+              className="absolute top-4 right-4 p-1.5 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100 transition-colors cursor-pointer"
+            >
+              <X size={18} />
+            </button>
+
+            <div className="flex items-center gap-2 mb-2">
+              <span className="bg-blue-50 text-blue-600 font-bold text-xs px-2.5 py-0.5 rounded-full border border-blue-200/60">
+                {selectedJob.category}
+              </span>
+              <span className="text-slate-500 font-bold text-xs">{selectedJob.company}</span>
+            </div>
+
+            <h3 className="text-lg font-bold text-slate-900 mb-2 leading-snug">
+              {selectedJob.title}
+            </h3>
+
+            <div className="flex items-center gap-4 text-xs text-slate-500 mb-4 pb-3 border-b border-slate-100 font-mono">
+              <span className="flex items-center gap-1 text-rose-500 font-semibold">
+                <Clock size={12} /> 마감일: {selectedJob.deadline}
+              </span>
+              <span className="flex items-center gap-1">
+                <MapPin size={12} /> 근무지: {selectedJob.location}
+              </span>
+            </div>
+
+            <div className="bg-slate-50 rounded-xl p-4 text-xs md:text-sm text-slate-700 space-y-2 whitespace-pre-line leading-relaxed mb-6 border border-slate-100 min-h-[100px] max-h-[250px] overflow-y-auto">
+              {selectedJob.content}
+            </div>
+
+            <div className="flex justify-end">
+              <button
+                onClick={() => setSelectedJob(null)}
+                className="px-5 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl transition-colors cursor-pointer"
+              >
+                닫기
+              </button>
             </div>
           </div>
         </div>
