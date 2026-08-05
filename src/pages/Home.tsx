@@ -1,13 +1,75 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowRight, Globe, Users, Target, Zap, ChevronLeft, ChevronRight, Play, Pause } from 'lucide-react';
+import { ArrowRight, Globe, Users, Target, Zap, ChevronLeft, ChevronRight, Play, Pause, Plus, X } from 'lucide-react';
 import Contact from '../components/Contact';
 import { BRAND_STORY } from '../constants';
 
 import aviationHero from '../assets/images/aviation_service_hero_1782037825374.jpg';
 import metaverseHero from '../assets/images/metaverse_hotel_hero_1782191831140.jpg';
 import cabinServiceAbout from '../assets/images/cabin_service_about_1782193310292.jpg';
+
+export interface NoticeItem {
+  id: number;
+  isImportant: boolean;
+  title: string;
+  date: string;
+  author: string;
+  content: string;
+}
+
+export interface NewsItem {
+  id: number;
+  tag: string;
+  category: string;
+  title: string;
+  date: string;
+  image: string;
+  content: string;
+}
+
+const INITIAL_NOTICES: NoticeItem[] = [];
+
+const INITIAL_NEWS: NewsItem[] = [
+  {
+    id: 4,
+    tag: "Curriculum",
+    category: "Regular Curriculums",
+    title: "호스피탈리티 세미나(2)",
+    date: "2026.03.14",
+    image: "https://i.ibb.co/4nfnKKkj/Kakao-Talk-20260507-182539464-08.jpg",
+    content: `관광 및 호스피탈리티 산업의 다각화된 국외 이슈와 최신 전략적 흐름을 분석하고 연구 발표를 진행했습니다.
+
+주요 연구 분석 주제:
+• 자본의 역외 수출 현상과 상생 전략
+• 문화유산 자원과 관광수요의 활성화 상관관계
+• 일본 '스마도리(スマドリ)' 문화 확산에 따른 주류 시장 분석
+• 서비스 직군의 노동 환경이 직무만족과 이직의도에 미치는 영향
+• 유가 등 대외 요인 조성이 국제 관광 경제에 주는 피드백`
+  },
+  {
+    id: 5,
+    tag: "Ideation",
+    category: "Idea Ideation",
+    title: "호스피탈리티 세미나(1)",
+    date: "2026.04.06",
+    image: "https://i.ibb.co/tpGm5dsZ/Kakao-Talk-20260407-184041137-05.jpg",
+    content: `지난 4월 6일(월) 16:30, '관심 있는 관광 분야 조사 및 발표'를 주제로 세미나가 진행되었습니다.
+
+각 학회원이 지속 가능한 관광, AI·스마트 관광, 지역 관광, 축제 및 이벤트 관광, 관광 상품 및 서비스 경험 등 다양한 주제에 대해 자유로운 발표를 펼치고 인사이트를 나누었습니다.`
+  },
+  {
+    id: 6,
+    tag: "Network",
+    category: "Human Network",
+    title: "호스피탈리티 경영학회 OT",
+    date: "2026.03.30",
+    image: "https://i.ibb.co/Mx4Yw4nk/image.png",
+    content: `지난 2026년 3월 30일, 많은 학회원분들의 성원 속에서 HIVE 학회 오리엔테이션(OT)이 성공적으로 개최되었습니다.
+
+이번 오리엔테이션을 통해 HIVE의 핵심 가치와 학술 비전은 물론, 앞으로 함께 만들어갈 알차고 유익한 활동 계획들을 활기차게 나누었습니다.`
+  }
+];
 
 const slides = [
   {
@@ -51,6 +113,79 @@ const slides = [
 const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
+
+  // Notice & News State
+  const [notices, setNotices] = useState<NoticeItem[]>(() => {
+    const saved = localStorage.getItem('hive_notices');
+    if (saved) {
+      try {
+        const parsed: NoticeItem[] = JSON.parse(saved);
+        return parsed.filter(n => n.author !== '김현정');
+      } catch (e) {
+        return INITIAL_NOTICES;
+      }
+    }
+    return INITIAL_NOTICES;
+  });
+
+  const [news, setNews] = useState<NewsItem[]>(() => {
+    const saved = localStorage.getItem('hive_news');
+    if (saved) {
+      try {
+        const parsed: NewsItem[] = JSON.parse(saved);
+        if (parsed.some(item => item.id === 1 || item.id === 2 || item.id === 3)) {
+          return INITIAL_NEWS;
+        }
+        return parsed;
+      } catch (e) {
+        return INITIAL_NEWS;
+      }
+    }
+    return INITIAL_NEWS;
+  });
+
+  const [selectedNotice, setSelectedNotice] = useState<NoticeItem | null>(null);
+  const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null);
+
+  // Write Modal State
+  const [isWriteOpen, setIsWriteOpen] = useState(false);
+
+  const [noticeForm, setNoticeForm] = useState({
+    title: '',
+    author: '관리자',
+    date: new Date().toISOString().split('T')[0],
+    isImportant: false,
+    content: ''
+  });
+
+  useEffect(() => {
+    localStorage.setItem('hive_notices', JSON.stringify(notices));
+  }, [notices]);
+
+  useEffect(() => {
+    localStorage.setItem('hive_news', JSON.stringify(news));
+  }, [news]);
+
+  const handleCreateSubmit = () => {
+    if (!noticeForm.title.trim()) return;
+    const newNoticeItem: NoticeItem = {
+      id: Date.now(),
+      isImportant: noticeForm.isImportant,
+      title: noticeForm.title.trim(),
+      date: noticeForm.date,
+      author: noticeForm.author.trim() || '관리자',
+      content: noticeForm.content.trim() || '공지사항 내용입니다.'
+    };
+    setNotices([newNoticeItem, ...notices]);
+    setNoticeForm({
+      title: '',
+      author: '관리자',
+      date: new Date().toISOString().split('T')[0],
+      isImportant: false,
+      content: ''
+    });
+    setIsWriteOpen(false);
+  };
 
   useEffect(() => {
     if (!isPlaying) return;
@@ -197,108 +332,330 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Short About Us Section */}
-      <section className="py-24 bg-white overflow-hidden">
+      {/* Notice & News Dashboard Section */}
+      <section className="py-12 md:py-16 bg-slate-100/70 border-t border-slate-200/60">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-            >
-              <h4 className="text-hive-green font-bold tracking-widest text-xs uppercase mb-4">About HIVE</h4>
-              <h2 className="text-4xl font-bold text-navy-900 mb-8 leading-tight">
-                따뜻한 환대에<br/>
-                <span className="text-hive-green font-serif">새로운 즐거움을 더하다</span>
-              </h2>
-              <p className="text-lg text-navy-900/70 mb-8 leading-relaxed">
-                HIVE는 대구대학교를 대표하는 호스피탈리티 경영학회입니다. 환대의 따뜻한 마음에 새로운 배움과 즐거움을 더해, 일상을 더욱 특별하게 디자인합니다.
-              </p>
-              <Link to="/about" className="inline-flex items-center text-hive-green font-bold uppercase tracking-widest text-sm hover:translate-x-2 transition-transform">
-                Learn More <ArrowRight size={18} className="ml-2" />
-              </Link>
-            </motion.div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+            
+            {/* NOTICE Card */}
+            <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-6 md:p-8 flex flex-col justify-between">
+              <div>
+                {/* Header */}
+                <div className="flex items-center justify-between pb-5 mb-4 border-b border-slate-100">
+                  <div className="flex items-center gap-3">
+                    <h2 className="text-2xl font-black text-slate-900 font-sans tracking-tight">NOTICE</h2>
+                    <span className="px-3 py-0.5 bg-slate-100 text-slate-600 rounded-full text-xs font-bold border border-slate-200/50">
+                      공지사항
+                    </span>
+                  </div>
+                  <button 
+                    onClick={() => setIsWriteOpen(true)}
+                    className="flex items-center gap-1.5 text-slate-600 hover:text-hive-green text-xs md:text-sm font-semibold border border-slate-200 rounded-lg px-3 py-1.5 bg-white hover:bg-slate-50 transition-all cursor-pointer shadow-2xs"
+                  >
+                    <span className="text-xs">+ 작성</span>
+                    <Plus size={14} className="text-slate-500" />
+                  </button>
+                </div>
 
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              className="relative aspect-square rounded-3xl overflow-hidden shadow-2xl"
+                {/* Notices List */}
+                <div className="divide-y divide-slate-100 min-h-[300px] flex flex-col justify-start">
+                  {notices.length === 0 ? (
+                    <div className="my-auto py-12 text-center text-slate-400 text-sm">
+                      등록된 공지사항이 없습니다.
+                    </div>
+                  ) : (
+                    notices.map((item) => (
+                      <div 
+                        key={item.id}
+                        onClick={() => setSelectedNotice(item)}
+                        className="flex items-center justify-between py-3.5 px-2.5 rounded-xl hover:bg-slate-50/80 transition-colors group cursor-pointer"
+                      >
+                        <div className="flex items-center gap-2.5 min-w-0 pr-3">
+                          {item.isImportant && (
+                            <span className="bg-rose-50 text-rose-500 border border-rose-200/60 text-[11px] font-bold px-1.5 py-0.5 rounded-md shrink-0">
+                              중요
+                            </span>
+                          )}
+                          <span className="text-slate-800 font-medium text-sm md:text-[15px] group-hover:text-hive-green transition-colors truncate">
+                            {item.title}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-3.5 shrink-0 text-xs md:text-sm text-slate-400 font-mono">
+                          <span>{item.date}</span>
+                          <span className="text-slate-700 font-medium font-sans w-12 text-right">{item.author}</span>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+
+              {/* Notice Footer */}
+              <div className="pt-6 mt-4 border-t border-slate-100 text-center">
+                <Link 
+                  to="/notices"
+                  className="inline-flex items-center gap-1.5 text-slate-600 hover:text-slate-900 font-bold text-xs md:text-sm transition-colors cursor-pointer group"
+                >
+                  <span>전체 공지사항 목록보기</span>
+                  <ChevronRight size={14} className="text-slate-400 group-hover:translate-x-0.5 transition-transform" />
+                </Link>
+              </div>
+            </div>
+
+            {/* PHOTO Card */}
+            <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-6 md:p-8 flex flex-col justify-between">
+              <div>
+                {/* Header */}
+                <div className="flex items-center justify-between pb-5 mb-4 border-b border-slate-100">
+                  <div className="flex items-center gap-3">
+                    <h2 className="text-2xl font-black text-slate-900 font-sans tracking-tight">PHOTO</h2>
+                    <span className="px-3 py-0.5 bg-hive-green/10 text-hive-green rounded-full text-xs font-bold border border-hive-green/20">
+                      포토 갤러리
+                    </span>
+                  </div>
+                </div>
+
+                {/* News Grid (3 Cards) */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 py-1 min-h-[300px]">
+                  {news.map((item) => (
+                    <div 
+                      key={item.id}
+                      onClick={() => setSelectedNews(item)}
+                      className="bg-white border border-slate-200/70 rounded-xl overflow-hidden hover:shadow-md transition-all flex flex-col justify-between cursor-pointer group"
+                    >
+                      {/* Image Thumbnail */}
+                      <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">
+                        <img 
+                          src={item.image} 
+                          alt={item.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          referrerPolicy="no-referrer"
+                        />
+                        <span className="absolute top-2 left-2 bg-slate-900/80 backdrop-blur-xs text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-xs">
+                          {item.tag}
+                        </span>
+                      </div>
+
+                      {/* Content */}
+                      <div className="p-3 flex-1 flex flex-col justify-between">
+                        <div>
+                          <h4 className="text-hive-green font-bold text-xs mb-1 truncate">
+                            {item.category}
+                          </h4>
+                          <p className="text-slate-900 font-bold text-xs md:text-[13px] leading-snug line-clamp-2 group-hover:text-hive-green transition-colors">
+                            {item.title}
+                          </p>
+                        </div>
+                        <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400 font-mono">
+                          <span>{item.date}</span>
+                          <span className="text-hive-green font-medium group-hover:underline flex items-center gap-0.5">
+                            상세 &gt;
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* News Footer */}
+              <div className="pt-6 mt-4 border-t border-slate-100 text-center">
+                <Link 
+                  to="/photo"
+                  className="inline-flex items-center gap-1.5 text-slate-600 hover:text-slate-900 font-bold text-xs md:text-sm transition-colors cursor-pointer group"
+                >
+                  <span>연구실 포토 갤러리 가기</span>
+                  <ChevronRight size={14} className="text-slate-400 group-hover:translate-x-0.5 transition-transform" />
+                </Link>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* Notice Detail Modal */}
+      {selectedNotice && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs animate-fadeIn">
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl relative border border-slate-100">
+            <button 
+              onClick={() => setSelectedNotice(null)}
+              className="absolute top-4 right-4 p-1.5 text-slate-400 hover:text-slate-700 rounded-full hover:bg-slate-100 transition-colors"
             >
+              <X size={18} />
+            </button>
+            
+            <div className="flex items-center gap-2 mb-3">
+              {selectedNotice.isImportant && (
+                <span className="bg-rose-50 text-rose-500 border border-rose-200 text-xs font-bold px-2 py-0.5 rounded-md">
+                  중요
+                </span>
+              )}
+              <span className="text-xs font-mono text-slate-400">{selectedNotice.date}</span>
+              <span className="text-xs text-slate-500 font-medium">| 작성자: {selectedNotice.author}</span>
+            </div>
+
+            <h3 className="text-xl font-bold text-slate-900 mb-4 leading-snug">
+              {selectedNotice.title}
+            </h3>
+
+            <div className="bg-slate-50 rounded-xl p-4 text-sm text-slate-700 leading-relaxed mb-6 border border-slate-100 min-h-[120px]">
+              {selectedNotice.content}
+            </div>
+
+            <div className="flex justify-end">
+              <button
+                onClick={() => setSelectedNotice(null)}
+                className="px-5 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition-colors"
+              >
+                닫기
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* News / Photo Detail Modal */}
+      {selectedNews && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs animate-fadeIn">
+          <div className="bg-white rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl relative border border-slate-100">
+            <button 
+              onClick={() => setSelectedNews(null)}
+              className="absolute top-3 right-3 z-10 p-1.5 bg-slate-900/60 hover:bg-slate-900 text-white rounded-full transition-colors"
+            >
+              <X size={18} />
+            </button>
+            
+            <div className="relative aspect-video w-full bg-slate-100">
               <img 
-                src={cabinServiceAbout} 
-                alt="HIVE Premium Cabin Service"
+                src={selectedNews.image} 
+                alt={selectedNews.title} 
                 className="w-full h-full object-cover"
                 referrerPolicy="no-referrer"
               />
-              <div className="absolute inset-0 bg-hive-green/10 mix-blend-multiply" />
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Core Values / H.I.V.E */}
-      <section className="py-24 bg-ivory">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20">
-            <h2 className="text-4xl font-bold text-navy-900 mb-4">The HIVE Concept</h2>
-            <p className="text-hive-green font-bold tracking-[0.2em] uppercase text-sm">Our Identity</p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              { char: 'H', title: 'Hospitality', desc: '산업의 본질을 꿰뚫는 service 마인드셋', icon: <Globe size={24}/> },
-              { char: 'I', title: 'Innovation', desc: '디지털 기술을 넘어 관광호스피탈리티 혁신 추구', icon: <Zap size={24}/> },
-              { char: 'V', title: 'Value', desc: '비즈니스와 사회를 잇는 실질적 가치 창출', icon: <Target size={24}/> },
-              { char: 'E', title: 'Experience', desc: '사용자 중심의 총체적 경험 디자인', icon: <Users size={24}/> },
-            ].map((item, idx) => (
-              <motion.div
-                key={item.char}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.1 }}
-                className="p-8 bg-white border border-navy-900/10 shadow-sm hover:shadow-md transition-all rounded-xl"
-              >
-                <div className="text-4xl font-bold text-hive-green/10 mb-4">{item.char}</div>
-                <div className="text-hive-green mb-4">{item.icon}</div>
-                <h3 className="text-xl font-bold mb-2 text-navy-900">{item.title}</h3>
-                <p className="text-sm text-navy-900/60 leading-relaxed">{item.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-
-      {/* Strategies Section */}
-      <section className="py-24 bg-white border-y border-navy-900/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-navy-900 mb-4">Core Strategies</h2>
-            <p className="text-hive-green font-bold tracking-[0.2em] uppercase text-sm">How we work</p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-0">
-            <div className="p-10 border-b md:border-b-0 md:border-r border-navy-900/10 hover:bg-navy-900/[0.02] transition-colors">
-              <span className="text-6xl font-light text-navy-900/10 mb-8 block font-display">01</span>
-              <h3 className="text-xl font-bold mb-4 text-navy-900 tracking-tight">Service Issue Seminar</h3>
-              <p className="text-navy-900/60 text-sm leading-relaxed italic">"최신 서비스 산업 트렌드와 호스피탈리티 이슈 분석 세미나를 진행합니다."</p>
+              <span className="absolute top-3 left-3 bg-slate-900/85 text-white text-xs font-bold px-2.5 py-1 rounded shadow-xs">
+                {selectedNews.tag}
+              </span>
             </div>
-            <div className="p-10 border-b md:border-b-0 md:border-r border-navy-900/10 hover:bg-navy-900/[0.02] transition-colors">
-              <span className="text-6xl font-light text-navy-900/10 mb-8 block font-display">02</span>
-              <h3 className="text-xl font-bold mb-4 text-navy-900 tracking-tight">Networking</h3>
-              <p className="text-navy-900/60 text-sm leading-relaxed italic">"다양한 실무 및 선배들과의 네트워크를 통해 지혜를 공유합니다."</p>
-            </div>
-            <div className="p-10 hover:bg-navy-900/[0.02] transition-colors">
-              <span className="text-6xl font-light text-navy-900/10 mb-8 block font-display">03</span>
-              <h3 className="text-xl font-bold mb-4 text-navy-900 tracking-tight">Academic Column</h3>
-              <p className="text-navy-900/60 text-sm leading-relaxed italic">"다양한 주제의 학회원 칼럼을 통해 트렌드와 통찰을 공유합니다."</p>
+
+            <div className="p-6">
+              <div className="text-hive-green font-bold text-xs mb-1">
+                {selectedNews.category}
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-2 leading-snug">
+                {selectedNews.title}
+              </h3>
+              <div className="text-xs font-mono text-slate-400 mb-4">
+                발행일: {selectedNews.date}
+              </div>
+
+              <div className="bg-slate-50 rounded-xl p-4 text-sm text-slate-700 whitespace-pre-line leading-relaxed mb-6 border border-slate-100 min-h-[100px]">
+                {selectedNews.content}
+              </div>
+
+              <div className="flex justify-end">
+                <button
+                  onClick={() => setSelectedNews(null)}
+                  className="px-5 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition-colors"
+                >
+                  닫기
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      </section>
+      )}
+
+      {/* Write / Create Modal */}
+      {isWriteOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs animate-fadeIn">
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl relative border border-slate-100 max-h-[90vh] overflow-y-auto">
+            <button 
+              onClick={() => setIsWriteOpen(false)}
+              className="absolute top-4 right-4 p-1.5 text-slate-400 hover:text-slate-700 rounded-full hover:bg-slate-100 transition-colors"
+            >
+              <X size={18} />
+            </button>
+
+            <h3 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+              <Plus size={20} className="text-hive-green" />
+              공지사항 작성
+            </h3>
+
+            <div className="space-y-4">
+              <div className="flex items-center gap-2">
+                <input 
+                  type="checkbox"
+                  id="isImportant"
+                  checked={noticeForm.isImportant}
+                  onChange={(e) => setNoticeForm({...noticeForm, isImportant: e.target.checked})}
+                  className="w-4 h-4 text-rose-500 rounded border-slate-300 focus:ring-rose-500"
+                />
+                <label htmlFor="isImportant" className="text-xs font-bold text-rose-600 cursor-pointer">
+                  중요 공지로 지정
+                </label>
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">제목</label>
+                <input 
+                  type="text"
+                  value={noticeForm.title}
+                  onChange={(e) => setNoticeForm({...noticeForm, title: e.target.value})}
+                  placeholder="공지사항 제목을 입력하세요"
+                  className="w-full text-xs p-2.5 rounded-lg border border-slate-200 focus:outline-none focus:border-hive-green"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">작성자</label>
+                  <input 
+                    type="text"
+                    value={noticeForm.author}
+                    onChange={(e) => setNoticeForm({...noticeForm, author: e.target.value})}
+                    className="w-full text-xs p-2.5 rounded-lg border border-slate-200 focus:outline-none focus:border-hive-green"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">날짜</label>
+                  <input 
+                    type="date"
+                    value={noticeForm.date}
+                    onChange={(e) => setNoticeForm({...noticeForm, date: e.target.value})}
+                    className="w-full text-xs p-2.5 rounded-lg border border-slate-200 focus:outline-none focus:border-hive-green"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">상세 내용</label>
+                <textarea 
+                  rows={4}
+                  value={noticeForm.content}
+                  onChange={(e) => setNoticeForm({...noticeForm, content: e.target.value})}
+                  placeholder="공지사항 내용을 입력하세요..."
+                  className="w-full text-xs p-2.5 rounded-lg border border-slate-200 focus:outline-none focus:border-hive-green"
+                />
+              </div>
+
+              <div className="flex justify-end gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setIsWriteOpen(false)}
+                  className="px-4 py-2 border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-xl text-xs font-bold transition-colors"
+                >
+                  취소
+                </button>
+                <button
+                  type="button"
+                  onClick={handleCreateSubmit}
+                  className="px-5 py-2 bg-hive-green hover:bg-hive-green/90 text-white rounded-xl text-xs font-bold transition-colors"
+                >
+                  등록하기
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Contact Section removed as requested */}
     </div>

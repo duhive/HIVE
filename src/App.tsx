@@ -10,6 +10,7 @@ import Activities from './pages/Activities';
 import Columns from './pages/Columns';
 import Projects from './pages/Projects';
 import Photo from './pages/Photo';
+import Notices from './pages/Notices';
 import Organization from './pages/Organization';
 import Members from './pages/Members';
 import Join from './pages/Join';
@@ -43,6 +44,7 @@ export default function App() {
                 <Route path="/columns" element={<Columns />} />
                 <Route path="/projects" element={<Projects />} />
                 <Route path="/photo" element={<Photo />} />
+                <Route path="/notices" element={<Notices />} />
                 <Route path="/members" element={<Members />} />
                 <Route path="/organization" element={<Organization />} />
                 <Route path="/join" element={<Join />} />
