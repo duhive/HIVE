@@ -67,6 +67,9 @@ export const VisitorAnalyticsModal: React.FC<VisitorAnalyticsModalProps> = ({ is
                 <span className="px-2 py-0.5 bg-rose-100 text-rose-600 rounded-md text-[10px] font-bold uppercase tracking-wider">
                   Admin Only
                 </span>
+                <span className="px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded-md text-[10px] font-bold">
+                  AI 스튜디오 접속 제외 필터링 적용됨
+                </span>
               </div>
               <p className="text-xs text-slate-500 mt-0.5">실시간 대구대 HIVE 홈페이지 방문자 통계 현황</p>
             </div>

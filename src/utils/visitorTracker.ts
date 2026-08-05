@@ -52,9 +52,31 @@ export function getVisitorStats(): VisitorStats {
   return stats;
 }
 
+export function isAIStudioOrDevEnv(): boolean {
+  if (typeof window === 'undefined') return false;
+  
+  const hostname = window.location.hostname || '';
+  const referrer = document.referrer || '';
+  const isIframe = window.self !== window.top;
+  
+  // AI Studio Dev app domain (ais-dev-*), localhost, or embedded preview iframe
+  const isAISDevDomain = hostname.includes('ais-dev-');
+  const isLocalhost = hostname === 'localhost' || hostname === '127.0.0.1';
+  const isAIStudioReferrer = referrer.includes('ai.studio') || referrer.includes('google.com') || referrer.includes('antigravity');
+
+  return isAISDevDomain || isLocalhost || isIframe || isAIStudioReferrer;
+}
+
 export function recordPageView(path: string = window.location.pathname): VisitorStats {
-  const today = new Date().toISOString().split('T')[0];
   const stats = getVisitorStats();
+
+  // Exclude AI Studio preview / dev environment visits
+  if (isAIStudioOrDevEnv()) {
+    console.log('[VisitorTracker] Excluded AI Studio / Dev environment pageview');
+    return stats;
+  }
+
+  const today = new Date().toISOString().split('T')[0];
 
   // Get or create unique visitor ID
   let visitorId = localStorage.getItem(VISITOR_ID_KEY);
