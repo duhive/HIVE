@@ -130,10 +130,10 @@ export const MEMBERS: Member[] = [
     id: 9,
     name: "송진혁",
     role: "YB",
-    image: "https://i.ibb.co/TGvX4D7/28.png",
+    image: "https://i.ibb.co/S4xLSnSD/2026-08-08-224456.png",
     bio: "",
     education: "호텔외식관광학과 23",
-    skills: ["호텔경영", "관광서비스"],
+    skills: ["AI", "서비스경영"],
     contact: "TBD"
   },
   {

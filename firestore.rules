@@ -29,5 +29,9 @@ service cloud.firestore {
     match /seminarTopics/{topicId} {
       allow read, write: if true;
     }
+
+    match /notices/{noticeId} {
+      allow read, write: if true;
+    }
   }
 }

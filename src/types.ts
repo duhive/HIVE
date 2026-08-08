@@ -61,4 +61,18 @@ export interface Column {
   createdAt?: any;
 }
 
+export interface NoticeItem {
+  id: string | number;
+  isImportant: boolean;
+  title: string;
+  date: string;
+  author: string;
+  content: string;
+  category?: string;
+  imageUrl?: string;
+  images?: string[];
+  views?: number;
+  createdAt?: any;
+}
+
 

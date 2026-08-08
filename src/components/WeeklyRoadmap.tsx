@@ -155,7 +155,7 @@ export const INITIAL_SEMINAR_TOPICS: SeminarTopicData[] = [
       name: '송진혁',
       role: 'YB',
       affiliation: '호텔외식관광학과 23',
-      image: 'https://i.ibb.co/TGvX4D7/28.png'
+      image: 'https://i.ibb.co/S4xLSnSD/2026-08-08-224456.png'
     }
   },
   {
@@ -286,7 +286,7 @@ export const INITIAL_SEMINAR_TOPICS: SeminarTopicData[] = [
       name: '송진혁',
       role: 'YB',
       affiliation: '호텔외식관광학과 23',
-      image: 'https://i.ibb.co/TGvX4D7/28.png'
+      image: 'https://i.ibb.co/S4xLSnSD/2026-08-08-224456.png'
     }
   }
 ];

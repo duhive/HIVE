@@ -4,19 +4,14 @@ import { motion, AnimatePresence } from 'motion/react';
 import { ArrowRight, Globe, Users, Target, Zap, ChevronLeft, ChevronRight, Play, Pause, Plus, X, Briefcase, Building2, Clock, MapPin } from 'lucide-react';
 import Contact from '../components/Contact';
 import { BRAND_STORY } from '../constants';
+import { NoticeItem } from '../types';
+import NoticeDetail from '../components/NoticeDetail';
+import NoticeFormModal from '../components/NoticeFormModal';
+import NoticePasswordModal from '../components/NoticePasswordModal';
 
 import aviationHero from '../assets/images/aviation_service_hero_1782037825374.jpg';
 import metaverseHero from '../assets/images/metaverse_hotel_hero_1782191831140.jpg';
 import cabinServiceAbout from '../assets/images/cabin_service_about_1782193310292.jpg';
-
-export interface NoticeItem {
-  id: number;
-  isImportant: boolean;
-  title: string;
-  date: string;
-  author: string;
-  content: string;
-}
 
 export interface NewsItem {
   id: number;
@@ -179,16 +174,16 @@ const Home = () => {
     localStorage.setItem('hive_jobs', JSON.stringify(jobs));
   }, [jobs]);
 
-  // Write Modal State
-  const [isWriteOpen, setIsWriteOpen] = useState(false);
-
-  const [noticeForm, setNoticeForm] = useState({
-    title: '',
-    author: '관리자',
-    date: new Date().toISOString().split('T')[0],
-    isImportant: false,
-    content: ''
-  });
+  // Protected Notice actions state
+  const [passwordModalOpen, setPasswordModalOpen] = useState(false);
+  const [pendingNoticeAction, setPendingNoticeAction] = useState<
+    { type: 'create' } | 
+    { type: 'edit'; notice: NoticeItem } | 
+    { type: 'delete'; noticeId: string | number } | 
+    null
+  >(null);
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [editingNotice, setEditingNotice] = useState<NoticeItem | null>(null);
 
   useEffect(() => {
     localStorage.setItem('hive_notices', JSON.stringify(notices));
@@ -198,25 +193,56 @@ const Home = () => {
     localStorage.setItem('hive_news', JSON.stringify(news));
   }, [news]);
 
-  const handleCreateSubmit = () => {
-    if (!noticeForm.title.trim()) return;
-    const newNoticeItem: NoticeItem = {
-      id: Date.now(),
-      isImportant: noticeForm.isImportant,
-      title: noticeForm.title.trim(),
-      date: noticeForm.date,
-      author: noticeForm.author.trim() || '관리자',
-      content: noticeForm.content.trim() || '공지사항 내용입니다.'
+  const handleProtectedNoticeAction = (action: 
+    { type: 'create' } | 
+    { type: 'edit'; notice: NoticeItem } | 
+    { type: 'delete'; noticeId: string | number }
+  ) => {
+    setPendingNoticeAction(action);
+    setPasswordModalOpen(true);
+  };
+
+  const handlePasswordSuccess = () => {
+    if (!pendingNoticeAction) return;
+    if (pendingNoticeAction.type === 'create') {
+      setEditingNotice(null);
+      setIsFormOpen(true);
+    } else if (pendingNoticeAction.type === 'edit') {
+      setEditingNotice(pendingNoticeAction.notice);
+      setIsFormOpen(true);
+    } else if (pendingNoticeAction.type === 'delete') {
+      if (window.confirm('이 공지사항을 정말로 삭제하시겠습니까?')) {
+        setNotices(prev => prev.filter(n => String(n.id) !== String(pendingNoticeAction.noticeId)));
+        if (selectedNotice && String(selectedNotice.id) === String(pendingNoticeAction.noticeId)) {
+          setSelectedNotice(null);
+        }
+      }
+    }
+    setPendingNoticeAction(null);
+  };
+
+  const handleSaveNotice = (noticeData: Omit<NoticeItem, 'id'> & { id?: string | number }) => {
+    const docId = noticeData.id ? String(noticeData.id) : `notice-${Date.now()}`;
+    const newNotice: NoticeItem = {
+      id: docId,
+      title: noticeData.title,
+      author: noticeData.author,
+      date: noticeData.date,
+      category: noticeData.category || '전체공지',
+      isImportant: noticeData.isImportant,
+      content: noticeData.content,
+      imageUrl: noticeData.imageUrl,
+      images: noticeData.images
     };
-    setNotices([newNoticeItem, ...notices]);
-    setNoticeForm({
-      title: '',
-      author: '관리자',
-      date: new Date().toISOString().split('T')[0],
-      isImportant: false,
-      content: ''
-    });
-    setIsWriteOpen(false);
+
+    if (editingNotice) {
+      setNotices(prev => prev.map(n => String(n.id) === String(docId) ? newNotice : n));
+      if (selectedNotice && String(selectedNotice.id) === String(docId)) {
+        setSelectedNotice(newNotice);
+      }
+    } else {
+      setNotices(prev => [newNotice, ...prev]);
+    }
   };
 
   useEffect(() => {
@@ -384,7 +410,7 @@ const Home = () => {
                       </span>
                     </div>
                     <button 
-                      onClick={() => setIsWriteOpen(true)}
+                      onClick={() => handleProtectedNoticeAction({ type: 'create' })}
                       className="flex items-center gap-1.5 text-slate-600 hover:text-hive-green text-xs font-semibold border border-slate-200 rounded-lg px-2.5 py-1 bg-white hover:bg-slate-50 transition-all cursor-pointer shadow-2xs"
                     >
                       <span className="text-xs">+ 작성</span>
@@ -569,44 +595,15 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Notice Detail Modal */}
+      {/* Notice Detail Modal / Overlay */}
       {selectedNotice && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs animate-fadeIn">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl relative border border-slate-100">
-            <button 
-              onClick={() => setSelectedNotice(null)}
-              className="absolute top-4 right-4 p-1.5 text-slate-400 hover:text-slate-700 rounded-full hover:bg-slate-100 transition-colors"
-            >
-              <X size={18} />
-            </button>
-            
-            <div className="flex items-center gap-2 mb-3">
-              {selectedNotice.isImportant && (
-                <span className="bg-rose-50 text-rose-500 border border-rose-200 text-xs font-bold px-2 py-0.5 rounded-md">
-                  중요
-                </span>
-              )}
-              <span className="text-xs font-mono text-slate-400">{selectedNotice.date}</span>
-              <span className="text-xs text-slate-500 font-medium">| 작성자: {selectedNotice.author}</span>
-            </div>
-
-            <h3 className="text-xl font-bold text-slate-900 mb-4 leading-snug">
-              {selectedNotice.title}
-            </h3>
-
-            <div className="bg-slate-50 rounded-xl p-4 text-sm text-slate-700 leading-relaxed mb-6 border border-slate-100 min-h-[120px]">
-              {selectedNotice.content}
-            </div>
-
-            <div className="flex justify-end">
-              <button
-                onClick={() => setSelectedNotice(null)}
-                className="px-5 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition-colors"
-              >
-                닫기
-              </button>
-            </div>
-          </div>
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/75 backdrop-blur-xs p-4 md:p-8 animate-fadeIn">
+          <NoticeDetail
+            notice={selectedNotice}
+            onEdit={(notice) => handleProtectedNoticeAction({ type: 'edit', notice })}
+            onDelete={(noticeId) => handleProtectedNoticeAction({ type: 'delete', noticeId })}
+            onBack={() => setSelectedNotice(null)}
+          />
         </div>
       )}
 
@@ -708,96 +705,28 @@ const Home = () => {
         </div>
       )}
 
-      {/* Write / Create Modal */}
-      {isWriteOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs animate-fadeIn">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl relative border border-slate-100 max-h-[90vh] overflow-y-auto">
-            <button 
-              onClick={() => setIsWriteOpen(false)}
-              className="absolute top-4 right-4 p-1.5 text-slate-400 hover:text-slate-700 rounded-full hover:bg-slate-100 transition-colors"
-            >
-              <X size={18} />
-            </button>
+      {/* Protected Notice Password Verification Modal */}
+      <NoticePasswordModal
+        isOpen={passwordModalOpen}
+        onClose={() => {
+          setPasswordModalOpen(false);
+          setPendingNoticeAction(null);
+        }}
+        onSuccess={handlePasswordSuccess}
+        title="관리자 비밀번호 확인"
+        subtitle="공지사항 작성/수정/삭제 권한을 확인합니다."
+      />
 
-            <h3 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
-              <Plus size={20} className="text-hive-green" />
-              공지사항 작성
-            </h3>
-
-            <div className="space-y-4">
-              <div className="flex items-center gap-2">
-                <input 
-                  type="checkbox"
-                  id="isImportant"
-                  checked={noticeForm.isImportant}
-                  onChange={(e) => setNoticeForm({...noticeForm, isImportant: e.target.checked})}
-                  className="w-4 h-4 text-rose-500 rounded border-slate-300 focus:ring-rose-500"
-                />
-                <label htmlFor="isImportant" className="text-xs font-bold text-rose-600 cursor-pointer">
-                  중요 공지로 지정
-                </label>
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">제목</label>
-                <input 
-                  type="text"
-                  value={noticeForm.title}
-                  onChange={(e) => setNoticeForm({...noticeForm, title: e.target.value})}
-                  placeholder="공지사항 제목을 입력하세요"
-                  className="w-full text-xs p-2.5 rounded-lg border border-slate-200 focus:outline-none focus:border-hive-green"
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">작성자</label>
-                  <input 
-                    type="text"
-                    value={noticeForm.author}
-                    onChange={(e) => setNoticeForm({...noticeForm, author: e.target.value})}
-                    className="w-full text-xs p-2.5 rounded-lg border border-slate-200 focus:outline-none focus:border-hive-green"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">날짜</label>
-                  <input 
-                    type="date"
-                    value={noticeForm.date}
-                    onChange={(e) => setNoticeForm({...noticeForm, date: e.target.value})}
-                    className="w-full text-xs p-2.5 rounded-lg border border-slate-200 focus:outline-none focus:border-hive-green"
-                  />
-                </div>
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">상세 내용</label>
-                <textarea 
-                  rows={4}
-                  value={noticeForm.content}
-                  onChange={(e) => setNoticeForm({...noticeForm, content: e.target.value})}
-                  placeholder="공지사항 내용을 입력하세요..."
-                  className="w-full text-xs p-2.5 rounded-lg border border-slate-200 focus:outline-none focus:border-hive-green"
-                />
-              </div>
-
-              <div className="flex justify-end gap-2 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setIsWriteOpen(false)}
-                  className="px-4 py-2 border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-xl text-xs font-bold transition-colors"
-                >
-                  취소
-                </button>
-                <button
-                  type="button"
-                  onClick={handleCreateSubmit}
-                  className="px-5 py-2 bg-hive-green hover:bg-hive-green/90 text-white rounded-xl text-xs font-bold transition-colors"
-                >
-                  등록하기
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Notice Form Modal */}
+      <NoticeFormModal
+        isOpen={isFormOpen}
+        onClose={() => {
+          setIsFormOpen(false);
+          setEditingNotice(null);
+        }}
+        editingNotice={editingNotice}
+        onSave={handleSaveNotice}
+      />
 
       {/* Contact Section removed as requested */}
     </div>
