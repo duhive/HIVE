@@ -559,7 +559,7 @@ const Home = () => {
                   to="/photo"
                   className="inline-flex items-center gap-1.5 text-slate-600 hover:text-slate-900 font-bold text-xs md:text-sm transition-colors cursor-pointer group"
                 >
-                  <span>연구실 포토 갤러리 가기</span>
+                  <span>학회 포토 갤러리 가기</span>
                   <ChevronRight size={14} className="text-slate-400 group-hover:translate-x-0.5 transition-transform" />
                 </Link>
               </div>

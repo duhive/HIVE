@@ -56,7 +56,7 @@ export default function ColumnForm({
   // Author sub-fields
   const [authorName, setAuthorName] = useState('김지민');
   const [authorRole, setAuthorRole] = useState('학회원 / 연구원');
-  const [authorAffiliation, setAuthorAffiliation] = useState('HIVE Hospitality Lab');
+  const [authorAffiliation, setAuthorAffiliation] = useState('호스피탈리티 경영학회 HIVE');
   const [authorImage, setAuthorImage] = useState(DEFAULT_CHARACTER_IMAGE);
 
   // Status fields

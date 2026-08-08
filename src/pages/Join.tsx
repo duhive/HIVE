@@ -56,11 +56,14 @@ function handleFirestoreError(error: unknown, operationType: OperationType, path
   throw new Error(JSON.stringify(errInfo));
 }
 
-const INTEREST_TRACKS = [
-  { id: 'academic', title: '학술 및 연구 정보', desc: '학술 동향 및 국내외 관광·호스피탈리티 업계 리서치 분야' },
-  { id: 'planning', title: '관광 컨텐츠 기획', desc: '세미나, 포럼, 서밋 및 각종 행사 현장 오퍼레이션 기획 분야' },
-  { id: 'pr', title: '브랜딩 및 미디어 홍보', desc: '카드뉴스, SNS 홍보, 보도자료 배포 및 대외 브랜드 마케팅 분야' },
-  { id: 'cooperation', title: '대외 연계 및 제휴', desc: '산업 연계 인턴십 교류, 대외 파트너사 발굴 및 네트워크 연계 분야' }
+const INTEREST_OPTIONS = [
+  '핀테크',
+  '반도체',
+  '관광 / 호스피탈리티',
+  'AI / 빅데이터',
+  '마케팅 / 기획',
+  '학술 / 연구',
+  '기타'
 ];
 
 // Canvas-based image compressor to safe base64 format (< 100KB typical)
@@ -128,6 +131,36 @@ const Join = () => {
     interestTrack: '학술 및 연구 정보',
     photo: '' // base64 representation
   });
+
+  const [selectedToggles, setSelectedToggles] = React.useState<string[]>(['관광 / 호스피탈리티']);
+  const [customInterest, setCustomInterest] = React.useState<string>('');
+
+  const toggleInterestOption = (option: string) => {
+    setSelectedToggles(prev => {
+      if (prev.includes(option)) {
+        const filtered = prev.filter(item => item !== option);
+        return filtered;
+      } else {
+        return [...prev, option];
+      }
+    });
+  };
+
+  const getFormattedInterestTrack = () => {
+    const list: string[] = [];
+    selectedToggles.forEach(opt => {
+      if (opt === '기타') {
+        if (customInterest.trim()) {
+          list.push(`기타: ${customInterest.trim()}`);
+        } else {
+          list.push('기타');
+        }
+      } else {
+        list.push(opt);
+      }
+    });
+    return list.length > 0 ? list.join(', ') : '미지정';
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -208,6 +241,8 @@ const Join = () => {
   // Soft validation rules
   const isFormValid = () => {
     const { name, email, phone, department, studentId, motivation, strengths, photo } = formData;
+    const hasToggles = selectedToggles.length > 0;
+    const isCustomValid = !selectedToggles.includes('기타') || selectedToggles.length > 1 || customInterest.trim().length > 0;
     return (
       name.trim().length >= 2 && name.trim().length <= 50 &&
       email.trim().includes('@') && email.trim().length >= 5 && email.trim().length <= 100 &&
@@ -216,14 +251,22 @@ const Join = () => {
       studentId.trim().length >= 4 && studentId.trim().length <= 20 &&
       motivation.trim().length >= 10 && motivation.trim().length <= 2000 &&
       strengths.trim().length >= 10 && strengths.trim().length <= 2000 &&
-      photo.length > 0 // Photo is strictly required in our rules specification
+      photo.length > 0 &&
+      hasToggles &&
+      isCustomValid
     );
   };
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isFormValid()) {
-      setErrorMessage('모든 항목과 자기소개용 이미지를 올바르게 작성 및 업로드해 주세요.');
+      if (selectedToggles.length === 0) {
+        setErrorMessage('관심 분야를 최소 하나 이상 선택해 주세요.');
+      } else if (selectedToggles.includes('기타') && customInterest.trim().length === 0 && selectedToggles.length === 1) {
+        setErrorMessage('기타 관심 분야를 직접 입력해 주세요.');
+      } else {
+        setErrorMessage('모든 항목과 자기소개용 이미지를 올바르게 작성 및 업로드해 주세요.');
+      }
       return;
     }
 
@@ -231,6 +274,8 @@ const Join = () => {
     setErrorMessage('');
 
     try {
+      const finalTrack = getFormattedInterestTrack();
+
       // Create random cryptographic-style 12-char application code for the user
       const codeChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
       let randomCode = 'HIVE-';
@@ -251,7 +296,7 @@ const Join = () => {
         studentId: formData.studentId.trim(),
         motivation: formData.motivation.trim(),
         strengths: formData.strengths.trim(),
-        interestTrack: formData.interestTrack,
+        interestTrack: finalTrack,
         photo: formData.photo,
         submittedAt: serverTimestamp() // strictly checked as request.time on rules
       });
@@ -267,7 +312,7 @@ const Join = () => {
           studentId: formData.studentId.trim(),
           motivation: formData.motivation.trim(),
           strengths: formData.strengths.trim(),
-          interestTrack: formData.interestTrack,
+          interestTrack: finalTrack,
           photo: formData.photo,
           createdAtStr: new Date().toLocaleString('ko-KR', {
             year: 'numeric',
@@ -607,37 +652,54 @@ const Join = () => {
                       />
                     </div>
 
-                    {/* Track Selection Card Grid */}
+                    {/* Toggle Selector for Interest Tracks */}
                     <div>
-                      <label className="block text-xs font-bold text-navy-900 mb-3 uppercase tracking-wide">
-                        관심 분야 <span className="text-red-500">*</span>
-                      </label>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        {INTEREST_TRACKS.map(track => {
-                          const isSelected = formData.interestTrack === track.title;
+                      <div className="flex items-center justify-between mb-2">
+                        <label className="block text-xs font-bold text-navy-900 uppercase tracking-wide">
+                          관심 분야 (토글 선택, 복수 선택 가능) <span className="text-red-500">*</span>
+                        </label>
+                        <span className="text-[10px] text-navy-900/50 font-sans">
+                          {selectedToggles.length}개 선택됨
+                        </span>
+                      </div>
+
+                      <div className="flex flex-wrap gap-2 mb-3">
+                        {INTEREST_OPTIONS.map(option => {
+                          const isSelected = selectedToggles.includes(option);
                           return (
                             <button
-                              key={track.id}
+                              key={option}
                               type="button"
-                              onClick={() => selectTrack(track.title)}
-                              className={`p-4 text-left border rounded-xl flex flex-col justify-between transition-all duration-200 cursor-pointer ${
+                              onClick={() => toggleInterestOption(option)}
+                              className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer flex items-center gap-1.5 border ${
                                 isSelected
-                                  ? 'bg-hive-green/5 border-hive-green shadow-sm'
-                                  : 'bg-white border-navy-900/10 hover:border-navy-900/30'
+                                  ? 'bg-hive-green text-white border-hive-green shadow-sm'
+                                  : 'bg-white text-navy-900/80 border-navy-900/15 hover:border-navy-900/40 hover:bg-navy-900/5'
                               }`}
                             >
-                              <div>
-                                <h5 className={`font-bold text-sm ${isSelected ? 'text-hive-green' : 'text-navy-900'}`}>
-                                  {track.title}
-                                </h5>
-                                <p className="text-[11px] text-navy-900/60 mt-1 font-sans leading-relaxed">
-                                  {track.desc}
-                                </p>
-                              </div>
+                              {isSelected && <CheckCircle2 size={13} />}
+                              {option}
                             </button>
                           );
                         })}
                       </div>
+
+                      {/* Custom Input when '기타' is selected */}
+                      {selectedToggles.includes('기타') && (
+                        <div className="animate-fadeIn mt-2 p-3 bg-ivory/80 rounded-2xl border border-hive-green/40">
+                          <label className="block text-[11px] font-bold text-navy-900 mb-1.5">
+                            기타 관심 분야 직접 입력
+                          </label>
+                          <input
+                            type="text"
+                            value={customInterest}
+                            onChange={(e) => setCustomInterest(e.target.value)}
+                            placeholder="예: 바이오, 우주항공, 패션, 게임, 에너지 등 관심 분야 입력"
+                            maxLength={50}
+                            className="w-full bg-white border border-navy-900/15 focus:border-hive-green focus:outline-none rounded-xl px-3.5 py-2.5 text-xs font-sans transition-all"
+                          />
+                        </div>
+                      )}
                     </div>
 
                     {/* Motivation Textarea with Interactive Counts */}

@@ -97,7 +97,7 @@ export default function Notices() {
             공지사항 목록
           </h1>
           <p className="text-slate-600 text-sm md:text-base leading-relaxed">
-            미래혁신관광연구실(FIT Lab) 및 호스피탈리티 경영학회의 주요 학술, 세미나, 수강 관련 공식 안내입니다.
+            호스피탈리티 경영학회 HIVE의 주요 학술, 세미나, 회원 활동 관련 공식 안내입니다.
           </p>
         </div>
 

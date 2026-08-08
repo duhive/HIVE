@@ -263,7 +263,7 @@ export const PARTNER_MEMBERS: Member[] = [
     category: "Global Service Group",
     image: "https://i.ibb.co/Z1Tk4T4L/2026-05-05-160901.png",
     bio: "",
-    education: "호텔관광연구실 / 대구관광고등학교 시간강사",
+    education: "HIVE 학회 파트너 / 대구관광고등학교 시간강사",
     skills: ["호스피탈리티 경영", "서비스혁신"],
     contact: "pyj@daegu.ac.kr",
     experience: [
@@ -279,7 +279,7 @@ export const PARTNER_MEMBERS: Member[] = [
     category: "Tourism & AI Group",
     image: "https://i.ibb.co/TGvX4D7/28.png",
     bio: "",
-    education: "호텔관광연구실",
+    education: "HIVE 학회 파트너",
     skills: ["인공지능", "스마트관광"],
     contact: "kbm010525@naver.com",
     experience: [

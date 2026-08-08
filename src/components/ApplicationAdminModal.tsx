@@ -152,6 +152,28 @@ export const ApplicationAdminModal: React.FC<ApplicationAdminModalProps> = ({ is
     }
   };
 
+  const handleClearAll = async () => {
+    if (applications.length === 0) {
+      alert('삭제할 지원서 데이터가 없습니다.');
+      return;
+    }
+    if (window.confirm(`현재 등록된 총 ${applications.length}건의 모든 지원서 데이터를 삭제하시겠습니까? 이 작업은 복구할 수 없습니다.`)) {
+      setLoading(true);
+      for (const app of applications) {
+        try {
+          await deleteDoc(doc(db, 'applications', app.id));
+        } catch (e) {
+          console.warn('Firestore delete error:', e);
+        }
+      }
+      localStorage.removeItem('hive_applications');
+      setApplications([]);
+      setSelectedApp(null);
+      setLoading(false);
+      alert('모든 지원서 데이터가 성공적으로 지워졌습니다.');
+    }
+  };
+
   if (!isOpen) return null;
 
   // Filter logic
@@ -256,14 +278,17 @@ export const ApplicationAdminModal: React.FC<ApplicationAdminModalProps> = ({ is
                   className="py-2 px-3 bg-white rounded-xl border border-slate-200 text-xs font-bold text-slate-700 focus:outline-none cursor-pointer"
                 >
                   <option value="all">전체 관심 분야</option>
-                  <option value="학술">학술 및 연구</option>
-                  <option value="기획">관광 컨텐츠 기획</option>
-                  <option value="홍보">브랜딩/미디어 홍보</option>
-                  <option value="제휴">대외 연계 및 제휴</option>
+                  <option value="핀테크">핀테크</option>
+                  <option value="반도체">반도체</option>
+                  <option value="관광">관광 / 호스피탈리티</option>
+                  <option value="AI">AI / 빅데이터</option>
+                  <option value="마케팅">마케팅 / 기획</option>
+                  <option value="학술">학술 / 연구</option>
+                  <option value="기타">기타</option>
                 </select>
               </div>
 
-              <div className="flex items-center justify-between sm:justify-end gap-3">
+              <div className="flex items-center justify-between sm:justify-end gap-2">
                 <div className="text-xs font-bold text-slate-600 bg-white px-3 py-2 rounded-xl border border-slate-200 font-mono">
                   총 지원자: <span className="text-hive-green font-extrabold text-sm">{filteredApps.length}</span> 명
                 </div>
@@ -274,6 +299,14 @@ export const ApplicationAdminModal: React.FC<ApplicationAdminModalProps> = ({ is
                   title="새로고침"
                 >
                   <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
+                </button>
+
+                <button
+                  onClick={handleClearAll}
+                  className="px-3 py-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl border border-red-200 font-bold text-xs transition-colors cursor-pointer flex items-center gap-1"
+                  title="전체 지원자 초기화"
+                >
+                  <Trash2 size={14} /> 전체 삭제
                 </button>
               </div>
             </div>
