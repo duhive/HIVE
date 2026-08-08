@@ -1005,7 +1005,7 @@ export const WeeklyRoadmap = () => {
               <div className="text-center">
                 <h5 className="font-extrabold text-navy-900 text-base">관리자 암호 확인</h5>
                 <p className="text-xs text-navy-900/60 font-medium mt-1 leading-relaxed">
-                  교육 커리큘럼 및 학술 세미나 발표 주제를 수정/등록하려면 비밀번호 (2405)를 입력하세요.
+                  교육 커리큘럼 및 학술 세미나 발표 주제를 수정/등록하려면 학회 전용 비밀번호를 입력하세요.
                 </p>
               </div>
 
