@@ -10,6 +10,52 @@ const Members = () => {
   const [selectedMember, setSelectedMember] = useState<Member | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('GENERATIONS');
   const [selectedFilter, setSelectedFilter] = useState<string>('전체');
+  const [isCaptured, setIsCaptured] = useState(false);
+
+  // Capture & Print Protection
+  useEffect(() => {
+    const triggerBlank = () => {
+      setIsCaptured(true);
+      document.body.classList.add('screen-captured');
+      setTimeout(() => {
+        setIsCaptured(false);
+        document.body.classList.remove('screen-captured');
+      }, 3000);
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (
+        e.key === 'PrintScreen' ||
+        e.keyCode === 44 ||
+        ((e.metaKey || e.ctrlKey) && e.shiftKey && (e.key === 'S' || e.key === 's' || e.key === '4' || e.key === '3')) ||
+        ((e.metaKey || e.ctrlKey) && (e.key === 'p' || e.key === 'P'))
+      ) {
+        triggerBlank();
+      }
+    };
+
+    const handleVisibility = () => {
+      if (document.hidden) {
+        setIsCaptured(true);
+        document.body.classList.add('screen-captured');
+      } else {
+        setTimeout(() => {
+          setIsCaptured(false);
+          document.body.classList.remove('screen-captured');
+        }, 1500);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyDown);
+    document.addEventListener('visibilitychange', handleVisibility);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyDown);
+      document.removeEventListener('visibilitychange', handleVisibility);
+    };
+  }, []);
 
   // Load dynamic custom members from Firestore
   const [customMembers, setCustomMembers] = useState<Member[]>([]);
@@ -350,14 +396,20 @@ const Members = () => {
                             onContextMenu={(e) => e.preventDefault()}
                             className="cursor-pointer group relative aspect-[4/5] overflow-hidden rounded-2xl bg-navy-900/5 hover:shadow-lg transition-all duration-300 select-none"
                           >
-                            <img
-                              src={member.image}
-                              alt={member.name}
-                              className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110 pointer-events-none select-none"
-                              referrerPolicy="no-referrer"
-                              draggable={false}
-                              onContextMenu={(e) => e.preventDefault()}
-                            />
+                             {isCaptured ? (
+                              <div className="w-full h-full bg-slate-100/90 flex items-center justify-center text-slate-400 font-mono text-[10px] select-none">
+                                PROTECTED
+                              </div>
+                            ) : (
+                              <img
+                                src={member.image}
+                                alt={member.name}
+                                className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110 pointer-events-none select-none member-photo-protected"
+                                referrerPolicy="no-referrer"
+                                draggable={false}
+                                onContextMenu={(e) => e.preventDefault()}
+                              />
+                            )}
                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
                             
                             <div className="absolute bottom-0 left-0 p-6 w-full transform translate-y-2 group-hover:translate-y-0 transition-transform">
@@ -406,14 +458,20 @@ const Members = () => {
                         onContextMenu={(e) => e.preventDefault()}
                         className="cursor-pointer group relative aspect-[4/5] overflow-hidden rounded-2xl bg-navy-900/5 select-none"
                       >
-                        <img
-                          src={member.image}
-                          alt={member.name}
-                          className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110 pointer-events-none select-none"
-                          referrerPolicy="no-referrer"
-                          draggable={false}
-                          onContextMenu={(e) => e.preventDefault()}
-                        />
+                        {isCaptured ? (
+                          <div className="w-full h-full bg-slate-100/90 flex items-center justify-center text-slate-400 font-mono text-[10px] select-none">
+                            PROTECTED
+                          </div>
+                        ) : (
+                          <img
+                            src={member.image}
+                            alt={member.name}
+                            className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110 pointer-events-none select-none member-photo-protected"
+                            referrerPolicy="no-referrer"
+                            draggable={false}
+                            onContextMenu={(e) => e.preventDefault()}
+                          />
+                        )}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
                         
                         <div className="absolute bottom-0 left-0 p-6 w-full transform translate-y-2 group-hover:translate-y-0 transition-transform">
@@ -469,14 +527,20 @@ const Members = () => {
                 className="w-full md:w-2/5 aspect-[4/5] md:aspect-[3/4] self-start relative bg-navy-900/5 flex-shrink-0 select-none overflow-hidden"
                 onContextMenu={(e) => e.preventDefault()}
               >
-                <img
-                  src={selectedMember.image}
-                  alt={selectedMember.name}
-                  className="w-full h-full object-cover pointer-events-none select-none"
-                  referrerPolicy="no-referrer"
-                  draggable={false}
-                  onContextMenu={(e) => e.preventDefault()}
-                />
+                {isCaptured ? (
+                  <div className="w-full h-full bg-slate-100/90 flex items-center justify-center text-slate-400 font-mono text-xs select-none">
+                    PROTECTED
+                  </div>
+                ) : (
+                  <img
+                    src={selectedMember.image}
+                    alt={selectedMember.name}
+                    className="w-full h-full object-cover pointer-events-none select-none member-photo-protected"
+                    referrerPolicy="no-referrer"
+                    draggable={false}
+                    onContextMenu={(e) => e.preventDefault()}
+                  />
+                )}
                 <div className="absolute inset-0 bg-transparent select-none pointer-events-auto" onContextMenu={(e) => e.preventDefault()} />
               </div>
 

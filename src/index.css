@@ -49,3 +49,30 @@ h1, h2, h3, h4 {
   content: '';
   @apply absolute bottom-0 left-0 w-full h-0.5 bg-hive-green;
 }
+
+/* Member Photo Screenshot & Print Protection */
+@media print {
+  .member-photo-protected,
+  .member-photo-protected img,
+  .member-photo-container {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
+}
+
+.screen-captured .member-photo-protected,
+body.screen-captured .member-photo-protected {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  filter: blur(50px) !important;
+}
+
+.member-photo-protected {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+

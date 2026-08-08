@@ -442,7 +442,7 @@ const Join = () => {
               {[
                 { step: "01", title: "Application Submission", desc: "서류 전형 및 자기소개 포트폴리오 확인" },
                 { step: "02", title: "Strategic Interview", desc: "면접 (역량 및 가치관 확인)" },
-                { step: "03", title: "Final Selection", desc: "최종 합격자 발표 및 오리엔테이션" }
+                { step: "03", title: "Orientation", desc: "오리엔테이션" }
               ].map((item, idx) => (
                 <div key={idx} className="flex items-center p-4 bg-navy-900/5 border-l-2 border-hive-green rounded-r-xl">
                   <span className="text-xl font-serif font-bold mr-6 text-hive-green/30">{item.step}</span>

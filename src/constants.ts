@@ -127,6 +127,16 @@ export const MEMBERS: Member[] = [
     contact: "yeeun8556@naver.com"
   },
   {
+    id: 9,
+    name: "송진혁",
+    role: "YB",
+    image: "https://i.ibb.co/TGvX4D7/28.png",
+    bio: "",
+    education: "호텔외식관광학과 23",
+    skills: ["호텔경영", "관광서비스"],
+    contact: "TBD"
+  },
+  {
     id: 10,
     name: "조석기",
     role: "YB",
@@ -291,7 +301,7 @@ export const PARTNER_MEMBERS: Member[] = [
 export const FAQS: FAQ[] = [
   {
     question: "어떤 전공이 지원 가능한가요?",
-    answer: "호텔외식관광전공 학부생이 지원 가능합니다."
+    answer: "학과 지원제한이 없습니다."
   },
   {
     question: "선발 프로세스는 어떻게 되나요?",

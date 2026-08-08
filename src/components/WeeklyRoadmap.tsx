@@ -2,14 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   Calendar, Plus, RotateCcw, Edit2, Trash2, BookOpen, 
-  X, Loader2, CheckCircle2, AlertTriangle, PlusCircle 
+  X, Loader2, CheckCircle2, AlertTriangle, PlusCircle, User, Sparkles, Lightbulb, Lock
 } from 'lucide-react';
 import { db } from '../firebase';
 import { 
   collection, getDocs, addDoc, updateDoc, deleteDoc, 
-  doc, writeBatch, query, orderBy, serverTimestamp 
+  doc, writeBatch, query, orderBy, serverTimestamp, onSnapshot, setDoc
 } from 'firebase/firestore';
 import { WeeklySession } from '../types';
+import SeminarTopicModal, { SeminarTopicData } from './SeminarTopicModal';
 
 enum OperationType {
   CREATE = 'create',
@@ -71,7 +72,7 @@ export const DEFAULT_WEEKLY_SESSIONS: Omit<WeeklySession, 'id'>[] = [
     week: 4,
     track: '정기 세미나',
     title: '중간 학술 리포트 공유회',
-    description: '연구 주제 중간 점검 및 학술적 피드백 수렴',
+    description: '발표 주제 중간 점검 및 학술적 피드백 수렴',
     deliverable: '중간 학술 리포트 피피티',
     semester: '1학기'
   },
@@ -96,8 +97,8 @@ export const DEFAULT_WEEKLY_SESSIONS: Omit<WeeklySession, 'id'>[] = [
     week: 1,
     track: '정기 세미나',
     title: '2학기 Kick-off & 트렌드 전망',
-    description: '하반기 호스피탈리티 테크 동향 공유 및 연구 주제 매칭',
-    deliverable: '개인 연구 계획서',
+    description: '하반기 호스피탈리티 테크 동향 공유 및 세미나 발표 주제 매칭',
+    deliverable: '개인 학술 발표 계획서',
     semester: '2학기'
   },
   {
@@ -120,7 +121,7 @@ export const DEFAULT_WEEKLY_SESSIONS: Omit<WeeklySession, 'id'>[] = [
     week: 4,
     track: '정기 세미나',
     title: '2학기 중간 교류회',
-    description: '타 학회 연계 학술 포럼 준비 및 합동 연구 점검',
+    description: '타 학회 연계 학술 포럼 준비 및 합동 세미나 점검',
     deliverable: '포럼 발표용 요약본',
     semester: '2학기'
   },
@@ -136,111 +137,157 @@ export const DEFAULT_WEEKLY_SESSIONS: Omit<WeeklySession, 'id'>[] = [
     week: 6,
     track: '종합 학술제',
     title: '최종 HIVE 학술제',
-    description: '한 해 연구 성과 공유 및 H&T Academic Portal 등재 심사',
+    description: '한 해 학술 발표 성과 공유 및 H&T Academic Portal 등재 심사',
     deliverable: '학회 보도자료 및 최종 논문',
     semester: '2학기'
   }
 ];
 
-interface PresentationTopic {
-  title: string;
-  category: string;
-  description: string;
-  round: number; // 1 or 2
-}
-
-const FIRST_SEMESTER_TOPICS: PresentationTopic[] = [
+export const INITIAL_SEMINAR_TOPICS: SeminarTopicData[] = [
   // Round 1
   {
+    id: 'sem-topic-01',
     title: '제주특별자치도 관광 산업의 발전 전략',
     category: '로컬 관광 개발',
-    description: '제주 관광 산업의 지속 가능한 미래 발전 방안 및 인프라 고도화 연구',
-    round: 1
+    description: '제주 관광 산업의 지속 가능한 미래 발전 방안 및 인프라 고도화 분석',
+    round: 1,
+    presenter: {
+      name: '송진혁',
+      role: 'YB',
+      affiliation: '호텔외식관광학과 23',
+      image: 'https://i.ibb.co/TGvX4D7/28.png'
+    }
   },
   {
+    id: 'sem-topic-02',
     title: '스포츠 메가 이벤트(마라톤 축제)와 관광산업 시너지',
     category: '스포츠 레저 관광',
     description: '참여형 스포츠 이벤트 활성화가 지역 목적지 관광 수요 및 상권에 미치는 효과',
-    round: 1
+    round: 1,
+    presenter: {
+      name: '고승민',
+      role: 'YB',
+      affiliation: '호텔외식관광학과 23',
+      image: 'https://i.ibb.co/ymb9d6wb/4.png'
+    }
   },
   {
+    id: 'sem-topic-03',
     title: '지역 대표 축제의 경제적 효과와 지속 가능성',
     category: '축제 경제학',
     description: '로컬 축제의 실질적 경제 파급 효과 측정 모델 및 지속 가능한 친환경 관리 설계',
-    round: 1
+    round: 1,
+    presenter: {
+      name: '조석기',
+      role: 'YB',
+      affiliation: '호텔외식관광학과 23',
+      image: 'https://i.ibb.co/TGvX4D7/28.png'
+    }
   },
   {
+    id: 'sem-topic-04',
     title: '글로벌 호스피탈리티 호텔 서비스 오퍼레이션의 이해',
     category: '호스피탈리티',
     description: '현대 호텔 산업 내 핵심 서비스 접점 및 효율적 고객 여정 관리 모델링',
-    round: 1
+    round: 1,
+    presenter: {
+      name: '강경임',
+      role: '1기 학회장',
+      affiliation: '호텔외식관광학과 24',
+      image: 'https://i.ibb.co/v6z0pWtm/image.jpg'
+    }
   },
   {
+    id: 'sem-topic-05',
     title: '축제/이벤트가 도시 목적지 브랜드 이미지에 미치는 영향',
     category: '목적지 브랜딩',
     description: '메가 이벤트 기획과 브랜딩 활동이 도시 이미지 및 관광객 재방문 의도에 미치는 영향',
-    round: 1
+    round: 1,
+    presenter: {
+      name: '박예은',
+      role: '교육',
+      affiliation: '호텔외식관광학과 22',
+      image: 'https://i.ibb.co/9mTfw9zq/image.jpg'
+    }
   },
   {
+    id: 'sem-topic-06',
     title: '서비스 여정 단계별 맞춤형 고객 경험(CX) 설계',
     category: '경험 디자인 (CX)',
     description: '디지털 및 대면 터치포인트 진단을 통한 고객 여정 지도(CJM) 고도화 방법론',
-    round: 1
+    round: 1,
+    presenter: {
+      name: '김민경',
+      role: 'PR',
+      affiliation: '호텔외식관광학과 25',
+      image: 'https://i.ibb.co/TGvX4D7/28.png'
+    }
   },
   {
+    id: 'sem-topic-07',
     title: '지방 소도시 활성화를 위한 로컬 관광 콘텐츠 제안',
     category: '소도시 활성화',
     description: '인구 감소 지역의 생존을 위한 특색 있는 로컬 콘텐츠 발굴 및 관광 생태계 활성화',
-    round: 1
+    round: 1,
+    presenter: {
+      name: '김하경',
+      role: '대외협력',
+      affiliation: '관광항공경영학과 20',
+      image: 'https://i.ibb.co/mC5PxwhH/image.png'
+    }
   },
   {
+    id: 'sem-topic-08',
     title: '국내 크루즈 관광 산업 분석 및 연계 고도화',
     category: '모빌리티 & 크루즈',
     description: '크루즈 관광 시장 동향 및 국내 주요 기항지 연계 관광 활성화 서비스 프레임워크',
-    round: 1
+    round: 1,
+    presenter: {
+      name: '김성학',
+      role: '회계',
+      affiliation: '호텔외식관광학과 24',
+      image: 'https://i.ibb.co/TGvX4D7/28.png'
+    }
   },
   // Round 2
   {
+    id: 'sem-topic-09',
     title: '국제 지정학적 리스크 및 유가 상승과 글로벌 관광 산업 영향',
     category: '거시경제 분석',
     description: '거시 정세 변화와 에너지 비용 변동이 국제 관광 수요 및 교통 인프라에 미치는 복합 영향',
-    round: 2
+    round: 2,
+    presenter: {
+      name: '김재환',
+      role: 'YB',
+      affiliation: '호텔관광경영학부 26',
+      image: 'https://i.ibb.co/v6rTnkYv/Kakao-Talk-20260322-200810881.jpg'
+    }
   },
   {
+    id: 'sem-topic-10',
     title: '역사·문화유산 보존과 지속 가능한 관광 수요의 상관관계',
     category: '문화유산 연계',
     description: '역사 문화재 보존 상태 및 매력도가 글로벌 관광 수요 촉진에 미치는 인과 분석',
-    round: 2
+    round: 2,
+    presenter: {
+      name: '박유진',
+      role: 'Partner',
+      affiliation: 'HIVE Partner',
+      image: 'https://i.ibb.co/Z1Tk4T4L/2026-05-05-160901.png'
+    }
   },
   {
+    id: 'sem-topic-11',
     title: '저비용 항공사(LCC) 성장과 아웃바운드 관광 확대',
     category: '항공 모빌리티',
     description: 'LCC 신규 취항 및 요금 전략이 글로벌 관광객 행동 및 여행 접근성 개선에 미치는 영향',
-    round: 2
-  },
-  {
-    title: '가상자산(Blockchain, BTC, ETH)의 이해와 호스피탈리티 접목',
-    category: '핀테크 융합',
-    description: '분산 원장 기술 및 가상자산 결제 도입이 관광 서비스 접점 편의성에 미치는 변화 예측',
-    round: 2
-  },
-  {
-    title: '한·미 호스피탈리티 서비스 스타일과 접대 문화 비교',
-    category: '글로벌 서비스 비교',
-    description: '한국 고유의 인적 서비스 강점과 미국의 비즈니스 지향적 프로페셔널 서비스 강단 분석',
-    round: 2
-  },
-  {
-    title: 'MZ세대의 새로운 소셜 네트워크와 글로벌 주류 소비 시장 변화',
-    category: '주류 소비 트렌드',
-    description: '글로벌 주류 트렌드와 웰니스 음주 소비 패턴(스마도리 등)의 변화가 미치는 상업적 가치',
-    round: 2
-  },
-  {
-    title: '호스피탈리티 근무환경이 직무만족 및 이직의도에 미치는 인과 분석',
-    category: '인적 자원 관리',
-    description: '서비스 직무 몰입에 영향을 미치는 내부 마케팅 및 근무 만족도 제고 전략 제안',
-    round: 2
+    round: 2,
+    presenter: {
+      name: '송진혁',
+      role: 'YB',
+      affiliation: '호텔외식관광학과 23',
+      image: 'https://i.ibb.co/TGvX4D7/28.png'
+    }
   }
 ];
 
@@ -252,14 +299,34 @@ export const WeeklyRoadmap = () => {
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  // Modals state
+  // Password Authorization State (Code: 2405)
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState<boolean>(false);
+  const [passwordInput, setPasswordInput] = useState<string>('');
+  const [passwordError, setPasswordError] = useState<boolean>(false);
+  const [pendingAction, setPendingAction] = useState<
+    | { type: 'add_session' }
+    | { type: 'edit_session'; session: WeeklySession }
+    | { type: 'delete_session'; session: WeeklySession }
+    | { type: 'reset_sessions' }
+    | { type: 'add_seminar_topic' }
+    | { type: 'edit_seminar_topic'; topic: SeminarTopicData }
+    | { type: 'delete_seminar_topic'; topicId: string }
+    | null
+  >(null);
+
+  // Seminar topics state
+  const [seminarTopics, setSeminarTopics] = useState<SeminarTopicData[]>([]);
+  const [isSeminarModalOpen, setIsSeminarModalOpen] = useState<boolean>(false);
+  const [editingSeminarTopic, setEditingSeminarTopic] = useState<SeminarTopicData | null>(null);
+
+  // Weekly Sessions Modals state
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
   const [editingSession, setEditingSession] = useState<WeeklySession | null>(null);
   const [isConfirmResetOpen, setIsConfirmResetOpen] = useState<boolean>(false);
   const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState<boolean>(false);
   const [sessionToDelete, setSessionToDelete] = useState<WeeklySession | null>(null);
 
-  // Form Fields
+  // Form Fields for Weekly Sessions
   const [formWeek, setFormWeek] = useState<number>(1);
   const [formTrack, setFormTrack] = useState<string>('공통 (Common)');
   const [formTitle, setFormTitle] = useState<string>('');
@@ -267,6 +334,7 @@ export const WeeklyRoadmap = () => {
   const [formDeliverable, setFormDeliverable] = useState<string>('');
   const [formSemester, setFormSemester] = useState<string>('1학기');
 
+  // Fetch weekly sessions
   const fetchSessions = async () => {
     setIsLoading(true);
     setErrorMsg(null);
@@ -278,7 +346,6 @@ export const WeeklyRoadmap = () => {
         fetched.push({ id: doc.id, ...doc.data() } as WeeklySession);
       });
 
-      // If no sessions exist in DB, pre-seed them for an exquisite user experience!
       if (fetched.length === 0) {
         await seedDefaultSessions();
       } else {
@@ -296,6 +363,47 @@ export const WeeklyRoadmap = () => {
     fetchSessions();
   }, []);
 
+  // Sync seminar topics with Firestore
+  useEffect(() => {
+    const unsub = onSnapshot(collection(db, 'seminarTopics'), (snapshot) => {
+      if (snapshot.empty) {
+        seedInitialSeminarTopics();
+      } else {
+        const fetchedTopics: SeminarTopicData[] = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        })) as SeminarTopicData[];
+        setSeminarTopics(fetchedTopics);
+      }
+    }, (err) => {
+      console.error('Seminar topics listener error:', err);
+      setSeminarTopics(INITIAL_SEMINAR_TOPICS);
+    });
+
+    return () => unsub();
+  }, []);
+
+  const seedInitialSeminarTopics = async () => {
+    try {
+      const batch = writeBatch(db);
+      INITIAL_SEMINAR_TOPICS.forEach((topic) => {
+        const docRef = doc(db, 'seminarTopics', topic.id!);
+        batch.set(docRef, {
+          title: topic.title,
+          category: topic.category,
+          description: topic.description,
+          round: topic.round,
+          presenter: topic.presenter,
+          createdAt: serverTimestamp()
+        });
+      });
+      await batch.commit();
+    } catch (err) {
+      console.error('Failed to seed seminar topics:', err);
+      setSeminarTopics(INITIAL_SEMINAR_TOPICS);
+    }
+  };
+
   const seedDefaultSessions = async () => {
     setIsSaving(true);
     try {
@@ -309,7 +417,6 @@ export const WeeklyRoadmap = () => {
       });
       await batch.commit();
       
-      // Re-fetch
       const q = query(collection(db, 'weeklySessions'), orderBy('week', 'asc'));
       const snapshot = await getDocs(q);
       const fetched: WeeklySession[] = [];
@@ -329,7 +436,6 @@ export const WeeklyRoadmap = () => {
     setIsSaving(true);
     setErrorMsg(null);
     try {
-      // 1. Delete all current
       const snapshot = await getDocs(collection(db, 'weeklySessions'));
       const batch = writeBatch(db);
       snapshot.forEach((doc) => {
@@ -337,7 +443,6 @@ export const WeeklyRoadmap = () => {
       });
       await batch.commit();
 
-      // 2. Seed default
       await seedDefaultSessions();
       setIsConfirmResetOpen(false);
     } catch (err) {
@@ -348,9 +453,48 @@ export const WeeklyRoadmap = () => {
     }
   };
 
-  const handleOpenAddForm = () => {
+  // Password Submit Handler
+  const handlePasswordSubmit = () => {
+    if (passwordInput === '2405') {
+      setIsPasswordModalOpen(false);
+      setPasswordInput('');
+      setPasswordError(false);
+
+      if (pendingAction) {
+        switch (pendingAction.type) {
+          case 'add_session':
+            executeOpenAddForm();
+            break;
+          case 'edit_session':
+            executeOpenEditForm(pendingAction.session);
+            break;
+          case 'delete_session':
+            setSessionToDelete(pendingAction.session);
+            setIsConfirmDeleteOpen(true);
+            break;
+          case 'reset_sessions':
+            setIsConfirmResetOpen(true);
+            break;
+          case 'add_seminar_topic':
+            executeOpenAddSeminarTopic();
+            break;
+          case 'edit_seminar_topic':
+            executeOpenEditSeminarTopic(pendingAction.topic);
+            break;
+          case 'delete_seminar_topic':
+            executeDeleteSeminarTopic(pendingAction.topicId);
+            break;
+        }
+      }
+      setPendingAction(null);
+    } else {
+      setPasswordError(true);
+    }
+  };
+
+  // Executions after password pass
+  const executeOpenAddForm = () => {
     setEditingSession(null);
-    // Find next week number for convenience
     const currentSemesterSessions = sessions.filter(s => s.semester === selectedSemester);
     const maxWeek = currentSemesterSessions.reduce((max, s) => s.week > max ? s.week : max, 0);
     
@@ -363,7 +507,7 @@ export const WeeklyRoadmap = () => {
     setIsFormOpen(true);
   };
 
-  const handleOpenEditForm = (session: WeeklySession) => {
+  const executeOpenEditForm = (session: WeeklySession) => {
     setEditingSession(session);
     setFormWeek(session.week);
     setFormTrack(session.track);
@@ -374,6 +518,62 @@ export const WeeklyRoadmap = () => {
     setIsFormOpen(true);
   };
 
+  const executeOpenAddSeminarTopic = () => {
+    setEditingSeminarTopic(null);
+    setIsSeminarModalOpen(true);
+  };
+
+  const executeOpenEditSeminarTopic = (topic: SeminarTopicData) => {
+    setEditingSeminarTopic(topic);
+    setIsSeminarModalOpen(true);
+  };
+
+  const executeDeleteSeminarTopic = async (topicId: string) => {
+    if (!window.confirm('이 세미나 발표 주제를 정말로 삭제하시겠습니까?')) return;
+    try {
+      await deleteDoc(doc(db, 'seminarTopics', topicId));
+    } catch (err) {
+      console.error('Error deleting seminar topic:', err);
+      handleFirestoreError(err, OperationType.DELETE, `seminarTopics/${topicId}`);
+    }
+  };
+
+  // Password Trigger Wrappers
+  const handleOpenAddForm = () => {
+    setPendingAction({ type: 'add_session' });
+    setIsPasswordModalOpen(true);
+  };
+
+  const handleOpenEditForm = (session: WeeklySession) => {
+    setPendingAction({ type: 'edit_session', session });
+    setIsPasswordModalOpen(true);
+  };
+
+  const handleRequestDeleteSession = (session: WeeklySession) => {
+    setPendingAction({ type: 'delete_session', session });
+    setIsPasswordModalOpen(true);
+  };
+
+  const handleRequestReset = () => {
+    setPendingAction({ type: 'reset_sessions' });
+    setIsPasswordModalOpen(true);
+  };
+
+  const handleOpenAddSeminarTopic = () => {
+    setPendingAction({ type: 'add_seminar_topic' });
+    setIsPasswordModalOpen(true);
+  };
+
+  const handleOpenEditSeminarTopic = (topic: SeminarTopicData) => {
+    setPendingAction({ type: 'edit_seminar_topic', topic });
+    setIsPasswordModalOpen(true);
+  };
+
+  const handleDeleteSeminarTopic = (topicId: string) => {
+    setPendingAction({ type: 'delete_seminar_topic', topicId });
+    setIsPasswordModalOpen(true);
+  };
+
   const handleSaveSession = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formTitle.trim()) return;
@@ -382,7 +582,6 @@ export const WeeklyRoadmap = () => {
     setErrorMsg(null);
     try {
       if (editingSession?.id) {
-        // Edit Mode
         const docRef = doc(db, 'weeklySessions', editingSession.id);
         const updateData = {
           week: Number(formWeek),
@@ -393,10 +592,8 @@ export const WeeklyRoadmap = () => {
           semester: formSemester,
         };
         await updateDoc(docRef, updateData);
-        
         setSessions(prev => prev.map(s => s.id === editingSession.id ? { ...s, ...updateData } : s));
       } else {
-        // Add Mode
         const docRef = await addDoc(collection(db, 'weeklySessions'), {
           week: Number(formWeek),
           track: formTrack,
@@ -406,220 +603,225 @@ export const WeeklyRoadmap = () => {
           semester: formSemester,
           createdAt: serverTimestamp()
         });
-
-        const newSession: WeeklySession = {
+        setSessions(prev => [...prev, {
           id: docRef.id,
           week: Number(formWeek),
           track: formTrack,
           title: formTitle,
           description: formDescription,
           deliverable: formDeliverable,
-          semester: formSemester,
-        };
-        setSessions(prev => [...prev, newSession]);
+          semester: formSemester
+        }]);
       }
       setIsFormOpen(false);
     } catch (err) {
-      handleFirestoreError(err, editingSession ? OperationType.UPDATE : OperationType.CREATE, 'weeklySessions');
-      setErrorMsg('세션을 저장하는 중 오류가 발생했습니다.');
+      handleFirestoreError(err, OperationType.WRITE, 'weeklySessions');
+      setErrorMsg('세션 저장 중 오류가 발생했습니다.');
     } finally {
       setIsSaving(false);
     }
   };
 
-  const handleConfirmDelete = (session: WeeklySession) => {
-    setSessionToDelete(session);
-    setIsConfirmDeleteOpen(true);
-  };
-
   const handleDeleteSession = async () => {
     if (!sessionToDelete?.id) return;
     setIsSaving(true);
-    setErrorMsg(null);
     try {
       await deleteDoc(doc(db, 'weeklySessions', sessionToDelete.id));
       setSessions(prev => prev.filter(s => s.id !== sessionToDelete.id));
       setIsConfirmDeleteOpen(false);
       setSessionToDelete(null);
     } catch (err) {
-      handleFirestoreError(err, OperationType.DELETE, 'weeklySessions');
-      setErrorMsg('세션을 삭제하는 중 오류가 발생했습니다.');
+      handleFirestoreError(err, OperationType.DELETE, `weeklySessions/${sessionToDelete.id}`);
+      setErrorMsg('삭제 중 오류가 발생했습니다.');
     } finally {
       setIsSaving(false);
     }
   };
 
-  // Filter and sort sessions
-  const filteredSessions = sessions
-    .filter(s => s.semester === selectedSemester)
-    .sort((a, b) => a.week - b.week);
-
-  // Track colors helper
-  const getTrackBadgeClass = (track: string) => {
-    if (track.includes('세미나')) {
-      return 'bg-navy-900/5 text-navy-900 border-navy-900/10';
-    } else if (track.includes('워크숍')) {
-      return 'bg-hive-green/5 text-hive-green border-hive-green/20';
-    } else if (track.includes('프로젝트')) {
-      return 'bg-hive-green text-white border-transparent';
-    } else if (track.includes('학술제')) {
-      return 'bg-navy-900 text-white border-transparent';
+  const handleSaveSeminarTopic = async (data: SeminarTopicData) => {
+    try {
+      if (data.id) {
+        // Edit
+        const docRef = doc(db, 'seminarTopics', data.id);
+        await setDoc(docRef, {
+          title: data.title,
+          category: data.category,
+          description: data.description,
+          round: data.round,
+          presenter: data.presenter,
+          createdAt: serverTimestamp()
+        });
+      } else {
+        // Add
+        const newRef = doc(collection(db, 'seminarTopics'));
+        await setDoc(newRef, {
+          title: data.title,
+          category: data.category,
+          description: data.description,
+          round: data.round,
+          presenter: data.presenter,
+          createdAt: serverTimestamp()
+        });
+      }
+    } catch (err) {
+      console.error('Error saving seminar topic:', err);
+      handleFirestoreError(err, OperationType.WRITE, 'seminarTopics');
     }
-    return 'bg-navy-900/5 text-navy-900 border-navy-900/10';
   };
+
+  const currentSessions = sessions.filter(s => s.semester === selectedSemester);
+  const filteredSeminarTopics = seminarTopics.filter(t => t.round === presentationRound);
 
   return (
     <div className="w-full">
-      {/* Semester Header & Controls in one bar */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-        <div className="flex items-center gap-3">
-          <Calendar className="w-6 h-6 text-hive-green" />
-          <h4 className="text-xl font-bold text-navy-900 font-display">
-            {selectedSemester} 주차별 학술 세션 계획
-          </h4>
-          <span className="text-xs bg-navy-900/5 text-navy-900/60 font-bold px-2.5 py-1 rounded-full">
-            총 {filteredSessions.length}개 세션
+      {/* Semester Selector Header */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+        <div>
+          <span className="inline-flex items-center space-x-1 px-3 py-1 bg-hive-green/10 text-hive-green text-xs font-bold rounded-full mb-2">
+            <Calendar className="w-3.5 h-3.5 mr-1" />
+            Curriculum Roadmap
           </span>
+          <h3 className="text-2xl font-bold text-navy-900 font-display">
+            학기별 교육 커리큘럼 세션
+          </h3>
+          <p className="text-xs text-navy-900/60 font-medium mt-1">
+            HIVE 학회의 정기 세미나, 워크숍, 팀 프로젝트 주차별 실무 활동 로드맵입니다.
+          </p>
         </div>
 
-        <div className="flex items-center gap-2 self-end md:self-center">
-          {/* Semester selection */}
-          <div className="bg-navy-900/5 p-1 rounded-xl flex">
+        {/* Action Controls */}
+        <div className="flex flex-wrap items-center gap-2 self-stretch sm:self-auto">
+          {/* Semester Tabs */}
+          <div className="flex bg-navy-900/5 p-1 rounded-2xl border border-navy-900/10">
             <button
               onClick={() => setSelectedSemester('1학기')}
-              className={`px-4 py-1.5 rounded-lg text-xs font-extrabold transition-all duration-300 cursor-pointer ${
+              className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all duration-300 cursor-pointer ${
                 selectedSemester === '1학기'
-                  ? 'bg-hive-green text-white shadow-xs'
-                  : 'text-navy-900/50 hover:text-navy-900 hover:bg-hive-green/5'
+                  ? 'bg-navy-900 text-white shadow-md'
+                  : 'text-navy-900/60 hover:text-navy-900 hover:bg-navy-900/5'
               }`}
             >
               1학기 (Spring)
             </button>
             <button
               onClick={() => setSelectedSemester('2학기')}
-              className={`px-4 py-1.5 rounded-lg text-xs font-extrabold transition-all duration-300 cursor-pointer ${
+              className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all duration-300 cursor-pointer ${
                 selectedSemester === '2학기'
-                  ? 'bg-hive-green text-white shadow-xs'
-                  : 'text-navy-900/50 hover:text-navy-900 hover:bg-hive-green/5'
+                  ? 'bg-navy-900 text-white shadow-md'
+                  : 'text-navy-900/60 hover:text-navy-900 hover:bg-navy-900/5'
               }`}
             >
               2학기 (Fall)
             </button>
           </div>
 
-          {/* Create Button */}
+          {/* Add Session Button */}
           <button
             onClick={handleOpenAddForm}
-            className="flex items-center gap-1 bg-navy-900 text-white px-3.5 py-2 rounded-xl text-xs font-extrabold hover:bg-black transition-all shadow-xs shrink-0 cursor-pointer"
+            className="px-3.5 py-2 rounded-xl bg-hive-green text-white font-extrabold text-xs hover:bg-hive-green/90 transition-all cursor-pointer shadow-xs flex items-center gap-1"
           >
             <Plus className="w-3.5 h-3.5" />
-            <span>주차 세션 추가</span>
+            <span>세션 추가</span>
           </button>
 
           {/* Reset Button */}
           <button
-            onClick={() => setIsConfirmResetOpen(true)}
-            className="flex items-center gap-1 bg-white text-rose-600 border border-rose-200 px-3.5 py-2 rounded-xl text-xs font-extrabold hover:bg-rose-50 transition-all shrink-0 cursor-pointer"
-            title="기본 커리큘럼으로 초기화"
+            onClick={handleRequestReset}
+            title="기본 세션 커리큘럼으로 초기화"
+            className="p-2 rounded-xl text-navy-900/40 hover:text-rose-600 hover:bg-rose-50 transition-colors border border-navy-900/10 cursor-pointer"
           >
-            <RotateCcw className="w-3.5 h-3.5" />
-            <span>초기화</span>
+            <RotateCcw className="w-4 h-4" />
           </button>
         </div>
       </div>
 
       {errorMsg && (
-        <div className="bg-rose-50 border border-rose-200 rounded-2xl p-4 mb-6 flex items-start gap-3">
-          <AlertTriangle className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
-          <p className="text-sm text-rose-700 font-semibold">{errorMsg}</p>
+        <div className="mb-6 p-4 bg-rose-50 border border-rose-200 rounded-2xl text-rose-700 text-xs font-bold flex items-center gap-2">
+          <AlertTriangle className="w-4 h-4 shrink-0" />
+          <span>{errorMsg}</span>
         </div>
       )}
 
-      {/* Loading state */}
+      {/* Loading State */}
       {isLoading ? (
-        <div className="flex flex-col items-center justify-center py-20 bg-white rounded-3xl border border-navy-900/10">
-          <Loader2 className="w-8 h-8 text-hive-green animate-spin mb-3" />
-          <p className="text-sm text-navy-900/50 font-bold">주차별 세션을 불러오는 중입니다...</p>
+        <div className="py-20 flex flex-col items-center justify-center text-navy-900/40 space-y-3">
+          <Loader2 className="w-8 h-8 animate-spin text-hive-green" />
+          <p className="text-xs font-bold">커리큘럼 데이터를 불러오는 중...</p>
         </div>
       ) : (
-        <div className="space-y-4">
+        /* Sessions Timeline Grid */
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
           <AnimatePresence mode="popLayout">
-            {filteredSessions.length === 0 ? (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="flex flex-col items-center justify-center py-16 bg-white rounded-3xl border border-dashed border-navy-900/20"
-              >
-                <Calendar className="w-10 h-10 text-navy-900/30 mb-2" />
-                <p className="text-sm text-navy-900/60 font-bold">등록된 세션이 없습니다.</p>
+            {currentSessions.length === 0 ? (
+              <div className="col-span-full py-16 text-center bg-navy-900/5 rounded-3xl border border-dashed border-navy-900/10">
+                <BookOpen className="w-10 h-10 text-navy-900/20 mx-auto mb-3" />
+                <p className="text-sm font-bold text-navy-900/60">
+                  등록된 {selectedSemester} 세션이 없습니다.
+                </p>
                 <button
                   onClick={handleOpenAddForm}
-                  className="mt-4 text-xs font-extrabold text-hive-green flex items-center gap-1 hover:underline"
+                  className="mt-3 inline-flex items-center gap-1.5 px-4 py-2 bg-navy-900 text-white rounded-xl text-xs font-bold hover:bg-navy-800 transition-colors cursor-pointer"
                 >
-                  <PlusCircle className="w-3.5 h-3.5" />
-                  첫 주차 세션 추가하기
+                  <Plus className="w-3.5 h-3.5" />첫 세션 추가하기
                 </button>
-              </motion.div>
+              </div>
             ) : (
-              filteredSessions.map((session, idx) => (
+              currentSessions.map((session, idx) => (
                 <motion.div
                   key={session.id || idx}
-                  initial={{ opacity: 0, y: 15 }}
+                  layout
+                  initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.25, delay: idx * 0.05 }}
-                  className="bg-white rounded-2xl p-5 border border-navy-900/5 shadow-xs hover:shadow-md hover:border-navy-900/10 transition-all duration-300 flex flex-col sm:flex-row items-start gap-5 group"
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.3, delay: idx * 0.05 }}
+                  className="bg-white rounded-2xl p-6 border border-navy-900/5 shadow-xs hover:shadow-md hover:border-hive-green/30 transition-all duration-300 flex flex-col justify-between group relative overflow-hidden"
                 >
-                  {/* Left Week Square badge */}
-                  <div className="w-16 h-16 rounded-xl bg-navy-900 text-white flex flex-col items-center justify-center shrink-0 shadow-xs">
-                    <span className="text-[9px] font-bold tracking-widest text-white/60">WEEK</span>
-                    <span className="text-2xl font-black font-display leading-none mt-0.5">{session.week}</span>
-                  </div>
-
-                  {/* Content area */}
-                  <div className="flex-grow min-w-0">
-                    <div className="flex items-center gap-2 mb-2 flex-wrap">
-                      <span className={`px-2.5 py-0.5 text-[10px] font-extrabold border rounded-md uppercase tracking-wider ${getTrackBadgeClass(session.track)}`}>
+                  <div>
+                    {/* Top Row: Week & Track */}
+                    <div className="flex items-center justify-between mb-3.5">
+                      <span className="px-2.5 py-1 bg-navy-900 text-white text-[10px] font-black rounded-lg font-mono">
+                        WEEK {session.week}
+                      </span>
+                      <span className="text-[11px] font-extrabold text-hive-green tracking-wider uppercase bg-hive-green/10 px-2.5 py-0.5 rounded-full">
                         {session.track}
                       </span>
                     </div>
 
-                    <h5 className="text-base font-extrabold text-navy-900 mb-1.5 leading-snug">
+                    {/* Title */}
+                    <h4 className="text-base font-extrabold text-navy-900 mb-2 group-hover:text-hive-green transition-colors leading-snug">
                       {session.title}
-                    </h5>
-                    
-                    <p className="text-xs text-navy-900/60 font-semibold mb-3 leading-relaxed">
+                    </h4>
+
+                    {/* Description */}
+                    <p className="text-xs text-navy-900/70 font-medium leading-relaxed mb-4">
                       {session.description}
                     </p>
-
-                    {session.deliverable && (
-                      <div className="flex items-center gap-1.5 flex-wrap">
-                        <span className="text-[10px] font-black text-navy-900 shrink-0">산출물:</span>
-                        <span className="px-2.5 py-1 text-[10px] font-bold bg-[#f8fafc] text-navy-900/80 border border-slate-200 rounded-md">
-                          {session.deliverable}
-                        </span>
-                      </div>
-                    )}
                   </div>
 
-                  {/* Actions buttons */}
-                  <div className="flex sm:flex-col items-center gap-1.5 sm:self-center self-end shrink-0 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                    <button
-                      onClick={() => handleOpenEditForm(session)}
-                      className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-bold text-navy-900/60 bg-navy-900/5 hover:bg-navy-900/10 hover:text-navy-900 transition-all cursor-pointer"
-                      title="세션 수정"
-                    >
-                      <Edit2 className="w-3 h-3" />
-                      <span>수정</span>
-                    </button>
-                    <button
-                      onClick={() => handleConfirmDelete(session)}
-                      className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-bold text-rose-600 bg-rose-50 hover:bg-rose-100 transition-all cursor-pointer"
-                      title="세션 삭제"
-                    >
-                      <Trash2 className="w-3 h-3" />
-                      <span>삭제</span>
-                    </button>
+                  {/* Bottom: Deliverable & Actions */}
+                  <div className="pt-4 border-t border-navy-900/5 flex items-center justify-between">
+                    <div className="flex items-center space-x-1.5 text-[11px] text-navy-900/60 font-semibold truncate pr-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-hive-green shrink-0" />
+                      <span className="truncate">{session.deliverable || '산출물 작성'}</span>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex items-center gap-1 opacity-80 group-hover:opacity-100 transition-opacity shrink-0">
+                      <button
+                        onClick={() => handleOpenEditForm(session)}
+                        className="p-1.5 rounded-lg text-navy-900/40 hover:text-navy-900 hover:bg-navy-900/5 transition-colors cursor-pointer"
+                        title="수정"
+                      >
+                        <Edit2 className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        onClick={() => handleRequestDeleteSession(session)}
+                        className="p-1.5 rounded-lg text-navy-900/40 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+                        title="삭제"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
                   </div>
                 </motion.div>
               ))
@@ -628,7 +830,7 @@ export const WeeklyRoadmap = () => {
         </div>
       )}
 
-      {/* 1학기 학술 세미나 연구 주제 Section */}
+      {/* 1학기 학회원 학술 세미나 주제 Section */}
       {selectedSemester === '1학기' && (
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -642,76 +844,234 @@ export const WeeklyRoadmap = () => {
                 💡 Academic Seminar Topics
               </span>
               <h4 className="text-2xl font-bold text-navy-900 font-display">
-                1학기 학회원 학술 세미나 연구 주제
+                1학기 학회원 학술 세미나 주제
               </h4>
-              <p className="text-xs text-navy-900/50 font-semibold mt-1">
-                학회원들이 1학기 동안 진행한 개인별 연구 주제 및 글로벌 서비스 관광 이슈 분석 세션의 실무 발표 아카이브입니다.
+              <p className="text-xs text-navy-900/60 font-semibold mt-1">
+                학회원들이 1학기 동안 진행한 개인별 세미나 발표 주제 및 글로벌 서비스 관광 이슈 분석 세션의 실무 발표 아카이브입니다.
               </p>
             </div>
             
-            {/* Round Filter Tabs */}
-            <div className="flex gap-1 bg-navy-900/5 p-1 rounded-xl self-start lg:self-end">
+            {/* Round Filter Tabs & Add Button */}
+            <div className="flex flex-wrap items-center gap-2 self-start lg:self-end">
+              <div className="flex gap-1 bg-navy-900/5 p-1 rounded-xl">
+                <button
+                  type="button"
+                  onClick={() => setPresentationRound(1)}
+                  className={`px-4 py-2 rounded-lg text-xs font-extrabold transition-all duration-300 cursor-pointer ${
+                    presentationRound === 1
+                      ? 'bg-hive-green text-white shadow-xs'
+                      : 'text-navy-900/50 hover:text-navy-900 hover:bg-hive-green/5'
+                  }`}
+                >
+                  1차 학술 세미나 발표
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPresentationRound(2)}
+                  className={`px-4 py-2 rounded-lg text-xs font-extrabold transition-all duration-300 cursor-pointer ${
+                    presentationRound === 2
+                      ? 'bg-hive-green text-white shadow-xs'
+                      : 'text-navy-900/50 hover:text-navy-900 hover:bg-hive-green/5'
+                  }`}
+                >
+                  2차 글로벌 관광 이슈 분석
+                </button>
+              </div>
+
+              {/* Add Seminar Topic Button */}
               <button
                 type="button"
-                onClick={() => setPresentationRound(1)}
-                className={`px-4 py-2 rounded-lg text-xs font-extrabold transition-all duration-300 cursor-pointer ${
-                  presentationRound === 1
-                    ? 'bg-hive-green text-white shadow-xs'
-                    : 'text-navy-900/50 hover:text-navy-900 hover:bg-hive-green/5'
-                }`}
+                onClick={handleOpenAddSeminarTopic}
+                className="px-3.5 py-2 rounded-xl bg-navy-900 text-white font-bold text-xs hover:bg-navy-800 transition-all cursor-pointer shadow-xs flex items-center gap-1.5"
               >
-                1차 학술 세미나 발표
-              </button>
-              <button
-                type="button"
-                onClick={() => setPresentationRound(2)}
-                className={`px-4 py-2 rounded-lg text-xs font-extrabold transition-all duration-300 cursor-pointer ${
-                  presentationRound === 2
-                    ? 'bg-hive-green text-white shadow-xs'
-                    : 'text-navy-900/50 hover:text-navy-900 hover:bg-hive-green/5'
-                }`}
-              >
-                2차 글로벌 관광 이슈 분석
+                <Plus className="w-3.5 h-3.5 text-hive-green" />
+                <span>세미나 주제 등록</span>
               </button>
             </div>
           </div>
 
           {/* Grid of Topics */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {FIRST_SEMESTER_TOPICS.filter(t => t.round === presentationRound).map((topic, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.3, delay: i * 0.05 }}
-                className="bg-white rounded-2xl p-6 border border-navy-900/5 shadow-xs hover:shadow-md hover:border-hive-green/20 transition-all duration-300 flex flex-col justify-between"
-              >
-                <div>
-                  <span className="inline-block px-2.5 py-0.5 bg-navy-900/5 text-navy-900/70 border border-navy-900/10 text-[9px] font-extrabold rounded-md mb-3.5 tracking-wider uppercase">
-                    {topic.category}
-                  </span>
-                  <h5 className="text-sm font-extrabold text-navy-900 mb-2 leading-snug">
-                    {topic.title}
-                  </h5>
-                  <p className="text-[11px] text-navy-900/60 font-semibold leading-relaxed">
-                    {topic.description}
-                  </p>
-                </div>
-                <div className="mt-5 pt-3.5 border-t border-navy-900/5 flex items-center justify-between">
-                  <span className="text-[9px] font-black text-hive-green uppercase tracking-wider">
-                    {presentationRound === 1 ? 'Academic Research' : 'Global Issues'}
-                  </span>
-                  <span className="text-[10px] font-bold text-navy-900/30 font-mono">
-                    HIVE-{presentationRound === 1 ? 'R1' : 'R2'}-0{i + 1}
-                  </span>
-                </div>
-              </motion.div>
-            ))}
+            {filteredSeminarTopics.length === 0 ? (
+              <div className="col-span-full py-12 text-center bg-navy-900/5 rounded-3xl border border-dashed border-navy-900/10">
+                <Lightbulb className="w-8 h-8 text-navy-900/20 mx-auto mb-2" />
+                <p className="text-xs font-bold text-navy-900/60">
+                  {presentationRound}차 세미나에 등록된 발표 주제가 없습니다.
+                </p>
+                <button
+                  type="button"
+                  onClick={handleOpenAddSeminarTopic}
+                  className="mt-3 inline-flex items-center gap-1 px-3.5 py-1.5 bg-hive-green text-white rounded-xl text-xs font-bold hover:bg-hive-green/90 transition-colors cursor-pointer"
+                >
+                  <Plus size={14} /> 첫 세미나 주제 기고하기
+                </button>
+              </div>
+            ) : (
+              filteredSeminarTopics.map((topic, i) => (
+                <motion.div
+                  key={topic.id || i}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3, delay: i * 0.04 }}
+                  className="bg-white rounded-2xl p-6 border border-navy-900/5 shadow-xs hover:shadow-md hover:border-hive-green/20 transition-all duration-300 flex flex-col justify-between group relative"
+                >
+                  <div>
+                    {/* Category Badge & Actions */}
+                    <div className="flex items-center justify-between mb-3.5">
+                      <span className="inline-block px-2.5 py-0.5 bg-navy-900/5 text-navy-900/70 border border-navy-900/10 text-[9px] font-extrabold rounded-md tracking-wider uppercase">
+                        {topic.category}
+                      </span>
+
+                      {/* Edit / Delete Options */}
+                      <div className="flex items-center gap-1 opacity-70 group-hover:opacity-100 transition-opacity">
+                        <button
+                          type="button"
+                          onClick={() => handleOpenEditSeminarTopic(topic)}
+                          className="p-1 rounded text-navy-900/40 hover:text-navy-900 hover:bg-navy-900/5 transition-colors cursor-pointer"
+                          title="발표 주제 수정"
+                        >
+                          <Edit2 size={13} />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => topic.id && handleDeleteSeminarTopic(topic.id)}
+                          className="p-1 rounded text-navy-900/40 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+                          title="발표 주제 삭제"
+                        >
+                          <Trash2 size={13} />
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Topic Title */}
+                    <h5 className="text-sm font-extrabold text-navy-900 mb-2 leading-snug group-hover:text-hive-green transition-colors">
+                      {topic.title}
+                    </h5>
+
+                    {/* Description */}
+                    <p className="text-[11px] text-navy-900/60 font-semibold leading-relaxed mb-4">
+                      {topic.description}
+                    </p>
+                  </div>
+
+                  {/* Presenter Profile Card Footer */}
+                  <div className="mt-4 pt-3.5 border-t border-navy-900/5 flex items-center justify-between">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <img
+                        src={topic.presenter?.image || 'https://i.ibb.co/TGvX4D7/28.png'}
+                        alt={topic.presenter?.name || '발표자'}
+                        className="w-8 h-8 rounded-full object-cover border border-navy-900/10 shrink-0 shadow-2xs"
+                      />
+                      <div className="min-w-0">
+                        <div className="text-[11px] font-extrabold text-navy-900 leading-none truncate flex items-center gap-1">
+                          <span>{topic.presenter?.name || '익명 학회원'}</span>
+                          {topic.presenter?.role && (
+                            <span className="text-[9px] font-bold text-hive-green bg-hive-green/10 px-1 py-0.2 rounded">
+                              {topic.presenter.role}
+                            </span>
+                          )}
+                        </div>
+                        <div className="text-[10px] text-navy-900/40 font-semibold truncate mt-0.5">
+                          {topic.presenter?.affiliation || '호텔외식관광학과'}
+                        </div>
+                      </div>
+                    </div>
+
+                    <span className="text-[9px] font-black text-hive-green uppercase tracking-wider shrink-0 font-mono ml-2">
+                      {presentationRound === 1 ? 'SEMINAR R1' : 'GLOBAL R2'}
+                    </span>
+                  </div>
+                </motion.div>
+              ))
+            )}
           </div>
         </motion.div>
       )}
 
-      {/* MODAL: Add/Edit Form */}
+      {/* MODAL: Password Verification */}
+      <AnimatePresence>
+        {isPasswordModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-navy-900/50 backdrop-blur-xs">
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-navy-900/10 space-y-4"
+            >
+              <div className="mx-auto w-12 h-12 rounded-2xl bg-hive-green/10 flex items-center justify-center text-hive-green">
+                <Lock className="w-6 h-6" />
+              </div>
+
+              <div className="text-center">
+                <h5 className="font-extrabold text-navy-900 text-base">관리자 암호 확인</h5>
+                <p className="text-xs text-navy-900/60 font-medium mt-1 leading-relaxed">
+                  교육 커리큘럼 및 학술 세미나 발표 주제를 수정/등록하려면 비밀번호 (2405)를 입력하세요.
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <input
+                  type="password"
+                  placeholder="비밀번호 입력"
+                  value={passwordInput}
+                  onChange={(e) => {
+                    setPasswordInput(e.target.value);
+                    setPasswordError(false);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      handlePasswordSubmit();
+                    }
+                  }}
+                  className={`w-full px-4 py-2.5 border rounded-xl text-center text-sm font-bold tracking-widest focus:outline-none ${
+                    passwordError ? 'border-rose-500 focus:border-rose-500' : 'border-navy-900/15 focus:border-hive-green'
+                  }`}
+                  autoFocus
+                />
+                {passwordError && (
+                  <p className="text-center text-[10px] text-rose-500 font-bold">비밀번호가 일치하지 않습니다.</p>
+                )}
+              </div>
+
+              <div className="flex gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsPasswordModalOpen(false);
+                    setPasswordInput('');
+                    setPasswordError(false);
+                    setPendingAction(null);
+                  }}
+                  className="flex-1 py-2.5 rounded-xl text-xs font-extrabold text-navy-900/60 bg-navy-900/5 hover:bg-navy-900/10 transition-colors cursor-pointer"
+                >
+                  취소
+                </button>
+                <button
+                  type="button"
+                  onClick={handlePasswordSubmit}
+                  className="flex-1 py-2.5 bg-hive-green text-white rounded-xl text-xs font-bold hover:bg-hive-green/90 transition-all cursor-pointer shadow-xs"
+                >
+                  확인
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* MODAL: Seminar Topic Form */}
+      <SeminarTopicModal
+        isOpen={isSeminarModalOpen}
+        onClose={() => {
+          setIsSeminarModalOpen(false);
+          setEditingSeminarTopic(null);
+        }}
+        editingTopic={editingSeminarTopic}
+        defaultRound={presentationRound}
+        onSave={handleSaveSeminarTopic}
+      />
+
+      {/* MODAL: Add/Edit Weekly Session Form */}
       <AnimatePresence>
         {isFormOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-navy-900/40 backdrop-blur-xs">
@@ -728,7 +1088,7 @@ export const WeeklyRoadmap = () => {
                 </h5>
                 <button
                   onClick={() => setIsFormOpen(false)}
-                  className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-navy-900/5 text-navy-900/40 hover:text-navy-900 transition-colors"
+                  className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-navy-900/5 text-navy-900/40 hover:text-navy-900 transition-colors cursor-pointer"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -811,7 +1171,7 @@ export const WeeklyRoadmap = () => {
                 {/* Description */}
                 <div>
                   <label className="block text-[11px] font-black text-navy-900 uppercase tracking-wider mb-1.5">
-                    활동 및 연구 내용 *
+                    활동 내용 *
                   </label>
                   <textarea
                     required
@@ -830,7 +1190,7 @@ export const WeeklyRoadmap = () => {
                   </label>
                   <input
                     type="text"
-                    placeholder="예: 팀별 연구 도메인 선정 보고서"
+                    placeholder="예: 팀별 발표 자료 및 보고서"
                     value={formDeliverable}
                     onChange={(e) => setFormDeliverable(e.target.value)}
                     className="w-full px-3.5 py-2.5 rounded-xl border border-navy-900/10 text-xs font-bold focus:outline-hidden focus:border-hive-green"
@@ -877,7 +1237,7 @@ export const WeeklyRoadmap = () => {
               <div>
                 <h5 className="font-extrabold text-navy-900 text-base">커리큘럼 로드맵 초기화</h5>
                 <p className="text-xs text-navy-900/60 font-semibold mt-2 leading-relaxed">
-                  현재 등록된 모든 주차별 세션 정보가 삭제되며, HIVE 공식 기본 학술 세션 커리큘럼(12개 세션)으로 다시 세팅됩니다. 이 작업은 되돌릴 수 없습니다. 계속하시겠습니까?
+                  현재 등록된 모든 주차별 세션 정보가 삭제되며, HIVE 공식 기본 세션 커리큘럼(12개 세션)으로 다시 세팅됩니다. 이 작업은 되돌릴 수 없습니다. 계속하시겠습니까?
                 </p>
               </div>
               <div className="flex items-center justify-center gap-2 pt-2">

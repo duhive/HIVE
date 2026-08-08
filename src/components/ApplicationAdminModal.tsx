@@ -153,6 +153,16 @@ export const ApplicationAdminModal: React.FC<ApplicationAdminModalProps> = ({ is
     }
   };
 
+  const handleDownloadPhoto = (photoUrl: string, name: string, studentId: string) => {
+    if (!photoUrl) return;
+    const a = document.createElement('a');
+    a.href = photoUrl;
+    a.download = `HIVE_프로필_${name}_${studentId || '지원자'}.png`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
+
   const handleClearAll = async () => {
     if (applications.length === 0) {
       alert('삭제할 지원서 데이터가 없습니다.');
@@ -336,18 +346,33 @@ export const ApplicationAdminModal: React.FC<ApplicationAdminModalProps> = ({ is
                       className="p-4 bg-white hover:bg-slate-50/80 rounded-2xl border border-slate-200/80 shadow-2xs transition-all hover:border-hive-green/40 flex flex-col justify-between space-y-3 group"
                     >
                       <div className="flex items-start gap-3">
-                        {app.photo ? (
-                          <img 
-                            src={app.photo} 
-                            alt={app.name} 
-                            className="w-14 h-14 object-cover rounded-xl border border-slate-200 shrink-0"
-                            referrerPolicy="no-referrer"
-                          />
-                        ) : (
-                          <div className="w-14 h-14 bg-slate-100 text-slate-400 rounded-xl flex items-center justify-center shrink-0 border border-slate-200">
-                            <User size={24} />
-                          </div>
-                        )}
+                        <div className="relative group/photo shrink-0">
+                          {app.photo ? (
+                            <img 
+                              src={app.photo} 
+                              alt={app.name} 
+                              className="w-14 h-14 object-cover rounded-xl border border-slate-200 shrink-0"
+                              referrerPolicy="no-referrer"
+                            />
+                          ) : (
+                            <div className="w-14 h-14 bg-slate-100 text-slate-400 rounded-xl flex items-center justify-center shrink-0 border border-slate-200">
+                              <User size={24} />
+                            </div>
+                          )}
+                          {app.photo && (
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDownloadPhoto(app.photo, app.name, app.studentId);
+                              }}
+                              className="absolute -bottom-1 -right-1 p-1 bg-hive-green text-white rounded-md hover:scale-110 transition-all cursor-pointer shadow-sm"
+                              title="프로필 다운로드"
+                            >
+                              <Download size={10} />
+                            </button>
+                          )}
+                        </div>
 
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center justify-between gap-1 mb-1">
@@ -434,18 +459,29 @@ export const ApplicationAdminModal: React.FC<ApplicationAdminModalProps> = ({ is
 
             {/* Top Profile Card */}
             <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5 p-5 bg-slate-50 rounded-2xl border border-slate-100 mb-6">
-              {selectedApp.photo ? (
-                <img 
-                  src={selectedApp.photo} 
-                  alt={selectedApp.name} 
-                  className="w-24 h-24 object-cover rounded-2xl border-2 border-white shadow-sm shrink-0"
-                  referrerPolicy="no-referrer"
-                />
-              ) : (
-                <div className="w-24 h-24 bg-slate-200 text-slate-500 rounded-2xl flex items-center justify-center shrink-0 border-2 border-white shadow-sm">
-                  <User size={40} />
-                </div>
-              )}
+              <div className="flex flex-col items-center gap-2 shrink-0">
+                {selectedApp.photo ? (
+                  <img 
+                    src={selectedApp.photo} 
+                    alt={selectedApp.name} 
+                    className="w-24 h-24 object-cover rounded-2xl border-2 border-white shadow-sm"
+                    referrerPolicy="no-referrer"
+                  />
+                ) : (
+                  <div className="w-24 h-24 bg-slate-200 text-slate-500 rounded-2xl flex items-center justify-center border-2 border-white shadow-sm">
+                    <User size={40} />
+                  </div>
+                )}
+                {selectedApp.photo && (
+                  <button
+                    type="button"
+                    onClick={() => handleDownloadPhoto(selectedApp.photo, selectedApp.name, selectedApp.studentId)}
+                    className="inline-flex items-center gap-1.5 px-3 py-1 bg-hive-green text-white font-bold text-[11px] rounded-lg hover:bg-hive-green/90 transition-all cursor-pointer shadow-2xs mt-1"
+                  >
+                    <Download size={13} /> 프로필 다운로드
+                  </button>
+                )}
+              </div>
 
               <div className="space-y-1.5 text-center sm:text-left flex-1">
                 <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">

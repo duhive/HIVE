@@ -6,126 +6,28 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
-    // Helper functions
-    function isValidId(id) {
-      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
-    }
-
-    function incoming() {
-      return request.resource.data;
-    }
-
-    function existing() {
-      return resource.data;
-    }
-
-    function isValidApplication(data) {
-      return data.keys().hasAll(['name', 'email', 'phone', 'department', 'studentId', 'motivation', 'strengths', 'activityProposal', 'interestTrack', 'photo', 'submittedAt'])
-        && data.keys().size() == 11
-        && data.name is string && data.name.size() >= 2 && data.name.size() <= 100
-        && data.email is string && data.email.size() >= 5 && data.email.size() <= 150
-        && data.phone is string && data.phone.size() >= 8 && data.phone.size() <= 30
-        && data.department is string && data.department.size() >= 2 && data.department.size() <= 100
-        && data.studentId is string && data.studentId.size() >= 4 && data.studentId.size() <= 30
-        && data.motivation is string && data.motivation.size() >= 10 && data.motivation.size() <= 3000
-        && data.strengths is string && data.strengths.size() >= 10 && data.strengths.size() <= 3000
-        && data.activityProposal is string && data.activityProposal.size() <= 3000
-        && data.interestTrack is string && data.interestTrack.size() >= 2 && data.interestTrack.size() <= 100
-        && data.photo is string && data.photo.size() <= 800000
-        && data.submittedAt == request.time;
-    }
-
-    function isValidColumn(data) {
-      return data.keys().hasAll(['title', 'subtitle', 'excerpt', 'content', 'category', 'author', 'date', 'readTime', 'likes', 'tags', 'coverImage', 'createdAt'])
-        && data.keys().size() == 12
-        && data.title is string && data.title.size() >= 2 && data.title.size() <= 200
-        && data.subtitle is string && data.subtitle.size() <= 300
-        && data.excerpt is string && data.excerpt.size() >= 2 && data.excerpt.size() <= 1000
-        && data.content is string && data.content.size() <= 50000
-        && data.category is string && data.category.size() <= 100
-        && data.date is string && data.date.size() <= 30
-        && data.readTime is string && data.readTime.size() <= 30
-        && data.likes is number
-        && data.tags is list
-        && data.coverImage is string && data.coverImage.size() <= 1000
-        && data.author is map
-        && data.author.keys().hasAll(['name', 'role', 'affiliation', 'image'])
-        && data.author.keys().size() == 4
-        && data.author.name is string && data.author.name.size() <= 100
-        && data.author.role is string && data.author.role.size() <= 100
-        && data.author.affiliation is string && data.author.affiliation.size() <= 200
-        && data.author.image is string && data.author.image.size() <= 1000
-        && data.createdAt is timestamp;
-    }
-
-    function isValidWeeklySession(data) {
-      return data.keys().hasAll(['week', 'track', 'title', 'description', 'deliverable', 'semester', 'createdAt'])
-        && data.keys().size() == 7
-        && data.week is number
-        && data.track is string && data.track.size() <= 100
-        && data.title is string && data.title.size() >= 2 && data.title.size() <= 200
-        && data.description is string && data.description.size() <= 2000
-        && data.deliverable is string && data.deliverable.size() <= 500
-        && data.semester is string && data.semester.size() <= 20
-        && data.createdAt is timestamp;
-    }
-
-    function isValidCommunityPost(data) {
-      return data.keys().hasAll(['title', 'content', 'category', 'author', 'likes', 'views', 'comments', 'createdAt'])
-        && data.title is string && data.title.size() >= 2 && data.title.size() <= 200
-        && data.content is string && data.content.size() <= 50000
-        && data.category is string && data.category.size() <= 100
-        && data.author is string && data.author.size() <= 100
-        && data.likes is number
-        && data.views is number
-        && data.comments is list
-        && data.createdAt is timestamp;
-    }
-
-    function isValidMember(data) {
-      return data.keys().hasAll(['name', 'role', 'category', 'image', 'bio', 'education', 'skills', 'contact', 'createdAt'])
-        && data.name is string && data.name.size() >= 1 && data.name.size() <= 100
-        && data.role is string && data.role.size() <= 100
-        && data.category is string && data.category.size() <= 100
-        && data.image is string && data.image.size() <= 2000
-        && data.bio is string && data.bio.size() <= 2000
-        && data.education is string && data.education.size() <= 200
-        && data.skills is list
-        && data.contact is string && data.contact.size() <= 150
-        && data.createdAt is timestamp;
-    }
-
     match /applications/{applicationId} {
-      allow create: if isValidId(applicationId) && isValidApplication(incoming());
-      allow read, delete: if true;
+      allow read, write: if true;
     }
 
     match /columns/{columnId} {
-      allow read: if true;
-      allow create: if isValidId(columnId) && isValidColumn(incoming()) && incoming().createdAt == request.time;
-      allow update: if isValidId(columnId) && isValidColumn(incoming()) && incoming().createdAt == existing().createdAt;
-      allow delete: if true;
+      allow read, write: if true;
     }
 
     match /weeklySessions/{sessionId} {
-      allow read: if true;
-      allow create: if isValidId(sessionId) && isValidWeeklySession(incoming()) && incoming().createdAt == request.time;
-      allow update: if isValidId(sessionId) && isValidWeeklySession(incoming()) && incoming().createdAt == existing().createdAt;
-      allow delete: if true;
+      allow read, write: if true;
     }
 
     match /communityPosts/{postId} {
-      allow read: if true;
-      allow create: if isValidId(postId) && isValidCommunityPost(incoming()) && incoming().createdAt == request.time;
-      allow update: if isValidId(postId) && isValidCommunityPost(incoming()) && incoming().createdAt == existing().createdAt;
-      allow delete: if true;
+      allow read, write: if true;
     }
 
     match /customMembers/{memberId} {
-      allow read: if true;
-      allow create: if isValidId(memberId) && isValidMember(incoming()) && incoming().createdAt == request.time;
-      allow update: if isValidId(memberId) && isValidMember(incoming()) && incoming().createdAt == existing().createdAt;
-      allow delete: if true;
+      allow read, write: if true;
+    }
+
+    match /seminarTopics/{topicId} {
+      allow read, write: if true;
     }
   }
 }

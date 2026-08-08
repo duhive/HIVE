@@ -204,6 +204,30 @@
         }
       },
       "required": ["name", "role", "category", "image", "bio", "education", "skills", "contact", "createdAt"]
+    },
+    "seminarTopic": {
+      "title": "Seminar Topic",
+      "description": "An academic seminar presentation topic submitted by members",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "description": "Title of the presentation topic" },
+        "category": { "type": "string", "description": "Category or sub-track" },
+        "description": { "type": "string", "description": "Detailed description of the topic" },
+        "round": { "type": "number", "description": "Presentation round: 1 for 1차 학술 세미나, 2 for 2차 글로벌 관광 이슈" },
+        "presenter": {
+          "type": "object",
+          "description": "Presenter info including profile image and role",
+          "properties": {
+            "name": { "type": "string" },
+            "role": { "type": "string" },
+            "affiliation": { "type": "string" },
+            "image": { "type": "string" }
+          },
+          "required": ["name", "role", "affiliation", "image"]
+        },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" }
+      },
+      "required": ["title", "category", "description", "round", "presenter", "createdAt"]
     }
   },
   "firestore": {
@@ -222,6 +246,10 @@
     "/customMembers/{memberId}": {
       "schema": "customMember",
       "description": "Collection of dynamically added member profiles"
+    },
+    "/seminarTopics/{topicId}": {
+      "schema": "seminarTopic",
+      "description": "Collection of academic seminar topics"
     }
   }
 }
