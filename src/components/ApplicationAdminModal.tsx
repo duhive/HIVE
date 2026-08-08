@@ -278,12 +278,15 @@ export const ApplicationAdminModal: React.FC<ApplicationAdminModalProps> = ({ is
                   className="py-2 px-3 bg-white rounded-xl border border-slate-200 text-xs font-bold text-slate-700 focus:outline-none cursor-pointer"
                 >
                   <option value="all">전체 관심 분야</option>
-                  <option value="핀테크">핀테크</option>
-                  <option value="반도체">반도체</option>
-                  <option value="관광">관광 / 호스피탈리티</option>
-                  <option value="AI">AI / 빅데이터</option>
-                  <option value="마케팅">마케팅 / 기획</option>
-                  <option value="학술">학술 / 연구</option>
+                  <option value="관광">관광 / 호스피탈리티 / 호텔</option>
+                  <option value="무역">무역학 / 국제통상</option>
+                  <option value="미디어">미디어 / 언론 / 방송</option>
+                  <option value="마케팅">마케팅 / 브랜딩 / PR</option>
+                  <option value="경영">경영학 / 회계 / 재무</option>
+                  <option value="핀테크">핀테크 / 금융 / 투자</option>
+                  <option value="반도체">반도체 / 디스플레이</option>
+                  <option value="AI">AI / 빅데이터 / IT</option>
+                  <option value="디자인">디자인 / UX·UI</option>
                   <option value="기타">기타</option>
                 </select>
               </div>

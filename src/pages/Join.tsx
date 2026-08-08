@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import SectionHeader from '../components/SectionHeader';
 import { FAQS } from '../constants';
-import { Send, ChevronDown, Zap, Target, ArrowLeft, CheckCircle2, RotateCcw, AlertCircle, Upload, Image as ImageIcon, X, Lock } from 'lucide-react';
+import { Send, ChevronDown, ChevronUp, Zap, Target, ArrowLeft, CheckCircle2, RotateCcw, AlertCircle, Upload, Image as ImageIcon, X, Lock, Search, Check } from 'lucide-react';
 import { db, auth } from '../firebase';
 import { collection, doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { ApplicationAdminModal } from '../components/ApplicationAdminModal';
@@ -57,13 +57,31 @@ function handleFirestoreError(error: unknown, operationType: OperationType, path
 }
 
 const INTEREST_OPTIONS = [
-  '핀테크',
-  '반도체',
   '관광 / 호스피탈리티',
-  'AI / 빅데이터',
-  '마케팅 / 기획',
-  '학술 / 연구',
+  '호텔 / 외식 / 조리',
+  '무역학 / 국제통상',
+  '미디어 / 언론 / 방송',
+  '마케팅 / 브랜딩 / PR',
+  '경영학 / 회계 / 재무',
+  '핀테크 / 금융 / 투자',
+  '반도체 / 디스플레이',
+  'AI / 빅데이터 / IT',
+  '디자인 / UX·UI / 콘텐츠',
+  '행정학 / 법학 / 공공정책',
+  '항공 / 서비스 / MICE',
+  '언어 / 통번역 / 외국어',
+  '심리학 / 소비자학',
+  '바이오 / 헬스케어 / 의학',
+  '스포츠 / 체육 / 레저',
+  '환경 / 에너지 / ESG',
+  '문화예술 / 엔터테인먼트',
+  '유통 / 물류 / 커머스',
+  '창업 / 스타트업',
   '기타'
+];
+
+const CHARACTER_PRESETS = [
+  { id: 'default', name: '기본 캐릭터', url: 'https://i.ibb.co/TGvX4D7/28.png' }
 ];
 
 // Canvas-based image compressor to safe base64 format (< 100KB typical)
@@ -134,6 +152,23 @@ const Join = () => {
 
   const [selectedToggles, setSelectedToggles] = React.useState<string[]>(['관광 / 호스피탈리티']);
   const [customInterest, setCustomInterest] = React.useState<string>('');
+  const [isDropdownOpen, setIsDropdownOpen] = React.useState<boolean>(false);
+  const [searchTerm, setSearchTerm] = React.useState<string>('');
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const [photoMode, setPhotoMode] = React.useState<'file' | 'character'>('file');
+  const [selectedCharacter, setSelectedCharacter] = React.useState<string>('https://i.ibb.co/TGvX4D7/28.png');
+  const [isAgreed, setIsAgreed] = React.useState<boolean>(false);
+
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const toggleInterestOption = (option: string) => {
     setSelectedToggles(prev => {
@@ -253,14 +288,17 @@ const Join = () => {
       strengths.trim().length >= 10 && strengths.trim().length <= 2000 &&
       photo.length > 0 &&
       hasToggles &&
-      isCustomValid
+      isCustomValid &&
+      isAgreed
     );
   };
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isFormValid()) {
-      if (selectedToggles.length === 0) {
+      if (!isAgreed) {
+        setErrorMessage('개인정보 수집·이용 및 입회 지원서 작성 내용 확인 동의란에 체크해 주세요.');
+      } else if (selectedToggles.length === 0) {
         setErrorMessage('관심 분야를 최소 하나 이상 선택해 주세요.');
       } else if (selectedToggles.includes('기타') && customInterest.trim().length === 0 && selectedToggles.length === 1) {
         setErrorMessage('기타 관심 분야를 직접 입력해 주세요.');
@@ -508,59 +546,148 @@ const Join = () => {
                       </div>
                     )}
 
-                    {/* Image Upload section for visual beautiful Resume */}
+                    {/* Image Upload / Character Selection section */}
                     <div>
-                      <label className="block text-xs font-bold text-navy-900 mb-2 uppercase tracking-wide">
-                        자기소개 프로필 / 대표 이미지 <span className="text-red-500">*</span>
-                      </label>
-                      
-                      {!formData.photo ? (
-                        <div
-                          onDragOver={handleDragOver}
-                          onDragLeave={handleDragLeave}
-                          onDrop={handleDrop}
-                          onClick={() => fileInputRef.current?.click()}
-                          className={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all ${
-                            isDragging 
-                              ? 'border-hive-green bg-hive-green/5' 
-                              : 'border-navy-900/10 hover:border-navy-900/30 hover:bg-navy-900/5'
-                          }`}
-                        >
-                          <input
-                            type="file"
-                            ref={fileInputRef}
-                            onChange={handleFileChange}
-                            accept="image/*"
-                            className="hidden"
-                          />
-                          <Upload className="mx-auto w-8 h-8 text-navy-900/40 mb-3" />
-                          <p className="text-sm font-sans text-navy-900/80 font-semibold mb-1">컴퓨터에서 파일 선택 또는 드래그</p>
-                          <p className="text-xs text-navy-900/40 font-sans">지원자 확인용 사진 혹은 관련 대표 예시 이미지 (PNG, JPG)</p>
-                        </div>
-                      ) : (
-                        <div className="relative rounded-xl overflow-hidden border border-navy-900/10 bg-navy-900/5 p-4 flex items-center gap-4">
-                          <img 
-                            src={formData.photo} 
-                            alt="Applicant portrait" 
-                            className="w-20 h-20 object-cover rounded-lg border border-navy-900/20"
-                            referrerPolicy="no-referrer"
-                          />
-                          <div className="flex-1">
-                            <p className="text-xs text-green-600 font-semibold flex items-center gap-1">
-                              <CheckCircle2 size={12} /> 이미지 업로드 완료
-                            </p>
-                            <p className="text-[10px] text-navy-900/40 mt-1 font-sans">데이터베이스 저장용 최적화 압축 적용됨</p>
-                          </div>
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+                        <label className="block text-xs font-bold text-navy-900 uppercase tracking-wide">
+                          자기소개 프로필 / 대표 이미지 <span className="text-red-500">*</span>
+                        </label>
+                        <div className="flex bg-navy-900/5 p-1 rounded-xl border border-navy-900/10 gap-1 text-[11px] font-bold">
                           <button
                             type="button"
-                            onClick={removePhoto}
-                            className="p-2 bg-navy-900/10 hover:bg-red-500 hover:text-white rounded-full transition-all cursor-pointer text-navy-900/60"
-                            title="사진 제거"
+                            onClick={() => {
+                              setPhotoMode('file');
+                              if (formData.photo.startsWith('https://')) {
+                                setFormData(prev => ({ ...prev, photo: '' }));
+                              }
+                            }}
+                            className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
+                              photoMode === 'file'
+                                ? 'bg-white text-navy-900 shadow-2xs font-extrabold'
+                                : 'text-navy-900/50 hover:text-navy-900'
+                            }`}
                           >
-                            <X size={14} />
+                            직접 사진 업로드
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setPhotoMode('character');
+                              setFormData(prev => ({ ...prev, photo: selectedCharacter }));
+                            }}
+                            className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
+                              photoMode === 'character'
+                                ? 'bg-hive-green text-white shadow-2xs font-extrabold'
+                                : 'text-navy-900/50 hover:text-navy-900'
+                            }`}
+                          >
+                            기본 캐릭터 선택
                           </button>
                         </div>
+                      </div>
+
+                      {photoMode === 'file' ? (
+                        !formData.photo || formData.photo.startsWith('https://') ? (
+                          <div
+                            onDragOver={handleDragOver}
+                            onDragLeave={handleDragLeave}
+                            onDrop={handleDrop}
+                            onClick={() => fileInputRef.current?.click()}
+                            className={`border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition-all ${
+                              isDragging 
+                                ? 'border-hive-green bg-hive-green/5' 
+                                : 'border-navy-900/10 hover:border-navy-900/30 hover:bg-navy-900/5'
+                            }`}
+                          >
+                            <input
+                              type="file"
+                              ref={fileInputRef}
+                              onChange={handleFileChange}
+                              accept="image/*"
+                              className="hidden"
+                            />
+                            <Upload className="mx-auto w-7 h-7 text-navy-900/40 mb-2" />
+                            <p className="text-xs font-sans text-navy-900/80 font-semibold mb-0.5">컴퓨터에서 본인 사진 선택 또는 드래그</p>
+                            <p className="text-[11px] text-navy-900/40 font-sans">지원자 확인용 증명사진 혹은 상반신 프로필 (PNG, JPG)</p>
+                          </div>
+                        ) : (
+                          <div className="relative rounded-xl overflow-hidden border border-navy-900/10 bg-navy-900/5 p-3 flex items-center gap-4">
+                            <img 
+                              src={formData.photo} 
+                              alt="Applicant portrait" 
+                              className="w-16 h-16 object-cover rounded-lg border border-navy-900/20"
+                              referrerPolicy="no-referrer"
+                            />
+                            <div className="flex-1">
+                              <p className="text-xs text-green-600 font-semibold flex items-center gap-1">
+                                <CheckCircle2 size={12} /> 이미지 업로드 완료
+                              </p>
+                              <p className="text-[10px] text-navy-900/40 mt-0.5 font-sans">데이터베이스 저장용 최적화 압축 적용됨</p>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={removePhoto}
+                              className="p-2 bg-navy-900/10 hover:bg-red-500 hover:text-white rounded-full transition-all cursor-pointer text-navy-900/60"
+                              title="사진 제거"
+                            >
+                              <X size={14} />
+                            </button>
+                          </div>
+                        )
+                      ) : (
+                        <div className="bg-ivory/80 border border-hive-green/30 rounded-2xl p-4 animate-fadeIn">
+                          <p className="text-xs font-bold text-navy-900 mb-3 flex items-center justify-between">
+                            <span>기본 캐릭터 아바타 선택</span>
+                            <span className="text-[10px] text-hive-green font-semibold bg-hive-green/10 px-2 py-0.5 rounded-full">사진 미소지 지원자용</span>
+                          </p>
+                          <div className="flex items-center gap-3">
+                            {CHARACTER_PRESETS.map((char) => {
+                              const isSelected = formData.photo === char.url;
+                              return (
+                                <button
+                                  key={char.id}
+                                  type="button"
+                                  onClick={() => {
+                                    setSelectedCharacter(char.url);
+                                    setFormData(prev => ({ ...prev, photo: char.url }));
+                                  }}
+                                  className={`p-3.5 rounded-xl border flex items-center gap-3 cursor-pointer transition-all w-full max-w-xs ${
+                                    isSelected
+                                      ? 'bg-white border-hive-green shadow-md ring-2 ring-hive-green/30'
+                                      : 'bg-white/60 border-navy-900/10 hover:border-navy-900/30'
+                                  }`}
+                                >
+                                  <img
+                                    src={char.url}
+                                    alt={char.name}
+                                    className="w-12 h-12 rounded-full border border-slate-200 object-cover bg-white shrink-0"
+                                    referrerPolicy="no-referrer"
+                                  />
+                                  <div className="text-left flex-1">
+                                    <p className={`text-xs font-bold ${isSelected ? 'text-hive-green' : 'text-navy-900/80'}`}>
+                                      {char.name}
+                                    </p>
+                                    <p className="text-[10px] text-navy-900/50 font-sans">
+                                      HIVE 학회 공식 기본 캐릭터 프로필
+                                    </p>
+                                  </div>
+                                  {isSelected && (
+                                    <span className="text-[10px] bg-hive-green text-white font-bold px-2 py-1 rounded-full shrink-0">
+                                      선택됨
+                                    </span>
+                                  )}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
                       )}
+
+                      {/* Photo Usage Disclosure Notice as requested */}
+                      <p className="text-[11px] text-navy-900/60 mt-2.5 font-sans leading-relaxed flex items-start gap-1 bg-amber-500/5 p-2.5 rounded-xl border border-amber-500/20">
+                        <span className="text-hive-green font-bold shrink-0">*</span>
+                        <span>본 사진은 향후 학회 공식 홈페이지 멤버 소개 및 개인 포트폴리오 관리를 위해 사용되는 사진으로, 해당 목적 이외의 용도로는 절대 사용되거나 외부에 제공되지 않습니다.</span>
+                      </p>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -652,41 +779,105 @@ const Join = () => {
                       />
                     </div>
 
-                    {/* Toggle Selector for Interest Tracks */}
-                    <div>
+                    {/* Scrollable Dropdown Selector for Interest Tracks */}
+                    <div className="relative" ref={dropdownRef}>
                       <div className="flex items-center justify-between mb-2">
                         <label className="block text-xs font-bold text-navy-900 uppercase tracking-wide">
-                          관심 분야 (토글 선택, 복수 선택 가능) <span className="text-red-500">*</span>
+                          관심 분야 (드롭다운 목록 선택, 복수 선택 가능) <span className="text-red-500">*</span>
                         </label>
                         <span className="text-[10px] text-navy-900/50 font-sans">
                           {selectedToggles.length}개 선택됨
                         </span>
                       </div>
 
-                      <div className="flex flex-wrap gap-2 mb-3">
-                        {INTEREST_OPTIONS.map(option => {
-                          const isSelected = selectedToggles.includes(option);
-                          return (
-                            <button
-                              key={option}
-                              type="button"
-                              onClick={() => toggleInterestOption(option)}
-                              className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer flex items-center gap-1.5 border ${
-                                isSelected
-                                  ? 'bg-hive-green text-white border-hive-green shadow-sm'
-                                  : 'bg-white text-navy-900/80 border-navy-900/15 hover:border-navy-900/40 hover:bg-navy-900/5'
-                              }`}
-                            >
-                              {isSelected && <CheckCircle2 size={13} />}
-                              {option}
-                            </button>
-                          );
-                        })}
+                      {/* Select Trigger Box */}
+                      <div
+                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                        className="w-full bg-ivory border border-navy-900/15 hover:border-navy-900/40 focus:border-hive-green rounded-xl p-3 text-sm font-sans cursor-pointer transition-all flex items-center justify-between gap-2 min-h-[46px] shadow-2xs"
+                      >
+                        <div className="flex flex-wrap gap-1.5 flex-1 items-center min-w-0">
+                          {selectedToggles.length === 0 ? (
+                            <span className="text-navy-900/40 text-xs">관심 분야를 클릭하여 목록에서 선택해 주세요...</span>
+                          ) : (
+                            selectedToggles.map(item => (
+                              <span
+                                key={item}
+                                className="inline-flex items-center gap-1 bg-hive-green text-white text-xs font-bold px-2.5 py-1 rounded-lg shrink-0"
+                              >
+                                {item}
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    toggleInterestOption(item);
+                                  }}
+                                  className="hover:bg-white/20 rounded p-0.5 cursor-pointer"
+                                >
+                                  <X size={12} />
+                                </button>
+                              </span>
+                            ))
+                          )}
+                        </div>
+                        <div className="text-navy-900/40 shrink-0 ml-1">
+                          {isDropdownOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+                        </div>
                       </div>
+
+                      {/* Dropdown Scrollable Menu */}
+                      {isDropdownOpen && (
+                        <div className="absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-2xl shadow-xl z-30 p-2 animate-fadeIn space-y-2">
+                          {/* Search Input inside Dropdown */}
+                          <div className="relative px-1 pt-1">
+                            <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                            <input
+                              type="text"
+                              value={searchTerm}
+                              onChange={(e) => setSearchTerm(e.target.value)}
+                              placeholder="무역학, 미디어, 핀테크, 반도체 등 검색..."
+                              className="w-full pl-8 pr-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-hive-green font-sans"
+                              onClick={(e) => e.stopPropagation()}
+                            />
+                          </div>
+
+                          {/* Options Scrollable List */}
+                          <div className="max-h-56 overflow-y-auto space-y-1 pr-1 custom-scrollbar">
+                            {INTEREST_OPTIONS.filter(opt => opt.toLowerCase().includes(searchTerm.toLowerCase())).length === 0 ? (
+                              <div className="py-4 text-center text-xs text-slate-400 font-sans">
+                                검색 결과가 없습니다.
+                              </div>
+                            ) : (
+                              INTEREST_OPTIONS.filter(opt => opt.toLowerCase().includes(searchTerm.toLowerCase())).map(option => {
+                                const isSelected = selectedToggles.includes(option);
+                                return (
+                                  <div
+                                    key={option}
+                                    onClick={() => toggleInterestOption(option)}
+                                    className={`px-3 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-between cursor-pointer transition-colors ${
+                                      isSelected
+                                        ? 'bg-hive-green/10 text-hive-green font-bold'
+                                        : 'text-slate-700 hover:bg-slate-100'
+                                    }`}
+                                  >
+                                    <span>{option}</span>
+                                    {isSelected ? (
+                                      <div className="w-5 h-5 bg-hive-green text-white rounded-md flex items-center justify-center shrink-0">
+                                        <Check size={12} />
+                                      </div>
+                                    ) : (
+                                      <div className="w-5 h-5 border border-slate-300 rounded-md shrink-0" />
+                                    )}
+                                  </div>
+                                );
+                              })
+                            )}
+                          </div>
+                        </div>
+                      )}
 
                       {/* Custom Input when '기타' is selected */}
                       {selectedToggles.includes('기타') && (
-                        <div className="animate-fadeIn mt-2 p-3 bg-ivory/80 rounded-2xl border border-hive-green/40">
+                        <div className="animate-fadeIn mt-3 p-3 bg-ivory/80 rounded-2xl border border-hive-green/40">
                           <label className="block text-[11px] font-bold text-navy-900 mb-1.5">
                             기타 관심 분야 직접 입력
                           </label>
@@ -746,6 +937,27 @@ const Join = () => {
                         placeholder="관심 분야와 관련하여 본인의 강점과 기획/소통/활동 등 성취한 과거 경험을 작성해 주세요."
                         className="w-full bg-ivory border border-navy-900/10 focus:border-hive-green focus:outline-none rounded-xl p-4 text-sm font-sans resize-none transition-all"
                       />
+                    </div>
+
+                    {/* Personal Information & Consent Agreement */}
+                    <div className="p-4 bg-ivory/80 border border-navy-900/15 rounded-2xl space-y-3">
+                      <div className="flex items-start gap-3">
+                        <input
+                          type="checkbox"
+                          id="consent-checkbox"
+                          checked={isAgreed}
+                          onChange={(e) => setIsAgreed(e.target.checked)}
+                          className="mt-0.5 w-4 h-4 text-hive-green rounded border-slate-300 focus:ring-hive-green cursor-pointer accent-hive-green"
+                        />
+                        <label htmlFor="consent-checkbox" className="text-xs font-bold text-navy-900 leading-snug cursor-pointer select-none">
+                          <span className="text-hive-green font-black">[필수]</span> 개인정보 수집·이용 및 입회 지원서 작성 내용 동의
+                        </label>
+                      </div>
+                      <div className="text-[11px] text-navy-900/60 leading-relaxed font-sans bg-white/70 p-3 rounded-xl border border-navy-900/10 space-y-1">
+                        <p>• <strong>수집 항목:</strong> 성명, 학번, 학과, 연락처, 이메일, 프로필 사진, 지원동기, 강점 및 관심분야</p>
+                        <p>• <strong>수집 및 이용 목적:</strong> 대구대학교 HIVE 학회원 선발 심사, 합격 통지, 학회원 명부 등록 및 개인 포트폴리오 관리</p>
+                        <p>• <strong>보유 및 이용 기간:</strong> 입회 지원서 제출 후 학회 활동 목적 달성 시까지 보관되며, 탈퇴 요청 시 즉시 파기됩니다.</p>
+                      </div>
                     </div>
 
                     <button

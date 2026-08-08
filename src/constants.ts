@@ -61,7 +61,7 @@ export const MEMBERS: Member[] = [
     role: "1기 학회장",
     image: "https://i.ibb.co/v6z0pWtm/image.jpg",
     bio: "",
-    education: "호텔외식관광학과",
+    education: "호텔외식관광학과 24",
     skills: ["관광교육", "호텔경영"],
     contact: "rang4f58@naver.com"
   },
@@ -71,7 +71,7 @@ export const MEMBERS: Member[] = [
     role: "YB",
     image: "https://i.ibb.co/ymb9d6wb/4.png",
     bio: "",
-    education: "호텔외식관광학과",
+    education: "호텔외식관광학과 23",
     skills: ["MICE 경영", "호텔경영"],
     contact: "smko0619@naver.com"
   },
@@ -81,7 +81,7 @@ export const MEMBERS: Member[] = [
     role: "PR",
     image: "https://i.ibb.co/TGvX4D7/28.png",
     bio: "",
-    education: "호텔외식관광학과",
+    education: "호텔외식관광학과 25",
     skills: ["MICE 경영", "호텔경영"],
     contact: "min_0817@naver.com"
   },
@@ -91,7 +91,7 @@ export const MEMBERS: Member[] = [
     role: "회계",
     image: "https://i.ibb.co/TGvX4D7/28.png",
     bio: "",
-    education: "호텔외식관광학과",
+    education: "호텔외식관광학과 24",
     skills: ["MICE 경영", "항공서비스"],
     contact: "ksh0020203@naver.com"
   },
@@ -101,7 +101,7 @@ export const MEMBERS: Member[] = [
     role: "YB",
     image: "https://i.ibb.co/v6rTnkYv/Kakao-Talk-20260322-200810881.jpg",
     bio: "",
-    education: "호텔관광경영학부",
+    education: "호텔관광경영학부 26",
     skills: ["글로벌 전략", "파트너십"],
     contact: "TBD"
   },
@@ -111,7 +111,7 @@ export const MEMBERS: Member[] = [
     role: "대외협력",
     image: "https://i.ibb.co/mC5PxwhH/image.png",
     bio: "",
-    education: "관광항공경영학과",
+    education: "관광항공경영학과 20",
     skills: ["지역관광개발", "항공서비스"],
     contact: "khkzz0802@naver.com",
     isAlumni: true
@@ -122,7 +122,7 @@ export const MEMBERS: Member[] = [
     role: "교육",
     image: "https://i.ibb.co/9mTfw9zq/image.jpg",
     bio: "",
-    education: "호텔외식관광학과 / 일본어일본학과",
+    education: "호텔외식관광학과 / 일본어일본학과 22",
     skills: ["국제관광", "지역관광개발"],
     contact: "yeeun8556@naver.com"
   },
@@ -132,7 +132,7 @@ export const MEMBERS: Member[] = [
     role: "YB",
     image: "https://i.ibb.co/TGvX4D7/28.png",
     bio: "",
-    education: "호텔외식관광학과",
+    education: "호텔외식관광학과 23",
     skills: ["항공서비스", "호텔경영"],
     contact: "seokgi205@gmail.com"
   },
@@ -142,7 +142,7 @@ export const MEMBERS: Member[] = [
     role: "대외협력",
     image: "https://i.ibb.co/TGvX4D7/28.png",
     bio: "",
-    education: "호텔외식관광학과",
+    education: "호텔외식관광학과 22",
     skills: ["호텔경영", "관광서비스"],
     contact: "TBD",
     isAlumni: true
@@ -208,7 +208,7 @@ export const PARTNER_MEMBERS: Member[] = [
     category: "Global Service Group",
     image: "https://i.ibb.co/TGvX4D7/28.png",
     bio: "",
-    education: "영어교육과 / 심리학과",
+    education: "영어교육과 / 심리학과 24",
     skills: ["항공서비스", "항공경영"],
     contact: "jiho5690@naver.com"
   },
@@ -219,7 +219,7 @@ export const PARTNER_MEMBERS: Member[] = [
     category: "Global Service Group",
     image: "https://i.ibb.co/KxdRcy4B/image.jpg",
     bio: "",
-    education: "지리교육과 / JAS(JEJUAIR SERVICE)",
+    education: "지리교육과 23 / JAS(JEJUAIR SERVICE)",
     skills: ["항공서비스", "지리교육"],
     contact: "pss76@naver.com"
   },
@@ -230,7 +230,7 @@ export const PARTNER_MEMBERS: Member[] = [
     category: "Global Service Group",
     image: "https://i.ibb.co/TGvX4D7/28.png",
     bio: "",
-    education: "경영학과",
+    education: "경영학과 25",
     skills: ["항공서비스", "항공경영"],
     contact: "yry8282@naver.com"
   },
@@ -241,7 +241,7 @@ export const PARTNER_MEMBERS: Member[] = [
     category: "Global Service Group",
     image: "https://i.ibb.co/TGvX4D7/28.png",
     bio: "",
-    education: "간호학과",
+    education: "간호학과 26",
     skills: ["관광서비스", "항공서비스"],
     contact: "TBD"
   },
@@ -263,7 +263,7 @@ export const PARTNER_MEMBERS: Member[] = [
     category: "Global Service Group",
     image: "https://i.ibb.co/Z1Tk4T4L/2026-05-05-160901.png",
     bio: "",
-    education: "HIVE 학회 파트너 / 대구관광고등학교 시간강사",
+    education: "호텔관광연구실 / 대구관광고등학교 시간강사",
     skills: ["호스피탈리티 경영", "서비스혁신"],
     contact: "pyj@daegu.ac.kr",
     experience: [
@@ -279,7 +279,7 @@ export const PARTNER_MEMBERS: Member[] = [
     category: "Tourism & AI Group",
     image: "https://i.ibb.co/TGvX4D7/28.png",
     bio: "",
-    education: "HIVE 학회 파트너",
+    education: "호텔관광연구실",
     skills: ["인공지능", "스마트관광"],
     contact: "kbm010525@naver.com",
     experience: [
