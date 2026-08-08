@@ -33,6 +33,10 @@
           "type": "string",
           "description": "Personal strengths and relevant experiences"
         },
+        "activityProposal": {
+          "type": "string",
+          "description": "Proposed activities or project ideas for HIVE"
+        },
         "interestTrack": {
           "type": "string",
           "description": "Preferred area of interest"
@@ -47,7 +51,7 @@
           "description": "Timestamp of submission"
         }
       },
-      "required": ["name", "email", "phone", "department", "studentId", "motivation", "strengths", "interestTrack", "photo", "submittedAt"]
+      "required": ["name", "email", "phone", "department", "studentId", "motivation", "strengths", "activityProposal", "interestTrack", "photo", "submittedAt"]
     },
     "column": {
       "title": "Column",

@@ -12,6 +12,7 @@ export interface ApplicationData {
   studentId: string;
   motivation: string;
   strengths: string;
+  activityProposal?: string;
   interestTrack: string;
   photo: string;
   submittedAt?: any;
@@ -479,7 +480,7 @@ export const ApplicationAdminModal: React.FC<ApplicationAdminModalProps> = ({ is
                 <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2 flex items-center gap-2">
                   <FileText size={15} className="text-hive-green" /> 1. 지원 동기
                 </h4>
-                <div className="p-4 bg-slate-50 rounded-2xl text-xs md:text-sm text-slate-800 leading-relaxed font-sans whitespace-pre-line border border-slate-100 min-h-[100px]">
+                <div className="p-4 bg-slate-50 rounded-2xl text-xs md:text-sm text-slate-800 leading-relaxed font-sans whitespace-pre-line border border-slate-100 min-h-[80px]">
                   {selectedApp.motivation || '작성 내용 없음'}
                 </div>
               </div>
@@ -488,8 +489,17 @@ export const ApplicationAdminModal: React.FC<ApplicationAdminModalProps> = ({ is
                 <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2 flex items-center gap-2">
                   <Award size={15} className="text-hive-green" /> 2. 본인의 강점 및 관련 경험
                 </h4>
-                <div className="p-4 bg-slate-50 rounded-2xl text-xs md:text-sm text-slate-800 leading-relaxed font-sans whitespace-pre-line border border-slate-100 min-h-[100px]">
+                <div className="p-4 bg-slate-50 rounded-2xl text-xs md:text-sm text-slate-800 leading-relaxed font-sans whitespace-pre-line border border-slate-100 min-h-[80px]">
                   {selectedApp.strengths || '작성 내용 없음'}
+                </div>
+              </div>
+
+              <div>
+                <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2 flex items-center gap-2">
+                  <FileText size={15} className="text-hive-green" /> 3. 희망 학회 활동 및 아이디어 제안
+                </h4>
+                <div className="p-4 bg-slate-50 rounded-2xl text-xs md:text-sm text-slate-800 leading-relaxed font-sans whitespace-pre-line border border-slate-100 min-h-[80px]">
+                  {selectedApp.activityProposal || '작성 내용 없음 (선택 작성)'}
                 </div>
               </div>
             </div>

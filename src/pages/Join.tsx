@@ -146,6 +146,7 @@ const Join = () => {
     studentId: '',
     motivation: '',
     strengths: '',
+    activityProposal: '',
     interestTrack: '학술 및 연구 정보',
     photo: '' // base64 representation
   });
@@ -275,7 +276,7 @@ const Join = () => {
 
   // Soft validation rules
   const isFormValid = () => {
-    const { name, email, phone, department, studentId, motivation, strengths, photo } = formData;
+    const { name, email, phone, department, studentId, motivation, strengths, activityProposal, photo } = formData;
     const hasToggles = selectedToggles.length > 0;
     const isCustomValid = !selectedToggles.includes('기타') || selectedToggles.length > 1 || customInterest.trim().length > 0;
     return (
@@ -286,6 +287,7 @@ const Join = () => {
       studentId.trim().length >= 4 && studentId.trim().length <= 20 &&
       motivation.trim().length >= 10 && motivation.trim().length <= 2000 &&
       strengths.trim().length >= 10 && strengths.trim().length <= 2000 &&
+      activityProposal.trim().length <= 2000 &&
       photo.length > 0 &&
       hasToggles &&
       isCustomValid &&
@@ -334,6 +336,7 @@ const Join = () => {
         studentId: formData.studentId.trim(),
         motivation: formData.motivation.trim(),
         strengths: formData.strengths.trim(),
+        activityProposal: formData.activityProposal.trim(),
         interestTrack: finalTrack,
         photo: formData.photo,
         submittedAt: serverTimestamp() // strictly checked as request.time on rules
@@ -350,6 +353,7 @@ const Join = () => {
           studentId: formData.studentId.trim(),
           motivation: formData.motivation.trim(),
           strengths: formData.strengths.trim(),
+          activityProposal: formData.activityProposal.trim(),
           interestTrack: finalTrack,
           photo: formData.photo,
           createdAtStr: new Date().toLocaleString('ko-KR', {
@@ -391,6 +395,7 @@ const Join = () => {
       studentId: '',
       motivation: '',
       strengths: '',
+      activityProposal: '',
       interestTrack: '학술 및 연구 정보',
       photo: ''
     });
@@ -935,6 +940,27 @@ const Join = () => {
                         maxLength={2000}
                         rows={5}
                         placeholder="관심 분야와 관련하여 본인의 강점과 기획/소통/활동 등 성취한 과거 경험을 작성해 주세요."
+                        className="w-full bg-ivory border border-navy-900/10 focus:border-hive-green focus:outline-none rounded-xl p-4 text-sm font-sans resize-none transition-all"
+                      />
+                    </div>
+
+                    {/* Activity Proposal Textarea */}
+                    <div>
+                      <div className="flex justify-between items-center mb-2">
+                        <label className="text-xs font-bold text-navy-900 uppercase tracking-wide">
+                          희망 학회 활동 및 프로젝트 아이디어 제안 <span className="text-navy-900/40 font-normal">(자유 기재)</span>
+                        </label>
+                        <span className={`text-[10px] font-mono ${formData.activityProposal.length > 2000 ? 'text-red-500' : 'text-navy-900/40'}`}>
+                          {formData.activityProposal.length.toLocaleString()} / 2,000자
+                        </span>
+                      </div>
+                      <textarea
+                        name="activityProposal"
+                        value={formData.activityProposal}
+                        onChange={handleInputChange}
+                        maxLength={2000}
+                        rows={4}
+                        placeholder="HIVE 학회에서 참여하고 싶거나 직접 기획해보고 싶은 활동, 스터디, 공모전, 소모임 프로젝트 아이디어를 자유롭게 제안해 주세요. (관광/호스피탈리티 분야뿐만 아니라 IT, 마케팅, 미디어, 창업 등 모든 분야 제안 가능)"
                         className="w-full bg-ivory border border-navy-900/10 focus:border-hive-green focus:outline-none rounded-xl p-4 text-sm font-sans resize-none transition-all"
                       />
                     </div>

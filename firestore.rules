@@ -20,8 +20,8 @@ service cloud.firestore {
     }
 
     function isValidApplication(data) {
-      return data.keys().hasAll(['name', 'email', 'phone', 'department', 'studentId', 'motivation', 'strengths', 'interestTrack', 'photo', 'submittedAt'])
-        && data.keys().size() == 10
+      return data.keys().hasAll(['name', 'email', 'phone', 'department', 'studentId', 'motivation', 'strengths', 'activityProposal', 'interestTrack', 'photo', 'submittedAt'])
+        && data.keys().size() == 11
         && data.name is string && data.name.size() >= 2 && data.name.size() <= 100
         && data.email is string && data.email.size() >= 5 && data.email.size() <= 150
         && data.phone is string && data.phone.size() >= 8 && data.phone.size() <= 30
@@ -29,6 +29,7 @@ service cloud.firestore {
         && data.studentId is string && data.studentId.size() >= 4 && data.studentId.size() <= 30
         && data.motivation is string && data.motivation.size() >= 10 && data.motivation.size() <= 3000
         && data.strengths is string && data.strengths.size() >= 10 && data.strengths.size() <= 3000
+        && data.activityProposal is string && data.activityProposal.size() <= 3000
         && data.interestTrack is string && data.interestTrack.size() >= 2 && data.interestTrack.size() <= 100
         && data.photo is string && data.photo.size() <= 800000
         && data.submittedAt == request.time;
