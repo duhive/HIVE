@@ -18,6 +18,8 @@ import Contact from './pages/Contact';
 import { AuthProvider, AuthModal } from './components/Auth';
 import ErrorBoundary from './components/ErrorBoundary';
 import { recordPageView } from './utils/visitorTracker';
+import { ApplicationAdminModal } from './components/ApplicationAdminModal';
+import { useState } from 'react';
 
 function ScrollToTopAndTrack() {
   const { pathname } = useLocation();
@@ -29,6 +31,34 @@ function ScrollToTopAndTrack() {
 }
 
 export default function App() {
+  const [isAppAdminOpen, setIsAppAdminOpen] = useState(false);
+
+  // Global keypress listener for typing '2405' anywhere
+  useEffect(() => {
+    let keyBuffer = '';
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't intercept if user is typing inside an input/textarea
+      const target = e.target as HTMLElement;
+      if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) {
+        return;
+      }
+
+      if (/\d/.test(e.key)) {
+        keyBuffer += e.key;
+        if (keyBuffer.length > 10) {
+          keyBuffer = keyBuffer.slice(-10);
+        }
+        if (keyBuffer.endsWith('2405')) {
+          setIsAppAdminOpen(true);
+          keyBuffer = '';
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   return (
     <ErrorBoundary>
       <AuthProvider>
@@ -55,6 +85,10 @@ export default function App() {
             </main>
             <Footer />
             <AuthModal />
+            <ApplicationAdminModal 
+              isOpen={isAppAdminOpen} 
+              onClose={() => setIsAppAdminOpen(false)} 
+            />
           </div>
         </Router>
       </AuthProvider>

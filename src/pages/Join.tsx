@@ -2,9 +2,10 @@ import React, { useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import SectionHeader from '../components/SectionHeader';
 import { FAQS } from '../constants';
-import { Send, ChevronDown, Zap, Target, ArrowLeft, CheckCircle2, RotateCcw, AlertCircle, Upload, Image as ImageIcon, X } from 'lucide-react';
+import { Send, ChevronDown, Zap, Target, ArrowLeft, CheckCircle2, RotateCcw, AlertCircle, Upload, Image as ImageIcon, X, Lock } from 'lucide-react';
 import { db, auth } from '../firebase';
 import { collection, doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { ApplicationAdminModal } from '../components/ApplicationAdminModal';
 
 // Operation types for Firestore security requirements
 enum OperationType {
@@ -113,6 +114,7 @@ const Join = () => {
   const [submissionId, setSubmissionId] = React.useState('');
   const [errorMessage, setErrorMessage] = React.useState('');
   const [isDragging, setIsDragging] = React.useState(false);
+  const [isAdminModalOpen, setIsAdminModalOpen] = React.useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [formData, setFormData] = React.useState({
@@ -254,6 +256,35 @@ const Join = () => {
         submittedAt: serverTimestamp() // strictly checked as request.time on rules
       });
 
+      // Local storage backup for instant sync
+      try {
+        const localData = {
+          id: randomCode,
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          phone: formData.phone.trim(),
+          department: formData.department.trim(),
+          studentId: formData.studentId.trim(),
+          motivation: formData.motivation.trim(),
+          strengths: formData.strengths.trim(),
+          interestTrack: formData.interestTrack,
+          photo: formData.photo,
+          createdAtStr: new Date().toLocaleString('ko-KR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit'
+          })
+        };
+        const existing = localStorage.getItem('hive_applications');
+        const list = existing ? JSON.parse(existing) : [];
+        list.unshift(localData);
+        localStorage.setItem('hive_applications', JSON.stringify(list));
+      } catch (e) {
+        console.error('Failed to save to local storage backup', e);
+      }
+
       setSubmissionId(randomCode);
       setSubmitSuccess(true);
     } catch (err) {
@@ -363,6 +394,15 @@ const Join = () => {
                   <p className="mt-4 text-[10px] text-center text-white/50 uppercase tracking-widest font-mono">
                     Deadline: 2026.03.31 23:59
                   </p>
+
+                  <div className="mt-6 pt-4 border-t border-white/15 text-center">
+                    <button
+                      onClick={() => setIsAdminModalOpen(true)}
+                      className="inline-flex items-center gap-1.5 text-xs text-white/70 hover:text-white font-medium underline underline-offset-4 cursor-pointer transition-colors"
+                    >
+                      <Lock size={12} /> 지원서 현황 조회
+                    </button>
+                  </div>
                 </motion.div>
               ) : submitSuccess ? (
                 // Success Badge Card
@@ -703,6 +743,12 @@ const Join = () => {
           </div>
         </div>
       </div>
+
+      {/* Admin Application Viewer Modal */}
+      <ApplicationAdminModal 
+        isOpen={isAdminModalOpen} 
+        onClose={() => setIsAdminModalOpen(false)} 
+      />
     </div>
   );
 };

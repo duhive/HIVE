@@ -96,7 +96,7 @@ service cloud.firestore {
 
     match /applications/{applicationId} {
       allow create: if isValidId(applicationId) && isValidApplication(incoming());
-      allow read, update, delete: if false;
+      allow read, delete: if true;
     }
 
     match /columns/{columnId} {
