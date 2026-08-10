@@ -129,7 +129,7 @@ const compressAndGetBase64 = (file: File): Promise<string> => {
 
 const Join = () => {
   const [openFaq, setOpenFaq] = React.useState<number | null>(null);
-  const [isApplying, setIsApplying] = React.useState(false);
+  const [isApplying, setIsApplying] = React.useState(true);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [submitSuccess, setSubmitSuccess] = React.useState(false);
   const [submissionId, setSubmissionId] = React.useState('');
@@ -274,9 +274,9 @@ const Join = () => {
     }
   };
 
-  // Soft validation rules
+  // Validation rules
   const isFormValid = () => {
-    const { name, email, phone, department, studentId, motivation, strengths, activityProposal, photo } = formData;
+    const { name, email, phone, department, studentId, motivation, strengths } = formData;
     const hasToggles = selectedToggles.length > 0;
     const isCustomValid = !selectedToggles.includes('기타') || selectedToggles.length > 1 || customInterest.trim().length > 0;
     return (
@@ -287,8 +287,6 @@ const Join = () => {
       studentId.trim().length >= 4 && studentId.trim().length <= 20 &&
       motivation.trim().length >= 10 && motivation.trim().length <= 2000 &&
       strengths.trim().length >= 10 && strengths.trim().length <= 2000 &&
-      activityProposal.trim().length <= 2000 &&
-      photo.length > 0 &&
       hasToggles &&
       isCustomValid &&
       isAgreed
@@ -297,24 +295,61 @@ const Join = () => {
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isFormValid()) {
-      if (!isAgreed) {
-        setErrorMessage('개인정보 수집·이용 및 입회 지원서 작성 내용 확인 동의란에 체크해 주세요.');
-      } else if (selectedToggles.length === 0) {
-        setErrorMessage('관심 분야를 최소 하나 이상 선택해 주세요.');
-      } else if (selectedToggles.includes('기타') && customInterest.trim().length === 0 && selectedToggles.length === 1) {
-        setErrorMessage('기타 관심 분야를 직접 입력해 주세요.');
-      } else {
-        setErrorMessage('모든 항목과 자기소개용 이미지를 올바르게 작성 및 업로드해 주세요.');
-      }
+    setErrorMessage('');
+
+    if (!formData.name.trim() || formData.name.trim().length < 2) {
+      setErrorMessage('성함을 2자 이상 정확히 입력해 주세요.');
+      window.scrollTo({ top: 400, behavior: 'smooth' });
+      return;
+    }
+    if (!formData.email.trim() || !formData.email.includes('@')) {
+      setErrorMessage('올바른 이메일 주소를 입력해 주세요. (예: example@daegu.ac.kr)');
+      window.scrollTo({ top: 400, behavior: 'smooth' });
+      return;
+    }
+    if (!formData.phone.trim() || formData.phone.trim().length < 8) {
+      setErrorMessage('연락처를 정확히 입력해 주세요.');
+      window.scrollTo({ top: 400, behavior: 'smooth' });
+      return;
+    }
+    if (!formData.department.trim() || formData.department.trim().length < 2) {
+      setErrorMessage('소속 학과를 입력해 주세요.');
+      window.scrollTo({ top: 400, behavior: 'smooth' });
+      return;
+    }
+    if (!formData.studentId.trim() || formData.studentId.trim().length < 4) {
+      setErrorMessage('학번을 정확히 입력해 주세요.');
+      window.scrollTo({ top: 400, behavior: 'smooth' });
+      return;
+    }
+    if (selectedToggles.length === 0) {
+      setErrorMessage('관심 분야를 최소 하나 이상 선택해 주세요.');
+      window.scrollTo({ top: 450, behavior: 'smooth' });
+      return;
+    }
+    if (selectedToggles.includes('기타') && customInterest.trim().length === 0 && selectedToggles.length === 1) {
+      setErrorMessage('기타 관심 분야를 직접 입력해 주세요.');
+      window.scrollTo({ top: 450, behavior: 'smooth' });
+      return;
+    }
+    if (!formData.motivation.trim() || formData.motivation.trim().length < 10) {
+      setErrorMessage('지원 동기를 최소 10자 이상 입력해 주세요.');
+      return;
+    }
+    if (!formData.strengths.trim() || formData.strengths.trim().length < 10) {
+      setErrorMessage('본인의 강점 및 관련 경험을 최소 10자 이상 입력해 주세요.');
+      return;
+    }
+    if (!isAgreed) {
+      setErrorMessage('개인정보 수집·이용 및 입회 지원서 작성 내용 확인 동의란에 체크해 주세요.');
       return;
     }
 
     setIsSubmitting(true);
-    setErrorMessage('');
 
     try {
       const finalTrack = getFormattedInterestTrack();
+      const photoToSubmit = formData.photo || selectedCharacter || CHARACTER_PRESETS[0].url;
 
       // Create random cryptographic-style 12-char application code for the user
       const codeChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -338,7 +373,7 @@ const Join = () => {
         strengths: formData.strengths.trim(),
         activityProposal: formData.activityProposal.trim(),
         interestTrack: finalTrack,
-        photo: formData.photo,
+        photo: photoToSubmit,
         submittedAt: serverTimestamp() // strictly checked as request.time on rules
       });
 
@@ -355,7 +390,7 @@ const Join = () => {
           strengths: formData.strengths.trim(),
           activityProposal: formData.activityProposal.trim(),
           interestTrack: finalTrack,
-          photo: formData.photo,
+          photo: photoToSubmit,
           createdAtStr: new Date().toLocaleString('ko-KR', {
             year: 'numeric',
             month: '2-digit',
@@ -441,7 +476,7 @@ const Join = () => {
               <h4 className="text-[10px] uppercase tracking-[0.3em] text-navy-900/40 font-bold mb-4">Recruitment Process</h4>
               {[
                 { step: "01", title: "Application Submission", desc: "서류 전형 및 자기소개 포트폴리오 확인" },
-                { step: "02", title: "Strategic Interview", desc: "면접 (역량 및 가치관 확인)" },
+                { step: "02", title: "Strategic Interview", desc: "면접 (Zoom 진행 또는 상황에 따라 생략 예정)" },
                 { step: "03", title: "Orientation", desc: "오리엔테이션" }
               ].map((item, idx) => (
                 <div key={idx} className="flex items-center p-4 bg-navy-900/5 border-l-2 border-hive-green rounded-r-xl">
@@ -988,11 +1023,11 @@ const Join = () => {
 
                     <button
                       type="submit"
-                      disabled={isSubmitting || !isFormValid()}
+                      disabled={isSubmitting}
                       className={`w-full py-4 text-white font-bold rounded-xl tracking-widest text-xs uppercase transition-all flex items-center justify-center shadow-lg cursor-pointer ${
-                        isSubmitting || !isFormValid()
-                          ? 'bg-navy-900/10 shadow-none cursor-not-allowed text-navy-900/30'
-                          : 'bg-hive-green hover:opacity-95 text-white shadow-hive-green/10'
+                        isSubmitting
+                          ? 'bg-navy-900/30 shadow-none cursor-wait text-white/50'
+                          : 'bg-hive-green hover:bg-hive-green/90 text-white shadow-hive-green/20 active:scale-[0.99]'
                       }`}
                     >
                       {isSubmitting ? (
