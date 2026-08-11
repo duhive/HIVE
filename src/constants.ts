@@ -255,6 +255,7 @@ export const PARTNER_MEMBERS: Member[] = [
     skills: ["관광서비스", "항공서비스"],
     contact: "TBD"
   },
+  /* 임시 삭제
   {
     id: 102,
     name: "이정현",
@@ -266,6 +267,7 @@ export const PARTNER_MEMBERS: Member[] = [
     skills: ["호스피탈리티", "네트워킹"],
     contact: "TBD"
   },
+  */
   {
     id: 105,
     name: "박유진",
