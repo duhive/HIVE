@@ -443,9 +443,9 @@ const Join = () => {
   return (
     <div className="pt-32 pb-24 bg-ivory min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
           {/* Left: Copy recruitment info */}
-          <div>
+          <div className="order-2 lg:order-1">
             <SectionHeader title="Become a Future Leader" subtitle="Recruitment 2026" />
             
             <div className="prose prose-navy max-w-none mb-12">
@@ -491,7 +491,7 @@ const Join = () => {
           </div>
 
           {/* Right: Toggle between Application Form Workroom & FAQ Panel */}
-          <div className="space-y-12">
+          <div className="order-1 lg:order-2 space-y-12">
             <AnimatePresence mode="wait">
               {!isApplying ? (
                 // Step 0: Recruitment Intro Card
