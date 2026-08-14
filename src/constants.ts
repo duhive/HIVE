@@ -164,7 +164,7 @@ export const MEMBERS: Member[] = [
     image: "https://i.ibb.co/KzwrdLn8/image.jpg",
     bio: "",
     education: "호텔외식관광학과 23",
-    skills: ["호텔경영", "관광서비스"],
+    skills: ["항공경영", "사회복지"],
     contact: "TBD"
   }
 ];
