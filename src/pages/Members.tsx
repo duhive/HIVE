@@ -394,7 +394,7 @@ const Members = () => {
                             transition={{ delay: i * 0.05 }}
                             onClick={() => handleSelectMember(member)}
                             onContextMenu={(e) => e.preventDefault()}
-                            className="cursor-pointer group relative aspect-[4/5] overflow-hidden rounded-2xl bg-navy-900/5 hover:shadow-lg transition-all duration-300 select-none"
+                            className="cursor-pointer group relative aspect-[4/5] overflow-hidden rounded-2xl bg-white border border-navy-900/5 hover:shadow-lg transition-all duration-300 select-none"
                           >
                              {isCaptured ? (
                               <div className="w-full h-full bg-slate-100/90 flex items-center justify-center text-slate-400 font-mono text-[10px] select-none">
@@ -456,7 +456,7 @@ const Members = () => {
                         transition={{ delay: i * 0.05 }}
                         onClick={() => handleSelectMember(member)}
                         onContextMenu={(e) => e.preventDefault()}
-                        className="cursor-pointer group relative aspect-[4/5] overflow-hidden rounded-2xl bg-navy-900/5 select-none"
+                        className="cursor-pointer group relative aspect-[4/5] overflow-hidden rounded-2xl bg-white border border-navy-900/5 select-none"
                       >
                         {isCaptured ? (
                           <div className="w-full h-full bg-slate-100/90 flex items-center justify-center text-slate-400 font-mono text-[10px] select-none">
@@ -524,7 +524,7 @@ const Members = () => {
               </button>
 
               <div 
-                className="w-full md:w-2/5 aspect-[4/5] md:aspect-[3/4] self-start relative bg-navy-900/5 flex-shrink-0 select-none overflow-hidden"
+                className="w-full md:w-2/5 aspect-[4/5] md:aspect-[3/4] self-start relative bg-white border-b md:border-b-0 md:border-r border-navy-900/5 flex-shrink-0 select-none overflow-hidden"
                 onContextMenu={(e) => e.preventDefault()}
               >
                 {isCaptured ? (

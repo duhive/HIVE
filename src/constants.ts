@@ -156,6 +156,16 @@ export const MEMBERS: Member[] = [
     skills: ["호텔경영", "관광서비스"],
     contact: "TBD",
     isAlumni: true
+  },
+  {
+    id: 12,
+    name: "윤시원",
+    role: "YB",
+    image: "https://i.ibb.co/KzwrdLn8/image.jpg",
+    bio: "",
+    education: "호텔외식관광학과 23",
+    skills: ["호텔경영", "관광서비스"],
+    contact: "TBD"
   }
 ];
 
