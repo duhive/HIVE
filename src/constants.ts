@@ -284,7 +284,7 @@ export const PARTNER_MEMBERS: Member[] = [
     image: "https://i.ibb.co/Z1Tk4T4L/2026-05-05-160901.png",
     bio: "",
     education: "호텔관광연구실 / 대구관광고등학교 시간강사",
-    skills: ["호스피탈리티 경영", "우주경영"],
+    skills: ["호스피탈리티 경영", "항공우주경영"],
     contact: "pyj@daegu.ac.kr",
     experience: [
       "2023. 08 한국관광공사 주관, 국제이벤트 지원사업 전문가 평가단",
