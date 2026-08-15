@@ -102,7 +102,7 @@ export const MEMBERS: Member[] = [
     image: "https://i.ibb.co/v6rTnkYv/Kakao-Talk-20260322-200810881.jpg",
     bio: "",
     education: "호텔관광경영학부 26",
-    skills: ["글로벌 전략", "파트너십"],
+    skills: ["파트너십", "지역관광개발"],
     contact: "TBD"
   },
   {
@@ -161,7 +161,7 @@ export const MEMBERS: Member[] = [
     id: 12,
     name: "윤시원",
     role: "YB",
-    image: "https://i.ibb.co/KzwrdLn8/image.jpg",
+    image: "https://i.ibb.co/Cp12RmPD/2026-08-15-154846.png",
     bio: "",
     education: "호텔외식관광학과 23",
     skills: ["항공경영", "사회복지"],
