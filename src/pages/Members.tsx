@@ -408,6 +408,10 @@ const Members = () => {
                                 referrerPolicy="no-referrer"
                                 draggable={false}
                                 onContextMenu={(e) => e.preventDefault()}
+                                onError={(e) => {
+                                  e.currentTarget.onerror = null;
+                                  e.currentTarget.src = "https://i.ibb.co/TGvX4D7/28.png";
+                                }}
                               />
                             )}
                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
@@ -470,6 +474,10 @@ const Members = () => {
                             referrerPolicy="no-referrer"
                             draggable={false}
                             onContextMenu={(e) => e.preventDefault()}
+                            onError={(e) => {
+                              e.currentTarget.onerror = null;
+                              e.currentTarget.src = "https://i.ibb.co/TGvX4D7/28.png";
+                            }}
                           />
                         )}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
@@ -539,6 +547,10 @@ const Members = () => {
                     referrerPolicy="no-referrer"
                     draggable={false}
                     onContextMenu={(e) => e.preventDefault()}
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = "https://i.ibb.co/TGvX4D7/28.png";
+                    }}
                   />
                 )}
                 <div className="absolute inset-0 bg-transparent select-none pointer-events-auto" onContextMenu={(e) => e.preventDefault()} />
