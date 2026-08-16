@@ -1,4 +1,5 @@
 import { Member, CurriculumItem, FAQ } from './types';
+import { YOON_SIWON_IMAGE } from './assets/yoonSiwonImage';
 
 export const REGULAR_CURRICULUM: CurriculumItem[] = [
   {
@@ -161,7 +162,7 @@ export const MEMBERS: Member[] = [
     id: 12,
     name: "윤시원",
     role: "YB",
-    image: "/images/members/yoon_siwon.png",
+    image: YOON_SIWON_IMAGE,
     bio: "",
     education: "호텔외식관광학과 23",
     skills: ["항공경영", "사회복지"],
