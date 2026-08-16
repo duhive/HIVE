@@ -161,7 +161,7 @@ export const MEMBERS: Member[] = [
     id: 12,
     name: "윤시원",
     role: "YB",
-    image: "https://i.ibb.co/Cp12RmPD/2026-08-15-154846.png",
+    image: "/images/members/yoon_siwon.png",
     bio: "",
     education: "호텔외식관광학과 23",
     skills: ["항공경영", "사회복지"],
