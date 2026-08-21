@@ -1,5 +1,6 @@
 import { Member, CurriculumItem, FAQ } from './types';
 import { YOON_SIWON_IMAGE } from './assets/yoonSiwonImage';
+import { KIM_YERA_IMAGE } from './assets/kimYeraImage';
 
 export const REGULAR_CURRICULUM: CurriculumItem[] = [
   {
@@ -167,6 +168,97 @@ export const MEMBERS: Member[] = [
     education: "호텔외식관광학과 23",
     skills: ["항공경영", "사회복지"],
     contact: "TBD"
+  },
+  {
+    id: 13,
+    name: "박지호",
+    role: "YB",
+    image: "https://i.ibb.co/TGvX4D7/28.png",
+    bio: "",
+    education: "영어교육과 / 심리학과 24",
+    skills: ["항공서비스", "항공경영"],
+    contact: "jiho5690@naver.com"
+  },
+  {
+    id: 14,
+    name: "전나영",
+    role: "YB",
+    image: "https://i.ibb.co/KxdRcy4B/image.jpg",
+    bio: "",
+    education: "지리교육과 23 / JAS(JEJUAIR SERVICE)",
+    skills: ["항공서비스", "지리교육"],
+    contact: "pss76@naver.com"
+  },
+  {
+    id: 15,
+    name: "송수민",
+    role: "YB",
+    image: "https://i.ibb.co/TGvX4D7/28.png",
+    bio: "",
+    education: "경영학과 25",
+    skills: ["항공서비스", "항공경영"],
+    contact: "yry8282@naver.com"
+  },
+  {
+    id: 16,
+    name: "이시현",
+    role: "YB",
+    image: "https://i.ibb.co/TGvX4D7/28.png",
+    bio: "",
+    education: "간호학과 26",
+    skills: ["관광서비스", "항공서비스"],
+    contact: "TBD"
+  },
+  {
+    id: 17,
+    name: "김예라",
+    role: "YB",
+    image: KIM_YERA_IMAGE,
+    bio: "",
+    education: "영어교육과, 관광항공경영학과",
+    skills: ["항공서비스", "항공경영"],
+    contact: "TBD"
+  },
+  {
+    id: 18,
+    name: "이정현",
+    role: "멘토",
+    image: "https://i.ibb.co/TGvX4D7/28.png",
+    bio: "",
+    education: "부산세연고등학교 교사",
+    skills: ["호스피탈리티", "네트워킹"],
+    contact: "TBD",
+    isAlumni: true
+  },
+  {
+    id: 19,
+    name: "박유진",
+    role: "연구원",
+    image: "https://i.ibb.co/Z1Tk4T4L/2026-05-05-160901.png",
+    bio: "",
+    education: "호텔관광연구실 / 대구관광고등학교 시간강사",
+    skills: ["호스피탈리티 경영", "서비스혁신"],
+    contact: "pyj@daegu.ac.kr",
+    isAlumni: true,
+    experience: [
+      "2023. 08 한국관광공사 주관, 국제이벤트 지원사업 전문가 평가단",
+      "2024. 08 경상남도 산청군 관광개발 예비사업 연구개발과제 인턴",
+      "2026. 04 ~ : 대구관광고등학교 시간강사(관광문화와자원, 웨딩)"
+    ]
+  },
+  {
+    id: 20,
+    name: "김보민",
+    role: "연구원",
+    image: "https://i.ibb.co/TGvX4D7/28.png",
+    bio: "",
+    education: "호텔관광연구실",
+    skills: ["인공지능", "스마트관광"],
+    contact: "kbm010525@naver.com",
+    isAlumni: true,
+    experience: [
+      "2024. 08 경상남도 산청군 관광개발 예비사업 연구개발과제 인턴"
+    ]
   }
 ];
 
@@ -221,91 +313,6 @@ export const PARTNER_MEMBERS: Member[] = [
     education: "대구대학교 호텔외식관광학과",
     skills: ["호텔경영", "식음료 서비스"],
     contact: "TBD"
-  },
-  {
-    id: 12,
-    name: "박지호",
-    role: "Partner",
-    category: "Global Service Group",
-    image: "https://i.ibb.co/TGvX4D7/28.png",
-    bio: "",
-    education: "영어교육과 / 심리학과 24",
-    skills: ["항공서비스", "항공경영"],
-    contact: "jiho5690@naver.com"
-  },
-  {
-    id: 13,
-    name: "전나영",
-    role: "Partner",
-    category: "Global Service Group",
-    image: "https://i.ibb.co/KxdRcy4B/image.jpg",
-    bio: "",
-    education: "지리교육과 23 / JAS(JEJUAIR SERVICE)",
-    skills: ["항공서비스", "지리교육"],
-    contact: "pss76@naver.com"
-  },
-  {
-    id: 14,
-    name: "송수민",
-    role: "Partner",
-    category: "Global Service Group",
-    image: "https://i.ibb.co/TGvX4D7/28.png",
-    bio: "",
-    education: "경영학과 25",
-    skills: ["항공서비스", "항공경영"],
-    contact: "yry8282@naver.com"
-  },
-  {
-    id: 15,
-    name: "이시현",
-    role: "Partner",
-    category: "Global Service Group",
-    image: "https://i.ibb.co/TGvX4D7/28.png",
-    bio: "",
-    education: "간호학과 26",
-    skills: ["관광서비스", "항공서비스"],
-    contact: "TBD"
-  },
-  {
-    id: 102,
-    name: "이정현",
-    role: "Partner",
-    category: "Global Service Group",
-    image: "https://i.ibb.co/TGvX4D7/28.png",
-    bio: "",
-    education: "부산세연고등학교 교사",
-    skills: ["호스피탈리티", "네트워킹"],
-    contact: "TBD"
-  },
-  {
-    id: 105,
-    name: "박유진",
-    role: "Partner",
-    category: "Global Service Group",
-    image: "https://i.ibb.co/Z1Tk4T4L/2026-05-05-160901.png",
-    bio: "",
-    education: "호텔관광연구실 / 대구관광고등학교 시간강사",
-    skills: ["호스피탈리티 경영", "서비스혁신"],
-    contact: "pyj@daegu.ac.kr",
-    experience: [
-      "2023. 08 한국관광공사 주관, 국제이벤트 지원사업 전문가 평가단",
-      "2024. 08 경상남도 산청군 관광개발 예비사업 연구개발과제 인턴",
-      "2026. 04 ~ : 대구관광고등학교 시간강사(관광문화와자원, 웨딩)"
-    ]
-  },
-  {
-    id: 104,
-    name: "김보민",
-    role: "Partner",
-    category: "Tourism & AI Group",
-    image: "https://i.ibb.co/TGvX4D7/28.png",
-    bio: "",
-    education: "호텔관광연구실",
-    skills: ["인공지능", "스마트관광"],
-    contact: "kbm010525@naver.com",
-    experience: [
-      "2024. 08 경상남도 산청군 관광개발 예비사업 연구개발과제 인턴"
-    ]
   }
 ];
 
@@ -328,7 +335,7 @@ export function getAuthorDisplayGroup(name: string): string {
   if (!name) return '호스피탈리티경영학회원';
   const partner = PARTNER_MEMBERS.find(m => m.name === name);
   if (partner) {
-    return partner.category || 'Global Service Group';
+    return partner.category || '호스피탈리티경영학회원';
   }
   const member = MEMBERS.find(m => m.name === name);
   if (member) {
