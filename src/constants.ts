@@ -239,7 +239,6 @@ export const MEMBERS: Member[] = [
     education: "호텔관광연구실 / 대구관광고등학교 시간강사",
     skills: ["호스피탈리티 경영", "서비스혁신"],
     contact: "pyj@daegu.ac.kr",
-    isAlumni: true,
     experience: [
       "2023. 08 한국관광공사 주관, 국제이벤트 지원사업 전문가 평가단",
       "2024. 08 경상남도 산청군 관광개발 예비사업 연구개발과제 인턴",
@@ -255,7 +254,6 @@ export const MEMBERS: Member[] = [
     education: "호텔관광연구실",
     skills: ["인공지능", "스마트관광"],
     contact: "kbm010525@naver.com",
-    isAlumni: true,
     experience: [
       "2024. 08 경상남도 산청군 관광개발 예비사업 연구개발과제 인턴"
     ]
